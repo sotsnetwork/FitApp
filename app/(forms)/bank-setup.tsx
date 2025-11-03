@@ -1,22 +1,52 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { router } from 'expo-router';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-
-const BRAND = '#66F2C9';
+import { spacing, fonts, colors } from '../../theme/tokens';
 
 export default function BankSetup() {
-  return (
-    <View style={{ flex: 1, backgroundColor: 'white', padding: 24, paddingTop: 64 }}>
-      <Text style={{ fontSize: 36, fontWeight: '700', marginBottom: 8 }}>Setup Withdrawal Account</Text>
-      <Text style={{ color: '#7A7A7A', marginBottom: 16 }}>Enter your bank details</Text>
-      <Input placeholder="Account Type" />
-      <Input placeholder="Bank Name" />
-      <Input placeholder="Account Number" keyboardType="number-pad" />
+  const params = useLocalSearchParams();
+  const role = (params.role as string) || 'user';
+  const [accountType, setAccountType] = React.useState('');
+  const [bankName, setBankName] = React.useState('');
+  const [accountNumber, setAccountNumber] = React.useState('');
+  const [accountName, setAccountName] = React.useState('');
 
-      <View style={{ height: 24 }} />
-      <Button title="Next" onPress={() => router.push('/(payments)/select-method')} />
+  // Simulate account name verification when account number is entered
+  React.useEffect(() => {
+    if (accountNumber.length >= 10) {
+      setAccountName('Debby Annie'); // Mock verification
+    } else {
+      setAccountName('');
+    }
+  }, [accountNumber]);
+
+  return (
+    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64 }}>
+      <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.lg }}>
+        <Ionicons name="arrow-back" size={24} color={colors.text} />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 36, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Setup Withdrawal Account</Text>
+      <Text style={{ color: colors.subtext, marginBottom: spacing.md, fontFamily: fonts.regular, fontSize: 14 }}>
+        Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
+      </Text>
+      <Input placeholder="Account Type" value={accountType} onChangeText={setAccountType} />
+      <Input placeholder="Bank Name" value={bankName} onChangeText={setBankName} />
+      <Input placeholder="Account Number" keyboardType="number-pad" value={accountNumber} onChangeText={setAccountNumber} />
+      {accountName ? (
+        <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: spacing.xs }}>
+          <Ionicons name="checkmark-circle" size={20} color={colors.brand} />
+          <Text style={{ marginLeft: spacing.xs, fontFamily: fonts.regular, color: colors.text }}>{accountName}</Text>
+        </View>
+      ) : null}
+
+      <View style={{ height: spacing.lg }} />
+      <Button 
+        title="Next" 
+        onPress={() => router.push({ pathname: '/(verify)/account-added', params: { role } })} 
+      />
     </View>
   );
 }
