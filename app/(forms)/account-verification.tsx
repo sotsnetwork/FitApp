@@ -1,24 +1,35 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { router } from 'expo-router';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { router, useLocalSearchParams } from 'expo-router';
+import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
-
-const BRAND = '#66F2C9';
+import { spacing, fonts, colors } from '../../theme/tokens';
 
 export default function AccountVerification() {
+  const params = useLocalSearchParams();
+  const role = (params.role as string) || 'user';
+  const [businessName, setBusinessName] = React.useState('');
+  const [productCategory, setProductCategory] = React.useState('');
+
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', padding: 24, paddingTop: 64 }}>
-      <Text style={{ fontSize: 36, fontWeight: '700', marginBottom: 8 }}>Complete Account Verification</Text>
-      <Text style={{ color: '#7A7A7A', marginBottom: 16 }}>
-        Provide your business information
+    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64 }}>
+      <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.lg }}>
+        <Ionicons name="arrow-back" size={24} color={colors.text} />
+      </TouchableOpacity>
+      <Text style={{ fontSize: 36, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Complete Account Verification</Text>
+      <Text style={{ color: colors.subtext, marginBottom: spacing.md, fontFamily: fonts.regular, fontSize: 14 }}>
+        Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
       </Text>
 
-      <Input placeholder="Business Name" />
-      <Input placeholder="Product Category" />
+      <Input placeholder="Business Name" value={businessName} onChangeText={setBusinessName} />
+      <Input placeholder="Product Category" value={productCategory} onChangeText={setProductCategory} />
 
-      <View style={{ height: 24 }} />
-      <Button title="Next" onPress={() => router.push('/(forms)/bank-setup')} />
+      <View style={{ height: spacing.lg }} />
+      <Button 
+        title="Next" 
+        onPress={() => router.push({ pathname: '/(forms)/contact-details', params: { role } })} 
+      />
     </View>
   );
 }
