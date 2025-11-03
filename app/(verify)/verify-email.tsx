@@ -29,28 +29,7 @@ export default function VerifyEmail() {
       <Text style={{ color: colors.subtext, marginBottom: spacing.xl, fontFamily: fonts.regular }}>
         We sent a message to Ric....@gmail.com with a code to verify your account
       </Text>
-
-      {/* PIN Display */}
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: spacing.xl }}>
-        {[0, 1, 2, 3].map((i) => (
-          <View
-            key={i}
-            style={{
-              width: 56,
-              height: 56,
-              marginHorizontal: spacing.sm,
-              borderRadius: 12,
-              backgroundColor: i < code.length ? colors.brandTint : '#F4F4F4',
-              alignItems: 'center',
-              justifyContent: 'center',
-            }}
-          >
-            <Text style={{ fontSize: 28, color: colors.text }}>{i < code.length ? '•' : ''}</Text>
-          </View>
-        ))}
-      </View>
-
-      {/* PIN Keypad */}
+      {/* PIN Keypad includes its own display styled to match design */}
       <PinKeypad length={4} onChange={handleCodeChange} />
 
       {/* Resend Code and Contact Links */}
