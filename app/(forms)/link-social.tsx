@@ -23,32 +23,40 @@ export default function LinkSocial() {
         Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
       </Text>
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-        <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#000', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-          <Text style={{ color: 'white', fontSize: 12, fontFamily: fonts.bold }}>TT</Text>
+      {/* TikTok */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs }}>
+        <View style={{ width: 28, height: 28, borderRadius: 6, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
+          <Ionicons name="logo-tiktok" size={18} color={'#FFFFFF'} />
         </View>
-        <Input placeholder="Paste Link" value={tiktok} onChangeText={setTiktok} showClearIcon style={{ flex: 1 }} />
+        <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>TIKTOK</Text>
       </View>
+      <Input placeholder="Paste Link" value={tiktok} onChangeText={setTiktok} showClearIcon />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-        <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#E4405F', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-          <Text style={{ color: 'white', fontSize: 12, fontFamily: fonts.bold }}>IG</Text>
+      {/* Instagram */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs }}>
+        <View style={{ width: 28, height: 28, borderRadius: 6, backgroundColor: '#E4405F', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
+          <Ionicons name="logo-instagram" size={18} color={'#FFFFFF'} />
         </View>
-        <Input placeholder="Paste Link" value={instagram} onChangeText={setInstagram} showClearIcon style={{ flex: 1 }} />
+        <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>INSTAGRAM</Text>
       </View>
+      <Input placeholder="Paste Link" value={instagram} onChangeText={setInstagram} showClearIcon />
 
-      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-        <View style={{ width: 32, height: 32, borderRadius: 16, backgroundColor: '#1877F2', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-          <Text style={{ color: 'white', fontSize: 12, fontFamily: fonts.bold }}>FB</Text>
+      {/* Facebook */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs }}>
+        <View style={{ width: 28, height: 28, borderRadius: 6, backgroundColor: '#1877F2', alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
+          <Ionicons name="logo-facebook" size={18} color={'#FFFFFF'} />
         </View>
-        <Input placeholder="Paste Link" value={facebook} onChangeText={setFacebook} showClearIcon style={{ flex: 1 }} />
+        <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>FACEBOOK</Text>
       </View>
+      <Input placeholder="Paste Link" value={facebook} onChangeText={setFacebook} showClearIcon />
 
-      <View style={{ height: spacing.lg }} />
-      <Button 
-        title="Next" 
-        onPress={() => router.push({ pathname: '/(verify)/account-verified', params: { role } })} 
-      />
+      <View style={{ flex: 1 }} />
+      <View style={{ paddingBottom: spacing.lg }}>
+        <Button 
+          title="Next" 
+          onPress={() => router.push({ pathname: '/(verify)/account-verified', params: { role } })} 
+        />
+      </View>
     </View>
   );
 }
