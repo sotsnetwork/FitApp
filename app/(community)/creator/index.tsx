@@ -9,84 +9,67 @@ export default function CreatorCommunity() {
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <Text style={{ fontSize: 24, fontFamily: fonts.bold }}>Creator Dashboard</Text>
-        <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
-            <Ionicons name="add-circle-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="notifications-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-        </View>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.md, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <TouchableOpacity>
+          <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center' }}>
+            <Ionicons name="person" size={20} color={colors.brand} />
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>DASHBOARD</Text>
+        <TouchableOpacity>
+          <Ionicons name="notifications-outline" size={24} color={colors.text} />
+        </TouchableOpacity>
       </View>
 
       <ScrollView style={{ flex: 1 }}>
-        {/* Stats Section */}
-        <View style={{ padding: spacing.lg, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.md, borderRadius: 12, alignItems: 'center', marginRight: spacing.sm }}>
-            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.brand }}>1.2K</Text>
-            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.text }}>Followers</Text>
-          </View>
-          <View style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.md, borderRadius: 12, alignItems: 'center', marginHorizontal: spacing.xs }}>
-            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.brand }}>456</Text>
-            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.text }}>Posts</Text>
-          </View>
-          <View style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.md, borderRadius: 12, alignItems: 'center', marginLeft: spacing.sm }}>
-            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.brand }}>89</Text>
-            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.text }}>Engagement</Text>
-          </View>
-        </View>
-
-        {/* Quick Actions */}
-        <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.lg }}>
-          <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.md }}>Quick Actions</Text>
-          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.md }}>
-            <TouchableOpacity style={{ flex: 1, minWidth: '45%', backgroundColor: colors.brand, padding: spacing.md, borderRadius: 12, alignItems: 'center' }}>
-              <Ionicons name="add-circle" size={32} color="white" />
-              <Text style={{ marginTop: spacing.xs, fontFamily: fonts.semibold, color: 'white' }}>Create Post</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={{ flex: 1, minWidth: '45%', backgroundColor: colors.border, padding: spacing.md, borderRadius: 12, alignItems: 'center' }}>
-              <Ionicons name="videocam" size={32} color={colors.text} />
-              <Text style={{ marginTop: spacing.xs, fontFamily: fonts.semibold, color: colors.text }}>Go Live</Text>
+        {/* Ongoing Section */}
+        <View style={{ padding: spacing.md }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+            <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Ongoing</Text>
+            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.brand }}>View more</Text>
+              <Ionicons name="chevron-down" size={16} color={colors.brand} />
             </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Recent Posts */}
-        <View style={{ paddingHorizontal: spacing.lg }}>
-          <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.md }}>Recent Posts</Text>
-          {[1, 2, 3].map((post) => (
-            <View key={post} style={{ marginBottom: spacing.md, backgroundColor: '#F9F9F9', borderRadius: 12, padding: spacing.md, flexDirection: 'row' }}>
-              <View style={{ width: 80, height: 80, borderRadius: 8, backgroundColor: colors.border, marginRight: spacing.md }} />
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 14, marginBottom: spacing.xs }}>Workout Challenge #1</Text>
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginBottom: spacing.xs }}>2 days ago</Text>
-                <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                    <Ionicons name="eye-outline" size={16} color={colors.subtext} />
-                    <Text style={{ fontSize: 12, color: colors.subtext }}>1.2K</Text>
-                  </View>
-                  <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                    <Ionicons name="heart-outline" size={16} color={colors.subtext} />
-                    <Text style={{ fontSize: 12, color: colors.subtext }}>245</Text>
-                  </View>
-                </View>
+          {/* Ongoing Post Card */}
+          <View style={{ backgroundColor: '#F9F9F9', borderRadius: 12, padding: spacing.md }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: 14, fontFamily: fonts.semibold }}>Nike Camouflage Joggers</Text>
+              <View style={{ flexDirection: 'row', gap: spacing.sm }}>
+                <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext }}>4:13 Mins</Text>
+                <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext }}>13/15/2023</Text>
               </View>
             </View>
-          ))}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+              <View />
+              <View style={{ backgroundColor: '#FFF5E6', paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, borderRadius: 8 }}>
+                <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: '#E6A800' }}>In review</Text>
+              </View>
+            </View>
+          </View>
         </View>
 
-        {/* Analytics Section */}
-        <View style={{ padding: spacing.lg }}>
-          <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.md }}>Analytics</Text>
-          <TouchableOpacity style={{ backgroundColor: '#F9F9F9', padding: spacing.md, borderRadius: 12, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-            <View>
-              <Text style={{ fontFamily: fonts.semibold }}>View Full Analytics</Text>
-              <Text style={{ fontSize: 12, color: colors.subtext, fontFamily: fonts.regular }}>Track your performance</Text>
-            </View>
-            <Ionicons name="chevron-forward" size={20} color={colors.subtext} />
-          </TouchableOpacity>
+        {/* Latest Uploads Section */}
+        <View style={{ padding: spacing.md }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+            <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Latest Uploads</Text>
+            <TouchableOpacity style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderRadius: 8 }}>
+              <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: 'white' }}>View all</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Video Grid */}
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', gap: spacing.sm }}>
+            {[1, 2, 3, 4].map((video) => (
+              <TouchableOpacity key={video} style={{ width: '48%', marginBottom: spacing.sm }}>
+                <View style={{ width: '100%', height: 120, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}>
+                  <Ionicons name="play-circle" size={40} color={colors.subtext} />
+                </View>
+                <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Video {video}</Text>
+              </TouchableOpacity>
+            ))}
+          </View>
         </View>
       </ScrollView>
 
