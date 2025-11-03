@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { colors, spacing, fonts, radii } from '../../theme/tokens';
 
 type Props = {
   length?: number;
@@ -20,32 +21,34 @@ export default function PinKeypad({ length = 4, onChange }: Props) {
   };
   return (
     <View>
-      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 24 }}>
+      {/* Display boxes */}
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: spacing.xl }}>
         {new Array(length).fill(0).map((_, i) => (
           <View
             key={i}
             style={{
-              width: 56,
-              height: 56,
-              marginHorizontal: 8,
-              borderRadius: 16,
-              backgroundColor: i < code.length ? '#E7FFF6' : '#F4F4F4',
+              width: 64,
+              height: 64,
+              marginHorizontal: spacing.sm,
+              borderRadius: radii.lg,
+              backgroundColor: i < code.length ? colors.brandTint : '#F5F5F5',
               alignItems: 'center',
               justifyContent: 'center',
             }}
           >
-            <Text style={{ fontSize: 28 }}>{i < code.length ? '•' : ''}</Text>
+            <Text style={{ fontSize: 36, fontFamily: fonts.bold, color: colors.text }}>{i < code.length ? '*' : ''}</Text>
           </View>
         ))}
       </View>
 
+      {/* Keypad */}
       {[['1','2','3'],['4','5','6'],['7','8','9'],['','0','<']].map((row, i) => (
-        <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: 12 }}>
+        <View key={i} style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginBottom: spacing.md }}>
           {row.map((k) => (
             <TouchableOpacity
               key={k}
               onPress={() => (k === '<' ? pop() : k ? push(k) : undefined)}
-              style={{ width: 72, height: 56, borderRadius: 16, backgroundColor: '#F4F4F4', alignItems: 'center', justifyContent: 'center' }}
+              style={{ width: 72, height: 64, borderRadius: radii.lg, backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center' }}
             >
               <Text style={{ fontSize: 18 }}>{k}</Text>
             </TouchableOpacity>
