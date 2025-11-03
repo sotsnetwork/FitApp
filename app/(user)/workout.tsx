@@ -14,13 +14,18 @@ export default function UserWorkout() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
+        <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <Text style={{ fontSize: 20 }}>👤</Text>
+          </View>
+        </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>WORKOUT</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
           <TouchableOpacity>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="notifications-outline" size={24} color={colors.text} />
+          <TouchableOpacity onPress={() => router.push('/(user)/saved-videos')}>
+            <Ionicons name="bookmark-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -69,8 +74,12 @@ export default function UserWorkout() {
                 style={{ width: '48%', marginBottom: spacing.md }}
                 onPress={() => router.push('/(user)/post-detail')}
               >
-                <View style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}>
-                  <Ionicons name="barbell" size={40} color={colors.subtext} />
+                <View style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
+                  <View style={{ position: 'absolute', top: spacing.xs, right: spacing.xs }}>
+                    <TouchableOpacity>
+                      <Ionicons name="bookmark-outline" size={20} color={colors.text} />
+                    </TouchableOpacity>
+                  </View>
                 </View>
                 <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, marginBottom: spacing.xs }}>
                   LOREM IPSUM DOLOR
