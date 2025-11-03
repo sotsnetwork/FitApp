@@ -56,7 +56,10 @@ export default function UserProfile() {
 
           {/* Saved Videos */}
           <TouchableOpacity
-            onPress={() => setSelectedMenu('Saved Videos')}
+            onPress={() => {
+              setSelectedMenu('Saved Videos');
+              router.push('/(user)/saved-videos');
+            }}
             style={{
               flexDirection: 'row',
               alignItems: 'center',
