@@ -15,7 +15,8 @@ export default function Signup() {
   const [phone, setPhone] = React.useState('');
   const [referralCode, setReferralCode] = React.useState('');
 
-  const emailOk = /.+@.+\..+/.test(email);
+  // Relaxed email validation to improve UX during onboarding
+  const emailOk = email.trim().length >= 2; // previously: /.+@.+\..+/.test(email)
   const hasLowerCase = /[a-z]/.test(password);
   const hasUpperCase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
