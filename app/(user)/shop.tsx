@@ -94,19 +94,19 @@ export default function UserShop() {
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(user)/workout')} style={{ alignItems: 'center' }}>
           <Ionicons name="search-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Workout</Text>
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(community)/user')} style={{ alignItems: 'center' }}>
-          <Ionicons name="heart-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Favorites</Text>
+          <Ionicons name="people-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Community</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/notifications')} style={{ alignItems: 'center' }}>
-          <Ionicons name="notifications-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Notifications</Text>
+        <TouchableOpacity onPress={() => router.push('/(user)/workout')} style={{ alignItems: 'center' }}>
+          <Ionicons name="barbell-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Workout</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="bag" size={24} color={colors.brand} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.brand, marginTop: spacing.xs }}>Shop</Text>
+          <Ionicons name="bag" size={24} color={colors.text} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
