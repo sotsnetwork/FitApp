@@ -15,11 +15,11 @@ export default function JoinFit() {
       <Text style={{ color: colors.subtext, marginBottom: spacing.xl, fontFamily: fonts.regular }}>
         Select your role to get started
       </Text>
-      <Button title="As a User" onPress={() => router.push({ pathname: '/(auth)/signup', params: { role: 'user' } })} />
+      <Button title="As a User" onPress={() => router.push('/(auth)/signup?role=user')} />
       <View style={{ height: spacing.sm }} />
-      <Button title="As a Creator" variant="ghost" onPress={() => router.push({ pathname: '/(auth)/signup', params: { role: 'creator' } })} />
+      <Button title="As a Creator" variant="ghost" onPress={() => router.push('/(auth)/signup?role=creator')} />
       <View style={{ height: spacing.sm }} />
-      <Button title="As a Vendor" variant="ghost" onPress={() => router.push({ pathname: '/(auth)/signup', params: { role: 'vendor' } })} />
+      <Button title="As a Vendor" variant="ghost" onPress={() => router.push('/(auth)/signup?role=vendor')} />
     </View>
   );
 }
