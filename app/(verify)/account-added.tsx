@@ -20,23 +20,26 @@ export default function AccountAdded() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 96, alignItems: 'center' }}>
+    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={() => router.back()} style={{ position: 'absolute', top: 64, left: spacing.lg }}>
         <Text style={{ fontSize: 24 }}>←</Text>
       </TouchableOpacity>
-      <View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.lg }}>
-        <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 36, color: 'white' }}>✓</Text>
+      {/* Success badge */}
+      <View style={{ width: 220, height: 220, borderRadius: 110, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.xl }}>
+        <View style={{ width: 140, height: 140, borderRadius: 70, backgroundColor: colors.brand, alignItems: 'center', justifyContent: 'center' }}>
+          <Text style={{ fontSize: 56, color: colors.text }}>✓</Text>
         </View>
       </View>
-      <Text style={{ fontSize: 32, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Account Added</Text>
-      <Text style={{ color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, fontFamily: fonts.regular }}>
+      <Text style={{ fontSize: 36, fontFamily: fonts.bold, marginBottom: spacing.md, textAlign: 'center' }}>Account Added</Text>
+      <Text style={{ color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, fontFamily: fonts.regular, lineHeight: 22 }}>
         Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
       </Text>
-      <Button 
-        title="Continue" 
-        onPress={() => router.push(`/(onboarding)/user-details?role=${role}`)} 
-      />
+      <View style={{ alignSelf: 'stretch' }}>
+        <Button 
+          title="Continue" 
+          onPress={() => router.push(`/(onboarding)/user-details?role=${role}`)} 
+        />
+      </View>
     </View>
   );
 }
