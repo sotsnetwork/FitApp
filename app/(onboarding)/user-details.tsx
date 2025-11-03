@@ -18,9 +18,9 @@ export default function UserDetails() {
   const [selectedDay, setSelectedDay] = React.useState(18);
   const [selectedYear, setSelectedYear] = React.useState(1995);
 
-  const months = ['December', 'January', 'February', 'March', 'April'];
-  const days = [16, 17, 18, 19, 20];
-  const years = [1993, 1994, 1995, 1996, 1997];
+  const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const days = Array.from({ length: 31 }, (_, i) => i + 1);
+  const years = Array.from({ length: 60 }, (_, i) => 1980 + i);
 
   const handleDateConfirm = () => {
     setBirthdate(`${selectedMonth} ${selectedDay}, ${selectedYear}`);
@@ -100,91 +100,59 @@ export default function UserDetails() {
         onPress={() => router.push(`/(onboarding)/activities?role=${role}`)} 
       />
 
-      {/* Date Picker Modal */}
+      {/* Date Picker Modal - Figma Styled */}
       <Modal visible={showDatePicker} transparent animationType="slide">
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.lg }}>
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20 }}>
+            {/* Grabber */}
+            <View style={{ alignItems: 'center', paddingTop: spacing.md }}>
+              <View style={{ width: 64, height: 6, borderRadius: 3, backgroundColor: '#EDEDED' }} />
+            </View>
+
+            {/* Wheels */}
+            <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.xl }}>
+              <View style={{ height: 180, flexDirection: 'row', justifyContent: 'space-between' }}>
+                {/* selection highlight */}
+                <View pointerEvents="none" style={{ position: 'absolute', left: spacing.lg, right: spacing.lg, top: 68, height: 44, backgroundColor: '#F5FFF9', borderRadius: 12 }} />
+
+                {/* Month */}
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                  {months.map((m) => (
+                    <TouchableOpacity key={m} onPress={() => setSelectedMonth(m)} style={{ height: 44, justifyContent: 'center' }}>
+                      <Text style={{ textAlign: 'left', fontFamily: fonts.regular, color: selectedMonth === m ? colors.text : '#B3B3B3', fontSize: 18 }}>{m}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+
+                {/* Day */}
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                  {days.map((d) => (
+                    <TouchableOpacity key={d} onPress={() => setSelectedDay(d)} style={{ height: 44, justifyContent: 'center', paddingHorizontal: spacing.md }}>
+                      <Text style={{ textAlign: 'center', fontFamily: fonts.regular, color: selectedDay === d ? colors.text : '#B3B3B3', fontSize: 18 }}>{d}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+
+                {/* Year */}
+                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                  {years.map((y) => (
+                    <TouchableOpacity key={y} onPress={() => setSelectedYear(y)} style={{ height: 44, justifyContent: 'center', alignItems: 'flex-end' }}>
+                      <Text style={{ textAlign: 'right', fontFamily: fonts.regular, color: selectedYear === y ? colors.text : '#B3B3B3', fontSize: 18 }}>{y}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </ScrollView>
+              </View>
+            </View>
+
+            {/* Footer */}
+            <View style={{ borderTopWidth: 1, borderTopColor: colors.border, padding: spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
               <TouchableOpacity onPress={() => setShowDatePicker(false)}>
                 <Text style={{ fontFamily: fonts.regular, color: colors.brand }}>Back</Text>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDateConfirm}>
-                <Text style={{ fontFamily: fonts.semibold, color: colors.brand }}>Done</Text>
+              <TouchableOpacity onPress={handleDateConfirm} style={{ backgroundColor: colors.brand, paddingVertical: spacing.sm, paddingHorizontal: spacing.xl, borderRadius: 24 }}>
+                <Text style={{ color: '#0F0F0F', fontFamily: fonts.semibold }}>Done</Text>
               </TouchableOpacity>
             </View>
-
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                {/* Month Picker */}
-                <View>
-                  <Text style={{ fontFamily: fonts.semibold, marginBottom: spacing.sm }}>Month</Text>
-                  <ScrollView style={{ maxHeight: 200 }}>
-                    {months.map((month) => (
-                      <TouchableOpacity
-                        key={month}
-                        onPress={() => setSelectedMonth(month)}
-                        style={{
-                          padding: spacing.sm,
-                          backgroundColor: selectedMonth === month ? colors.brandTint : 'transparent',
-                          borderRadius: 8,
-                          marginBottom: spacing.xs,
-                        }}
-                      >
-                        <Text style={{ fontFamily: fonts.regular, color: selectedMonth === month ? colors.brand : colors.text }}>
-                          {month}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                {/* Day Picker */}
-                <View>
-                  <Text style={{ fontFamily: fonts.semibold, marginBottom: spacing.sm }}>Day</Text>
-                  <ScrollView style={{ maxHeight: 200 }}>
-                    {days.map((day) => (
-                      <TouchableOpacity
-                        key={day}
-                        onPress={() => setSelectedDay(day)}
-                        style={{
-                          padding: spacing.sm,
-                          backgroundColor: selectedDay === day ? colors.brandTint : 'transparent',
-                          borderRadius: 8,
-                          marginBottom: spacing.xs,
-                        }}
-                      >
-                        <Text style={{ fontFamily: fonts.regular, color: selectedDay === day ? colors.brand : colors.text }}>
-                          {day}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-
-                {/* Year Picker */}
-                <View>
-                  <Text style={{ fontFamily: fonts.semibold, marginBottom: spacing.sm }}>Year</Text>
-                  <ScrollView style={{ maxHeight: 200 }}>
-                    {years.map((year) => (
-                      <TouchableOpacity
-                        key={year}
-                        onPress={() => setSelectedYear(year)}
-                        style={{
-                          padding: spacing.sm,
-                          backgroundColor: selectedYear === year ? colors.brandTint : 'transparent',
-                          borderRadius: 8,
-                          marginBottom: spacing.xs,
-                        }}
-                      >
-                        <Text style={{ fontFamily: fonts.regular, color: selectedYear === year ? colors.brand : colors.text }}>
-                          {year}
-                        </Text>
-                      </TouchableOpacity>
-                    ))}
-                  </ScrollView>
-                </View>
-              </View>
-            </ScrollView>
           </View>
         </View>
       </Modal>
