@@ -3,7 +3,6 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
 
 type NotificationItem = {
@@ -15,14 +14,17 @@ type NotificationItem = {
 };
 
 export default function UserNotifications() {
-  const notifications: NotificationItem[] = [
-    // Today
-    { id: 'n1', icon: 'people-outline', text: 'Lorem ipsum dolor sit amet consectetur. Penatibus gravida sit egestas porta dictumst gravida. Ipsum elit.', time: 'Just now', day: 'today' },
-    { id: 'n2', icon: 'barbell-outline', text: 'Apple stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
-    { id: 'n3', icon: 'bag-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
-    // Yesterday
-    { id: 'n4', icon: 'people-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Thursday 5PM', day: 'yesterday' },
-  ];
+  // Set to empty array to show empty state, or populate with notifications to show list
+  const notifications: NotificationItem[] = [];
+  // Example notifications (uncomment to see list view):
+  // const notifications: NotificationItem[] = [
+  //   // Today
+  //   { id: 'n1', icon: 'people-outline', text: 'Lorem ipsum dolor sit amet consectetur. Penatibus gravida sit egestas porta dictumst gravida. Ipsum elit.', time: 'Just now', day: 'today' },
+  //   { id: 'n2', icon: 'barbell-outline', text: 'Apple stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
+  //   { id: 'n3', icon: 'bag-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
+  //   // Yesterday
+  //   { id: 'n4', icon: 'people-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Thursday 5PM', day: 'yesterday' },
+  // ];
   const hasNotifications = notifications.length > 0;
 
   return (
@@ -38,12 +40,23 @@ export default function UserNotifications() {
       {!hasNotifications ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
           <Ionicons name="document-text-outline" size={72} color={colors.subtext} style={{ marginBottom: spacing.lg }} />
-          <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.sm }}>No Activity</Text>
-          <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, lineHeight: 20 }}>
-            Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
-            {'\n'}Lorem ipsum dolor sit amet consectetur.
+          <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>No Activity</Text>
+          <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, lineHeight: 20, paddingHorizontal: spacing.lg }}>
+            Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus Lorem ipsum dolor sit amet consectetur.
           </Text>
-          <Button title="Go to Workouts" onPress={() => router.push('/(user)/workout')} />
+          <TouchableOpacity
+            onPress={() => router.push('/(user)/workout')}
+            style={{
+              borderWidth: 1,
+              borderColor: colors.border,
+              borderRadius: 12,
+              paddingVertical: spacing.md,
+              paddingHorizontal: spacing.xl,
+              backgroundColor: 'white',
+            }}
+          >
+            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Go to Workouts</Text>
+          </TouchableOpacity>
         </View>
       ) : (
         <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
