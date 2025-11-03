@@ -90,21 +90,21 @@ export default function UserWorkout() {
           <Ionicons name="home-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="search" size={24} color={colors.brand} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.brand, marginTop: spacing.xs }}>Workout</Text>
+        <TouchableOpacity onPress={() => router.push('/(user)/workout')} style={{ alignItems: 'center' }}>
+          <Ionicons name="search-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(community)/user')} style={{ alignItems: 'center' }}>
           <Ionicons name="people-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Community</Text>
         </TouchableOpacity>
+        <TouchableOpacity style={{ alignItems: 'center' }}>
+          <Ionicons name="barbell" size={24} color={colors.text} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Workout</Text>
+        </TouchableOpacity>
         <TouchableOpacity onPress={() => router.push('/(user)/shop')} style={{ alignItems: 'center' }}>
           <Ionicons name="bag-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="person-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Profile</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
