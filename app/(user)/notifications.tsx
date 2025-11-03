@@ -6,8 +6,24 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
 
+type NotificationItem = {
+  id: string;
+  icon: keyof typeof Ionicons.glyphMap;
+  text: string;
+  time: string;
+  day?: 'today' | 'yesterday';
+};
+
 export default function UserNotifications() {
-  const hasNotifications = false; // Change to true to see notifications list
+  const notifications: NotificationItem[] = [
+    // Today
+    { id: 'n1', icon: 'people-outline', text: 'Lorem ipsum dolor sit amet consectetur. Penatibus gravida sit egestas porta dictumst gravida. Ipsum elit.', time: 'Just now', day: 'today' },
+    { id: 'n2', icon: 'barbell-outline', text: 'Apple stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
+    { id: 'n3', icon: 'bag-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Just now', day: 'today' },
+    // Yesterday
+    { id: 'n4', icon: 'people-outline', text: 'Google stocks increased by 0.9% over the last 24 hours', time: 'Thursday 5PM', day: 'yesterday' },
+  ];
+  const hasNotifications = notifications.length > 0;
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -21,32 +37,40 @@ export default function UserNotifications() {
 
       {!hasNotifications ? (
         <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: spacing.xl }}>
-          <View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.lg }}>
-            <Ionicons name="document-text-outline" size={60} color={colors.subtext} />
-          </View>
+          <Ionicons name="document-text-outline" size={72} color={colors.subtext} style={{ marginBottom: spacing.lg }} />
           <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.sm }}>No Activity</Text>
           <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, lineHeight: 20 }}>
-            Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus consectetur.
+            Lorem ipsum dolor sit amet consectetur. Nec volutpat nunc lectus vivamus dolor. Dolor ultricies lacus
+            {'\n'}Lorem ipsum dolor sit amet consectetur.
           </Text>
           <Button title="Go to Workouts" onPress={() => router.push('/(user)/workout')} />
         </View>
       ) : (
-        <ScrollView style={{ flex: 1 }}>
-          <View style={{ padding: spacing.lg }}>
-            {/* Notification Items */}
-            {[1, 2, 3].map((item, index) => (
-              <View key={index} style={{ marginBottom: spacing.md, paddingBottom: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-                <View style={{ flexDirection: 'row', alignItems: 'flex-start' }}>
-                  <Ionicons name="time-outline" size={20} color={colors.subtext} style={{ marginRight: spacing.sm }} />
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 14, lineHeight: 20 }}>
-                      Google stocks increased by 0.9% over the last 24 hours
-                    </Text>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginTop: spacing.xs }}>00</Text>
+        <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+          <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.md, paddingBottom: spacing.xl }}>
+            {notifications.map((n, idx) => {
+              const showYesterdayChip = n.day === 'yesterday' && notifications[idx - 1]?.day !== 'yesterday';
+              return (
+                <View key={n.id}>
+                  {showYesterdayChip && (
+                    <View style={{ alignItems: 'center', marginVertical: spacing.md }}>
+                      <View style={{ backgroundColor: '#F1F1F1', borderRadius: 12, paddingHorizontal: spacing.lg, paddingVertical: spacing.xs }}>
+                        <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>Yesterday</Text>
+                      </View>
+                    </View>
+                  )}
+                  <View style={{ paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', gap: spacing.md }}>
+                      <Ionicons name={n.icon} size={22} color={colors.text} />
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontFamily: fonts.regular, fontSize: 14, lineHeight: 20 }}>{n.text}</Text>
+                        <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginTop: 2 }}>{n.time}</Text>
+                      </View>
+                    </View>
                   </View>
                 </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         </ScrollView>
       )}
