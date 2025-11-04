@@ -16,7 +16,7 @@ export default function CreatorCommunity() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>DASHBOARD</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
           <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
