@@ -8,9 +8,9 @@ import { spacing, fonts, colors } from '../../theme/tokens';
 export default function VerifyPhone() {
   const params = useLocalSearchParams();
   const phoneNumber = (params.phone as string) || '+2348060113697';
-  const [code, setCode] = React.useState(['8', '', '3', '']);
+  const [code, setCode] = React.useState(['', '', '', '']);
   const [resendTime, setResendTime] = React.useState(48);
-  const [activeIndex, setActiveIndex] = React.useState(1);
+  const [activeIndex, setActiveIndex] = React.useState(0);
 
   React.useEffect(() => {
     if (resendTime > 0) {
@@ -21,13 +21,19 @@ export default function VerifyPhone() {
 
   const handleKeyPress = (key: string) => {
     if (key === 'backspace') {
-      const emptyIndex = code.findIndex((c, i) => c === '' && i < activeIndex);
-      const indexToClear = emptyIndex !== -1 ? emptyIndex : code.length - 1;
-      if (code[indexToClear]) {
+      // Find the last filled index
+      let lastFilledIndex = -1;
+      for (let i = code.length - 1; i >= 0; i--) {
+        if (code[i] !== '') {
+          lastFilledIndex = i;
+          break;
+        }
+      }
+      if (lastFilledIndex !== -1) {
         const newCode = [...code];
-        newCode[indexToClear] = '';
+        newCode[lastFilledIndex] = '';
         setCode(newCode);
-        setActiveIndex(indexToClear);
+        setActiveIndex(lastFilledIndex);
       }
     } else if (/\d/.test(key)) {
       const emptyIndex = code.findIndex((c) => c === '');
@@ -35,7 +41,8 @@ export default function VerifyPhone() {
         const newCode = [...code];
         newCode[emptyIndex] = key;
         setCode(newCode);
-        setActiveIndex(emptyIndex + 1);
+        const nextEmptyIndex = newCode.findIndex((c) => c === '');
+        setActiveIndex(nextEmptyIndex !== -1 ? nextEmptyIndex : 4);
         
         // Auto-verify when all 4 digits entered
         if (emptyIndex === 3) {
@@ -52,17 +59,14 @@ export default function VerifyPhone() {
     const isEmpty = !hasValue;
     const isActive = index === activeIndex && isEmpty;
     
-    if (hasValue && index === 0) {
-      // Success state (green)
+    if (hasValue) {
+      // Success state (green) when filled
       return { borderColor: colors.brand, backgroundColor: colors.brandTint };
     } else if (isActive) {
-      // Error/Active state (red)
+      // Error/Active state (red) when empty and active
       return { borderColor: '#F3B5B5', backgroundColor: '#FFF5F5' };
-    } else if (hasValue && index === 2) {
-      // Success state (green)
-      return { borderColor: colors.brand, backgroundColor: colors.brandTint };
     } else {
-      // Default state (gray)
+      // Default state (gray) when empty and not active
       return { borderColor: colors.border, backgroundColor: 'white' };
     }
   };
@@ -140,12 +144,13 @@ export default function VerifyPhone() {
           <View key={rowIndex} style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.sm, marginBottom: spacing.sm }}>
             {row.map((keyObj, keyIndex) => {
               const key = keyObj.num;
+              const uniqueKey = `${rowIndex}-${keyIndex}-${key}`;
               if (key === '') {
-                return <View key={keyIndex} style={{ width: 72, height: 72 }} />;
+                return <View key={uniqueKey} style={{ width: 72, height: 72 }} />;
               }
               return (
                 <TouchableOpacity
-                  key={key}
+                  key={uniqueKey}
                   onPress={() => handleKeyPress(key)}
                   style={{
                     width: 72,
