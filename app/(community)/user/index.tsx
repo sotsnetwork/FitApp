@@ -158,8 +158,7 @@ export default function UserCommunity() {
               <Ionicons name="share-outline" size={20} color={colors.text} />
             </View>
           </View>
-
-          {/* Challenge Post */}
+            </>
           )}
         </View>
       </ScrollView>
