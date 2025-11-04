@@ -19,7 +19,7 @@ export default function ForgotPassword() {
       </Text>
       <Input value={email} onChangeText={setEmail} placeholder="Enter email" leftIcon="mail-outline" showClearIcon />
       <View style={{ height: spacing.lg }} />
-      <Button title="Continue" onPress={() => router.push('/(auth)/reset-sent')} />
+      <Button title="Continue" onPress={() => router.push('/(auth)/verify-phone')} />
       <View style={{ flex: 1 }} />
       <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: spacing.xl }}>
         <TouchableOpacity onPress={() => router.push('/(auth)/login')}>
