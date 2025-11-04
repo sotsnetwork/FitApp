@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -9,6 +9,8 @@ const categories = ['All', 'Walk', 'Run', 'Ride', 'Hike', 'Swim', 'Crossfit', 'R
 
 export default function UserWorkout() {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
+  const [sponsoredDropdownVisible, setSponsoredDropdownVisible] = React.useState(false);
+  const [selectedFilter, setSelectedFilter] = React.useState('Sponsored');
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -61,8 +63,11 @@ export default function UserWorkout() {
         <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, marginBottom: spacing.md }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
             <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>RECOMMENDED</Text>
-            <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-              <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext }}>Sponsored</Text>
+            <TouchableOpacity
+              onPress={() => setSponsoredDropdownVisible(true)}
+              style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+            >
+              <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext }}>{selectedFilter}</Text>
               <Ionicons name="chevron-down" size={16} color={colors.subtext} />
             </TouchableOpacity>
           </View>
@@ -115,6 +120,111 @@ export default function UserWorkout() {
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Sponsored Dropdown Modal */}
+      <Modal
+        visible={sponsoredDropdownVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setSponsoredDropdownVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => setSponsoredDropdownVisible(false)}
+          />
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
+            {/* Handle/Grabber */}
+            <View style={{ alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.md }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: colors.border,
+                }}
+              />
+            </View>
+
+            {/* Options */}
+            <View>
+              {/* Sponsored Option */}
+              <TouchableOpacity
+                onPress={() => setSelectedFilter('Sponsored')}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing.lg,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.border,
+                }}
+              >
+                <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Sponsored</Text>
+                {selectedFilter === 'Sponsored' && (
+                  <View
+                    style={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: 12,
+                      backgroundColor: colors.brand,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Ionicons name="checkmark" size={16} color="#0F0F0F" />
+                  </View>
+                )}
+              </TouchableOpacity>
+
+              {/* Creators Option */}
+              <TouchableOpacity
+                onPress={() => setSelectedFilter('Creators')}
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  paddingVertical: spacing.md,
+                  paddingHorizontal: spacing.lg,
+                }}
+              >
+                <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Creators</Text>
+                {selectedFilter === 'Creators' && (
+                  <View
+                    style={{
+                      width: 24,
+                      height: 24,
+                      borderRadius: 12,
+                      backgroundColor: colors.brand,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <Ionicons name="checkmark" size={16} color="#0F0F0F" />
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {/* Done Button */}
+            <TouchableOpacity
+              onPress={() => setSponsoredDropdownVisible(false)}
+              style={{
+                backgroundColor: colors.text,
+                marginHorizontal: spacing.lg,
+                marginTop: spacing.lg,
+                paddingVertical: spacing.md,
+                borderRadius: 12,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: 'white' }}>Done</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
