@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 
-const categories = ['All', 'Yoga', 'Alba/Achilles', 'Squat', 'Jumping'];
+const categories = ['All', 'Walk', 'Run', 'Ride', 'Hike', 'Swim', 'Crossfit', 'Rock Climb'];
 
 export default function UserWorkout() {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
@@ -31,22 +31,23 @@ export default function UserWorkout() {
       </View>
 
       {/* Filter Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.sm }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 0 }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.xs }}>
           {categories.map((category) => (
             <TouchableOpacity
               key={category}
               onPress={() => setSelectedCategory(category)}
               style={{
                 paddingHorizontal: spacing.md,
-                paddingVertical: spacing.sm,
-                borderRadius: 12,
+                paddingVertical: 3,
+                borderRadius: 16,
                 backgroundColor: selectedCategory === category ? colors.brand : 'white',
                 borderWidth: 1,
                 borderColor: selectedCategory === category ? colors.brand : colors.border,
+                height: 36,
               }}
             >
-              <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
                 {category}
               </Text>
             </TouchableOpacity>
@@ -57,7 +58,7 @@ export default function UserWorkout() {
       {/* Content */}
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Recommended Section */}
-        <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, marginBottom: spacing.md }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
             <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>RECOMMENDED</Text>
             <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
@@ -68,7 +69,7 @@ export default function UserWorkout() {
 
           {/* Workout Grid */}
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {[1, 2, 3, 4].map((item) => (
+            {[1, 2, 3, 4, 5, 6, 7].map((item) => (
               <View key={item} style={{ width: '48%', marginBottom: spacing.md }}>
                 <TouchableOpacity
                   style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}
