@@ -28,7 +28,15 @@ export default function AccountVerification() {
       <View style={{ height: spacing.lg }} />
       <Button 
         title="Next" 
-        onPress={() => router.push({ pathname: '/(forms)/contact-details', params: { role } })} 
+        onPress={() => {
+          // Both Creators and Vendors need to fill Contact Details (Shop Address, Closest Landmark)
+          // Users skip both Account Verification and Contact Details
+          if (role === 'creator' || role === 'vendor') {
+            router.push({ pathname: '/(forms)/contact-details', params: { role } });
+          } else {
+            router.push({ pathname: '/(forms)/link-social', params: { role } });
+          }
+        }} 
       />
     </View>
   );
