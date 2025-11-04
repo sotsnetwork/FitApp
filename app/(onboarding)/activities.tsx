@@ -40,7 +40,7 @@ export default function Activities() {
         What types of activities do you like to do?
       </Text>
 
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {activities.map((activity) => {
           const isSelected = selectedActivities.includes(activity);
           return (
@@ -50,19 +50,17 @@ export default function Activities() {
               style={{
                 padding: spacing.md,
                 borderRadius: 12,
-                borderWidth: 2,
-                borderColor: isSelected ? colors.brand : colors.border,
-                backgroundColor: isSelected ? colors.brandTint : 'transparent',
+                borderWidth: 1,
+                borderColor: colors.border,
+                backgroundColor: isSelected ? colors.brandTint : '#F5F5F5',
                 marginBottom: spacing.md,
-                flexDirection: 'row',
                 alignItems: 'center',
-                justifyContent: 'space-between',
+                justifyContent: 'center',
               }}
             >
-              <Text style={{ fontFamily: fonts.regular, color: isSelected ? colors.brand : colors.text, fontSize: 16 }}>
+              <Text style={{ fontFamily: fonts.regular, color: colors.text, fontSize: 16, textAlign: 'center' }}>
                 {activity}
               </Text>
-              {isSelected && <Ionicons name="checkmark-circle" size={24} color={colors.brand} />}
             </TouchableOpacity>
           );
         })}
