@@ -32,21 +32,21 @@ export default function UserWorkout() {
 
       {/* Filter Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: spacing.md }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.md }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.sm }}>
           {categories.map((category) => (
             <TouchableOpacity
               key={category}
               onPress={() => setSelectedCategory(category)}
               style={{
-                paddingHorizontal: spacing.md,
-                paddingVertical: spacing.sm,
+                paddingHorizontal: spacing.sm,
+                paddingVertical: spacing.xs,
                 borderRadius: 20,
-                backgroundColor: selectedCategory === category ? colors.brand : 'transparent',
+                backgroundColor: selectedCategory === category ? colors.brand : 'white',
                 borderWidth: 1,
-                borderColor: selectedCategory === category ? colors.brand : colors.border,
+                borderColor: selectedCategory === category ? colors.brand : '#E0E0E0',
               }}
             >
-              <Text style={{ fontFamily: fonts.regular, color: selectedCategory === category ? '#0F0F0F' : colors.text }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: selectedCategory === category ? '#0F0F0F' : colors.text }}>
                 {category}
               </Text>
             </TouchableOpacity>
@@ -69,25 +69,23 @@ export default function UserWorkout() {
           {/* Workout Grid */}
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {[1, 2, 3, 4].map((item) => (
-              <TouchableOpacity
-                key={item}
-                style={{ width: '48%', marginBottom: spacing.md }}
-                onPress={() => router.push('/(user)/post-detail')}
-              >
-                <View style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
-                  <View style={{ position: 'absolute', top: spacing.xs, right: spacing.xs }}>
-                    <TouchableOpacity>
-                      <Ionicons name="bookmark-outline" size={20} color={colors.text} />
-                    </TouchableOpacity>
-                  </View>
+              <View key={item} style={{ width: '48%', marginBottom: spacing.md }}>
+                <TouchableOpacity
+                  style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}
+                  onPress={() => router.push('/(user)/post-detail')}
+                />
+                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, flex: 1 }}>
+                    LOREM IPSUM DOLOR
+                  </Text>
+                  <TouchableOpacity onPress={() => {}}>
+                    <Ionicons name="bookmark-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
                 </View>
-                <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, marginBottom: spacing.xs }}>
-                  LOREM IPSUM DOLOR
-                </Text>
                 <View style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start' }}>
                   <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Sponsored</Text>
                 </View>
-              </TouchableOpacity>
+              </View>
             ))}
           </View>
         </View>
