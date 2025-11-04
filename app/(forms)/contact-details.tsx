@@ -135,47 +135,21 @@ export default function ContactDetails() {
         </View>
       </View>
 
-      {/* Shop Address - button styled row to match design */}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {}}
-        style={{
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: 16,
-          padding: spacing.md,
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 12,
-        }}
-      >
-        <Ionicons name="location-outline" size={20} color={colors.subtext} style={{ marginRight: spacing.sm }} />
-        <Text style={{ flex: 1, color: shopAddress ? colors.text : colors.subtext, fontFamily: fonts.regular }}>
-          {shopAddress || 'Shop Address'}
-        </Text>
-        <Ionicons name="chevron-forward" size={18} color={colors.subtext} />
-      </TouchableOpacity>
+      {/* Shop Address - text input field */}
+      <Input 
+        placeholder="Shop Address" 
+        value={shopAddress} 
+        onChangeText={setShopAddress}
+        leftIcon="location-outline"
+      />
 
-      {/* Closest Landmark - button styled row (uses flag icon instead of location pin) */}
-      <TouchableOpacity
-        activeOpacity={0.8}
-        onPress={() => {}}
-        style={{
-          borderWidth: 1,
-          borderColor: colors.border,
-          borderRadius: 16,
-          padding: spacing.md,
-          flexDirection: 'row',
-          alignItems: 'center',
-          marginBottom: 12,
-        }}
-      >
-        <Ionicons name="flag-outline" size={20} color={colors.subtext} style={{ marginRight: spacing.sm }} />
-        <Text style={{ flex: 1, color: landmark ? colors.text : colors.subtext, fontFamily: fonts.regular }}>
-          {landmark || 'Closest Landmark'}
-        </Text>
-        <Ionicons name="chevron-forward" size={18} color={colors.subtext} />
-      </TouchableOpacity>
+      {/* Closest Landmark - text input field */}
+      <Input 
+        placeholder="Closest Landmark" 
+        value={landmark} 
+        onChangeText={setLandmark}
+        leftIcon="flag-outline"
+      />
 
       <View style={{ height: spacing.lg }} />
       <Button 
