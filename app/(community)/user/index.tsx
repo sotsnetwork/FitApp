@@ -9,6 +9,7 @@ const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
 export default function UserCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
+  const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -49,8 +50,54 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        {/* Feed Posts */}
         <View style={{ padding: spacing.lg }}>
+          {selectedTab === 'Challenges' ? (
+            <>
+              {/* Sub tabs */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.md }}>
+                {(['Leaderboard','Challenges'] as const).map((tab) => (
+                  <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
+                    <View style={{ alignItems: 'center' }}>
+                      <Text style={{ fontFamily: fonts.semibold, color: challengeSubTab === tab ? colors.text : colors.subtext }}>{tab}</Text>
+                      {challengeSubTab === tab && (
+                        <View style={{ height: 2, backgroundColor: colors.text, width: 100, marginTop: 8 }} />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* Hero card */}
+              <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm }}>Join 20,234 Runners</Text>
+              <View style={{ width: '100%', height: 180, backgroundColor: '#FF6A00', borderRadius: 12, marginBottom: spacing.md }} />
+              <TouchableOpacity style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center', marginBottom: spacing.xl }}>
+                <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>Join Challenge</Text>
+              </TouchableOpacity>
+
+              {/* Ongoing list */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
+                <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>Ongoing Challenges</Text>
+                <TouchableOpacity>
+                  <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>See all</Text>
+                </TouchableOpacity>
+              </View>
+              {[1,2,3].map((i) => (
+                <TouchableOpacity key={i} onPress={() => router.push('/(community)/user/challenge-details')} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+                  <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
+                    <Text>🏅</Text>
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: fonts.semibold }}>July Weekly Challenge</Text>
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>0.00 / 15.00km</Text>
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>4 days Left</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color={colors.subtext} />
+                </TouchableOpacity>
+              ))}
+            </>
+          ) : (
+            <>
+        {/* Feed Posts */}
           {/* Post 1 */}
           <View style={{ marginBottom: spacing.xl }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
@@ -113,36 +160,6 @@ export default function UserCommunity() {
           </View>
 
           {/* Challenge Post */}
-          {selectedTab === 'Challenges' && (
-            <View style={{ marginBottom: spacing.xl }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-                  <Text style={{ fontSize: 16 }}>👤</Text>
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Daily Excerc...</Text>
-                  <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>10M joined</Text>
-                  <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Soust || Albs Loins || Yoga</Text>
-                </View>
-              </View>
-              <View style={{ width: '100%', height: 200, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}>
-                <Text style={{ color: colors.subtext }}>Challenge Image</Text>
-              </View>
-              <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.sm, lineHeight: 20 }}>
-                Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
-              </Text>
-              <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                  <Ionicons name="heart-outline" size={20} color={colors.text} />
-                  <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>2</Text>
-                </View>
-                <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                  <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                  <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
-                </View>
-                <Ionicons name="share-outline" size={20} color={colors.text} />
-              </View>
-            </View>
           )}
         </View>
       </ScrollView>
