@@ -44,8 +44,8 @@ export default function UserHome() {
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
             <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>Daily Goal</Text>
-            <TouchableOpacity>
-              <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.brand }}>See all</Text>
+            <TouchableOpacity onPress={() => router.push('/(user)/daily-goals')}>
+              <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.text, opacity: 0.5 }}>See all</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity style={{ backgroundColor: '#F9F9F9', borderRadius: 16, overflow: 'hidden' }}>
