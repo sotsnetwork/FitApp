@@ -1,24 +1,36 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ActivityIndicator, View, Text } from 'react-native';
+import { View } from 'react-native';
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
-import PandaIllustration from '../components/ui/PandaIllustration';
+import * as SplashScreen from 'expo-splash-screen';
+
+// Prevent the splash screen from auto-hiding before asset loading is complete
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_600SemiBold, Inter_700Bold });
+
+  const onLayoutRootView = useCallback(async () => {
+    if (fontsLoaded) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [fontsLoaded]);
+
   if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: '#66FFCC' }}>
-        <PandaIllustration />
-        <Text style={{ marginTop: 20, fontSize: 24, fontWeight: 'bold', color: '#0F0F0F' }}>FitApp</Text>
-        <ActivityIndicator size="large" color="#0F0F0F" style={{ marginTop: 20 }} />
-      </View>
-    );
+    return null;
   }
+
   return (
     <SafeAreaProvider>
-      <Stack screenOptions={{ headerShown: false }} />
+      <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+        <Stack screenOptions={{ headerShown: false }} />
+      </View>
     </SafeAreaProvider>
   );
 }
