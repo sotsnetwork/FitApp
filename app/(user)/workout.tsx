@@ -38,15 +38,15 @@ export default function UserWorkout() {
               key={category}
               onPress={() => setSelectedCategory(category)}
               style={{
-                paddingHorizontal: spacing.sm,
-                paddingVertical: spacing.xs,
-                borderRadius: 20,
+                paddingHorizontal: spacing.md,
+                paddingVertical: spacing.sm,
+                borderRadius: 12,
                 backgroundColor: selectedCategory === category ? colors.brand : 'white',
                 borderWidth: 1,
-                borderColor: selectedCategory === category ? colors.brand : '#E0E0E0',
+                borderColor: selectedCategory === category ? colors.brand : colors.border,
               }}
             >
-              <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: selectedCategory === category ? '#0F0F0F' : colors.text }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
                 {category}
               </Text>
             </TouchableOpacity>
