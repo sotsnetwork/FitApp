@@ -15,6 +15,11 @@ export default function UserCommunity() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
+        <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <Text style={{ fontSize: 20 }}>👤</Text>
+          </View>
+        </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>COMMUNITY</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
           <TouchableOpacity>
@@ -28,20 +33,22 @@ export default function UserCommunity() {
 
       {/* Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.xs }}>
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setSelectedTab(tab)}
               style={{
                 paddingHorizontal: spacing.md,
-                paddingVertical: spacing.md,
-                borderBottomWidth: selectedTab === tab ? 2 : 0,
-                borderBottomColor: colors.brand,
-                marginRight: spacing.md,
+                paddingVertical: 3,
+                borderRadius: 16,
+                backgroundColor: selectedTab === tab ? colors.text : 'transparent',
+                height: 36,
+                justifyContent: 'center',
+                alignItems: 'center',
               }}
             >
-              <Text style={{ fontFamily: fonts.semibold, color: selectedTab === tab ? colors.brand : colors.subtext }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedTab === tab ? 'white' : colors.subtext }}>
                 {tab}
               </Text>
             </TouchableOpacity>
@@ -50,11 +57,11 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ padding: spacing.lg }}>
+        <View style={{ padding: spacing.lg, paddingTop: 0 }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.md }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.sm, marginBottom: spacing.md }}>
                 {(['Leaderboard','Challenges'] as const).map((tab) => (
                   <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
                     <View style={{ alignItems: 'center' }}>
@@ -114,12 +121,12 @@ export default function UserCommunity() {
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.sm, lineHeight: 20 }}>
               Happy to be rated No1. on the World Top 100 Lifters. Thank you for your support!!
             </Text>
-            <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
-              <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
+            <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
+              <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.md }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                <Ionicons name="heart-outline" size={20} color={colors.text} />
+                <Ionicons name="heart" size={20} color={colors.brand} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
@@ -130,33 +137,38 @@ export default function UserCommunity() {
             </View>
           </View>
 
-          {/* Post 2 */}
+          {/* Post 2 - Daily Exercise Post */}
           <View style={{ marginBottom: spacing.xl }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-                <Text style={{ fontSize: 16 }}>👤</Text>
-              </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
+                <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text }}>Daily Excerc...</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginTop: 2 }}>10M joined</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Squat || Albs || Loins || Yoga</Text>
               </View>
-              <TouchableOpacity style={{ backgroundColor: colors.border, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: 16 }}>
-                <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.text }}>Following</Text>
+              <TouchableOpacity>
+                <Ionicons name="ellipsis-horizontal" size={20} color={colors.text} />
               </TouchableOpacity>
             </View>
-            <View style={{ width: '100%', height: 200, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity
+              onPress={() => router.push('/(user)/post-detail')}
+              style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
+            >
               <Text style={{ color: colors.subtext }}>Post Image</Text>
-            </View>
-            <View style={{ flexDirection: 'row', gap: spacing.md }}>
+            </TouchableOpacity>
+            <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
-                <Ionicons name="heart-outline" size={20} color={colors.text} />
+                <Ionicons name="heart" size={20} color={colors.brand} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
               </View>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
               </View>
               <Ionicons name="share-outline" size={20} color={colors.text} />
             </View>
+            <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20 }}>
+              Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
+            </Text>
           </View>
             </>
           )}
