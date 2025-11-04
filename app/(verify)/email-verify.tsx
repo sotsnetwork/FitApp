@@ -30,7 +30,16 @@ export default function EmailVerified() {
       <View style={{ alignSelf: 'stretch' }}>
         <Button 
           title="Proceed" 
-          onPress={() => router.push({ pathname: '/(forms)/account-verification', params: { role } })} 
+          onPress={() => {
+            // Users: Skip Account Verification, Contact Details, and Link Social → Go directly to Account Verified
+            // Creators & Vendors: Go through Account Verification → Contact Details → Link Social → Account Verified
+            if (role === 'creator' || role === 'vendor') {
+              router.push({ pathname: '/(forms)/account-verification', params: { role } });
+            } else {
+              // Users skip all business-related screens and go directly to account verified
+              router.push({ pathname: '/(verify)/account-verified', params: { role } });
+            }
+          }} 
         />
       </View>
     </View>
