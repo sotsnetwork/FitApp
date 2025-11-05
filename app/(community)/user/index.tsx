@@ -58,7 +58,7 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg }}>
+        <View style={{ paddingHorizontal: spacing.lg, marginTop: 0, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
