@@ -61,12 +61,15 @@ export default function PostDetail() {
       </View>
 
       {/* Top Overlay - Close Button and Engagement Metrics */}
-      <View style={{ position: 'absolute', top: spacing.lg, left: spacing.lg, zIndex: 100 }}>
+      <View style={{ position: 'absolute', top: spacing.lg, left: spacing.lg, zIndex: 1000, pointerEvents: 'box-none' }}>
         {/* Close Button */}
         <TouchableOpacity
-          onPress={() => router.back()}
+          onPress={() => {
+            console.log('Close button pressed');
+            router.back();
+          }}
           activeOpacity={0.7}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+          hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
           style={{
             width: 40,
             height: 40,
@@ -75,6 +78,7 @@ export default function PostDetail() {
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: spacing.md,
+            zIndex: 1001,
           }}
         >
           <Ionicons name="close" size={24} color="white" />
