@@ -4,13 +4,48 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useSavedPosts } from '../../contexts/SavedPostsContext';
 
 const categories = ['All', 'Walk', 'Run', 'Ride', 'Hike', 'Swim', 'Crossfit', 'Rock Climb'];
+
+// Mock posts with activity tags
+const allPosts = [
+  { id: '1', title: 'LOREM IPSUM DOLOR', activityTag: 'Walk', isSponsored: true },
+  { id: '2', title: 'LOREM IPSUM DOLOR', activityTag: 'Run', isSponsored: true },
+  { id: '3', title: 'LOREM IPSUM DOLOR', activityTag: 'Ride', isSponsored: true },
+  { id: '4', title: 'LOREM IPSUM DOLOR', activityTag: 'Hike', isSponsored: true },
+  { id: '5', title: 'LOREM IPSUM DOLOR', activityTag: 'Swim', isSponsored: true },
+  { id: '6', title: 'LOREM IPSUM DOLOR', activityTag: 'Crossfit', isSponsored: true },
+  { id: '7', title: 'LOREM IPSUM DOLOR', activityTag: 'Rock Climb', isSponsored: true },
+  { id: '8', title: 'LOREM IPSUM DOLOR', activityTag: 'Walk', isSponsored: false },
+  { id: '9', title: 'LOREM IPSUM DOLOR', activityTag: 'Run', isSponsored: false },
+  { id: '10', title: 'LOREM IPSUM DOLOR', activityTag: 'Ride', isSponsored: false },
+];
 
 export default function UserWorkout() {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const [sponsoredDropdownVisible, setSponsoredDropdownVisible] = React.useState(false);
   const [selectedFilter, setSelectedFilter] = React.useState('Sponsored');
+  const { savePost, unsavePost, isSaved } = useSavedPosts();
+
+  // Filter posts based on selected category
+  const filteredPosts = React.useMemo(() => {
+    let filtered = allPosts;
+    
+    // Filter by activity tag
+    if (selectedCategory !== 'All') {
+      filtered = filtered.filter((post) => post.activityTag === selectedCategory);
+    }
+
+    // Filter by Sponsored/Creators
+    if (selectedFilter === 'Sponsored') {
+      filtered = filtered.filter((post) => post.isSponsored);
+    } else if (selectedFilter === 'Creators') {
+      filtered = filtered.filter((post) => !post.isSponsored);
+    }
+
+    return filtered;
+  }, [selectedCategory, selectedFilter]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -76,25 +111,38 @@ export default function UserWorkout() {
 
           {/* Workout Grid */}
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {[1, 2, 3, 4, 5, 6, 7].map((item) => (
-              <View key={item} style={{ width: '48%', marginBottom: spacing.md }}>
-                <TouchableOpacity
-                  style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}
-                  onPress={() => router.push('/(user)/post-detail')}
-                />
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs }}>
-                  <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, flex: 1 }}>
-                    LOREM IPSUM DOLOR
-                  </Text>
-                  <TouchableOpacity onPress={() => {}}>
-                    <Ionicons name="bookmark-outline" size={20} color={colors.text} />
-                  </TouchableOpacity>
+            {filteredPosts.map((post) => {
+              const saved = isSaved(post.id);
+              return (
+                <View key={post.id} style={{ width: '48%', marginBottom: spacing.md }}>
+                  <TouchableOpacity
+                    style={{ width: '100%', height: 150, backgroundColor: colors.border, borderRadius: 12, marginBottom: spacing.xs, alignItems: 'center', justifyContent: 'center' }}
+                    onPress={() => router.push('/(user)/post-detail')}
+                  />
+                  <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs }}>
+                    <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, flex: 1 }}>
+                      {post.title}
+                    </Text>
+                    <TouchableOpacity
+                      onPress={() => {
+                        if (saved) {
+                          unsavePost(post.id);
+                        } else {
+                          savePost(post);
+                        }
+                      }}
+                    >
+                      <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={20} color={saved ? colors.brand : colors.text} />
+                    </TouchableOpacity>
+                  </View>
+                  {post.isSponsored && (
+                    <View style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start' }}>
+                      <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Sponsored</Text>
+                    </View>
+                  )}
                 </View>
-                <View style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start' }}>
-                  <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Sponsored</Text>
-                </View>
-              </View>
-            ))}
+              );
+            })}
           </View>
         </View>
       </ScrollView>
