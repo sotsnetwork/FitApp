@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams } from 'expo-router';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
@@ -22,7 +23,7 @@ export default function AccountAdded() {
   return (
     <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={() => router.back()} style={{ position: 'absolute', top: 64, left: spacing.lg }}>
-        <Text style={{ fontSize: 24 }}>←</Text>
+        <Ionicons name="arrow-back" size={24} color={colors.text} />
       </TouchableOpacity>
       {/* Success badge */}
       <View style={{ width: 220, height: 220, borderRadius: 110, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.xl }}>
