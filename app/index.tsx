@@ -10,7 +10,7 @@ export default function Landing() {
   return (
     <View style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
       {/* Panda Illustration Card - Top 60% */}
-      <View style={{ height: '60%', backgroundColor: BRAND, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 40, paddingHorizontal: 20 }}>
+      <View style={{ height: '50%', backgroundColor: BRAND, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20 }}>
         <Image
           source={require('../assets/panda.png')}
           style={{ width: 220, height: 220, resizeMode: 'contain' }}
@@ -18,7 +18,7 @@ export default function Landing() {
       </View>
 
       {/* Content Section */}
-      <View style={{ flex: 1, padding: spacing.lg, justifyContent: 'center' }}>
+      <View style={{ flex: 1, padding: spacing.lg, paddingTop: spacing.md, justifyContent: 'flex-start' }}>
         <Text style={{ color: 'white', fontSize: 36, fontFamily: fonts.bold, marginBottom: 8 }}>
           Join the Movement
         </Text>
