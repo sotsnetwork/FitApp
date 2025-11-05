@@ -61,7 +61,7 @@ export default function UserCommunity() {
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.sm, marginBottom: spacing.md }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.xs, marginBottom: spacing.md }}>
                 {(['Leaderboard','Challenges'] as const).map((tab) => (
                   <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
                     <View style={{ alignItems: 'center' }}>
