@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,6 +10,7 @@ const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 export default function UserCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
+  const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -32,7 +33,7 @@ export default function UserCommunity() {
       </View>
 
       {/* Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border, marginBottom: 0 }}>
         <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.xs }}>
           {tabs.map((tab) => (
             <TouchableOpacity
@@ -57,11 +58,11 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ padding: spacing.lg, paddingTop: 0 }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: spacing.xs, marginBottom: spacing.md }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 0, marginBottom: spacing.md }}>
                 {(['Leaderboard','Challenges'] as const).map((tab) => (
                   <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
                     <View style={{ alignItems: 'center' }}>
@@ -77,7 +78,10 @@ export default function UserCommunity() {
               {/* Hero card */}
               <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm }}>Join 20,234 Runners</Text>
               <View style={{ width: '100%', height: 180, backgroundColor: '#FF6A00', borderRadius: 12, marginBottom: spacing.md }} />
-              <TouchableOpacity style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center', marginBottom: spacing.xl }}>
+              <TouchableOpacity
+                onPress={() => setChallengeAcceptedVisible(true)}
+                style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center', marginBottom: spacing.xl }}
+              >
                 <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>Join Challenge</Text>
               </TouchableOpacity>
 
@@ -106,7 +110,7 @@ export default function UserCommunity() {
             <>
         {/* Feed Posts */}
           {/* Post 1 */}
-          <View style={{ marginBottom: spacing.xl }}>
+          <View style={{ marginTop: 0, marginBottom: spacing.xl }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
                 <Text style={{ fontSize: 16 }}>👤</Text>
@@ -198,6 +202,86 @@ export default function UserCommunity() {
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Challenge Accepted Modal */}
+      <Modal
+        visible={challengeAcceptedVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setChallengeAcceptedVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => setChallengeAcceptedVisible(false)}
+          />
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl, alignItems: 'center' }}>
+            {/* Handle/Grabber */}
+            <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: colors.border,
+                }}
+              />
+            </View>
+
+            {/* Success Icon */}
+            <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60,
+                  backgroundColor: colors.brandTint,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                    backgroundColor: colors.brand,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={{ fontSize: 48, color: colors.text, fontFamily: fonts.bold }}>✓</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Title */}
+            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.text, marginBottom: spacing.md, textAlign: 'center' }}>
+              Challenge Accepted
+            </Text>
+
+            {/* Description */}
+            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', lineHeight: 20, marginBottom: spacing.xl }}>
+              Lorem ipsum dolor sit amet consectetur. Id purus quis magna varius mollis nullam. Diam sed quisque lectus.
+            </Text>
+
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setChallengeAcceptedVisible(false)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: spacing.xs,
+              }}
+            >
+              <Ionicons name="close" size={20} color={colors.text} />
+              <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
