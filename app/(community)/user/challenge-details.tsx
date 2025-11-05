@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../../theme/tokens';
 
 export default function ChallengeDetails() {
+  const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Hero Image */}
@@ -49,10 +51,93 @@ export default function ChallengeDetails() {
 
       {/* Join button docked */}
       <View style={{ padding: spacing.lg, borderTopWidth: 1, borderTopColor: colors.border }}>
-        <TouchableOpacity style={{ backgroundColor: colors.brand, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center' }}>
+        <TouchableOpacity
+          onPress={() => setChallengeAcceptedVisible(true)}
+          style={{ backgroundColor: colors.brand, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center' }}
+        >
           <Text style={{ fontFamily: fonts.semibold, color: '#0F0F0F' }}>Join Challenge</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Challenge Accepted Modal */}
+      <Modal
+        visible={challengeAcceptedVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setChallengeAcceptedVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => setChallengeAcceptedVisible(false)}
+          />
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl, alignItems: 'center' }}>
+            {/* Handle/Grabber */}
+            <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: colors.border,
+                }}
+              />
+            </View>
+
+            {/* Success Icon */}
+            <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  width: 120,
+                  height: 120,
+                  borderRadius: 60,
+                  backgroundColor: colors.brandTint,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <View
+                  style={{
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                    backgroundColor: colors.brand,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <Text style={{ fontSize: 48, color: colors.text, fontFamily: fonts.bold }}>✓</Text>
+                </View>
+              </View>
+            </View>
+
+            {/* Title */}
+            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.text, marginBottom: spacing.md, textAlign: 'center' }}>
+              Challenge Accepted
+            </Text>
+
+            {/* Description */}
+            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', lineHeight: 20, marginBottom: spacing.xl }}>
+              Lorem ipsum dolor sit amet consectetur. Id purus quis magna varius mollis nullam. Diam sed quisque lectus.
+            </Text>
+
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setChallengeAcceptedVisible(false)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: spacing.xs,
+              }}
+            >
+              <Ionicons name="close" size={20} color={colors.text} />
+              <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 }
