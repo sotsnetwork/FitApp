@@ -33,34 +33,36 @@ export default function UserWorkout() {
       </View>
 
       {/* Filter Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ marginBottom: 0 }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.xs }}>
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category}
-              onPress={() => setSelectedCategory(category)}
-              style={{
-                paddingHorizontal: spacing.md,
-                paddingVertical: 3,
-                borderRadius: 16,
-                backgroundColor: selectedCategory === category ? colors.brand : 'white',
-                borderWidth: 1,
-                borderColor: selectedCategory === category ? colors.brand : colors.border,
-                height: 36,
-              }}
-            >
-              <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
-                {category}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </ScrollView>
+      <View style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.sm }}>
+          <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+            {categories.map((category) => (
+              <TouchableOpacity
+                key={category}
+                onPress={() => setSelectedCategory(category)}
+                style={{
+                  paddingHorizontal: spacing.md,
+                  paddingVertical: 3,
+                  borderRadius: 16,
+                  backgroundColor: selectedCategory === category ? colors.brand : 'white',
+                  borderWidth: 1,
+                  borderColor: selectedCategory === category ? colors.brand : colors.border,
+                  height: 36,
+                }}
+              >
+                <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
+                  {category}
+                </Text>
+              </TouchableOpacity>
+            ))}
+          </View>
+        </ScrollView>
+      </View>
 
       {/* Content */}
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Recommended Section */}
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, marginBottom: spacing.md }}>
+        <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md, marginTop: 0 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
             <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>RECOMMENDED</Text>
             <TouchableOpacity
