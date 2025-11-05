@@ -1,8 +1,8 @@
 import React from 'react';
 import { Link } from 'expo-router';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { fonts, colors, spacing } from '../theme/tokens';
-import PandaIllustration from '../components/ui/PandaIllustration';
+// Replaced PandaIllustration with static image asset
 
 const BRAND = '#66FFCC';
 
@@ -11,7 +11,10 @@ export default function Landing() {
     <View style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
       {/* Panda Illustration Card - Top 60% */}
       <View style={{ height: '60%', backgroundColor: BRAND, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 40, paddingHorizontal: 20 }}>
-        <PandaIllustration />
+        <Image
+          source={require('../assets/panda.png')}
+          style={{ width: 220, height: 220, resizeMode: 'contain' }}
+        />
       </View>
 
       {/* Content Section */}
