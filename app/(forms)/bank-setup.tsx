@@ -14,14 +14,21 @@ export default function BankSetup() {
   const [accountNumber, setAccountNumber] = React.useState('');
   const [accountName, setAccountName] = React.useState('');
 
+  // Users should not see this screen - redirect them to user details
+  React.useEffect(() => {
+    if (role === 'user') {
+      router.replace({ pathname: '/(onboarding)/user-details', params: { role } });
+    }
+  }, [role]);
+
   // Simulate account name verification when account number is entered
   React.useEffect(() => {
-    if (accountNumber.length >= 10) {
+    if (role !== 'user' && accountNumber.length >= 10) {
       setAccountName('Debby Annie'); // Mock verification
     } else {
       setAccountName('');
     }
-  }, [accountNumber]);
+  }, [accountNumber, role]);
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64 }}>
