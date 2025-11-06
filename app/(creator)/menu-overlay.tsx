@@ -28,7 +28,6 @@ export default function MenuOverlay({ visible, onClose, currentScreen }: MenuOve
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }} activeOpacity={1} onPress={onClose} />
         <View style={{ width: 340, backgroundColor: 'white' }}>
           {/* Profile Section */}
           <View style={{ padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
@@ -63,6 +62,7 @@ export default function MenuOverlay({ visible, onClose, currentScreen }: MenuOve
             ))}
           </View>
         </View>
+        <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }} activeOpacity={1} onPress={onClose} />
       </View>
     </Modal>
   );
