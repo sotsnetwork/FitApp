@@ -5,6 +5,7 @@ import { View } from 'react-native';
 import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@expo-google-fonts/inter';
 import * as SplashScreen from 'expo-splash-screen';
 import { SavedPostsProvider } from '../contexts/SavedPostsContext';
+import { UserRoleProvider } from '../contexts/UserRoleContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
@@ -28,13 +29,15 @@ export default function RootLayout() {
   }
 
   return (
-    <SavedPostsProvider>
-      <SafeAreaProvider>
-        <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-          <Stack screenOptions={{ headerShown: false }} />
-        </View>
-      </SafeAreaProvider>
-    </SavedPostsProvider>
+    <UserRoleProvider>
+      <SavedPostsProvider>
+        <SafeAreaProvider>
+          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+            <Stack screenOptions={{ headerShown: false }} />
+          </View>
+        </SafeAreaProvider>
+      </SavedPostsProvider>
+    </UserRoleProvider>
   );
 }
 
