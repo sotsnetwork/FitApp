@@ -31,13 +31,13 @@ export default function EmailVerified() {
         <Button 
           title="Proceed" 
           onPress={() => {
-            // Users: Skip Account Verification, Contact Details, and Link Social → Go directly to Account Verified
+            // Users: Skip Account Verification, Contact Details, Link Social, and Account Verified → Go directly to User Details
             // Creators & Vendors: Go through Account Verification → Contact Details → Link Social → Account Verified
             if (role === 'creator' || role === 'vendor') {
               router.push({ pathname: '/(forms)/account-verification', params: { role } });
             } else {
-              // Users skip all business-related screens and go directly to account verified
-              router.push({ pathname: '/(verify)/account-verified', params: { role } });
+              // Users skip all business-related screens and Account Verified, go directly to User Details
+              router.push({ pathname: '/(onboarding)/user-details', params: { role } });
             }
           }} 
         />
