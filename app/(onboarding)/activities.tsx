@@ -4,12 +4,14 @@ import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserRole } from '../../contexts/UserRoleContext';
 
 const activities = ['Walk', 'Run', 'Ride', 'Hike', 'Swim', 'Crossfit', 'Rock Climb'];
 
 export default function Activities() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { setRole } = useUserRole();
   const [selectedActivities, setSelectedActivities] = React.useState<string[]>([]);
 
   const toggleActivity = (activity: string) => {
@@ -69,7 +71,17 @@ export default function Activities() {
       <Button 
         title="Next" 
         disabled={selectedActivities.length === 0}
-        onPress={() => router.replace('/(user)/home')} 
+        onPress={async () => {
+          await setRole(role as 'user' | 'creator' | 'vendor');
+          // Route based on role
+          if (role === 'creator') {
+            router.replace('/(creator)/dashboard');
+          } else if (role === 'vendor') {
+            router.replace('/(community)/vendor');
+          } else {
+            router.replace('/(user)/home');
+          }
+        }} 
       />
     </View>
   );
