@@ -5,9 +5,11 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import UserMenuOverlay from './menu-overlay';
 
 export default function UserHome() {
   const { role } = useUserRole();
+  const [menuVisible, setMenuVisible] = React.useState(false);
 
   const handleProfileClick = () => {
     if (role === 'creator') {
@@ -15,7 +17,7 @@ export default function UserHome() {
     } else if (role === 'vendor') {
       router.push('/(community)/vendor');
     } else {
-      router.push('/(user)/profile');
+      setMenuVisible(true);
     }
   };
 
@@ -145,6 +147,9 @@ export default function UserHome() {
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Menu Overlay */}
+      <UserMenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="home" />
     </SafeAreaView>
   );
 }
