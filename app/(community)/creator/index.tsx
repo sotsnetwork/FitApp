@@ -10,7 +10,7 @@ export default function CreatorCommunity() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.md, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(creator)/dashboard')}>
           <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center' }}>
             <Ionicons name="person" size={20} color={colors.brand} />
           </View>
