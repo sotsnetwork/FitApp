@@ -4,13 +4,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserRole } from '../../contexts/UserRoleContext';
 
 export default function UserHome() {
+  const { role } = useUserRole();
+
+  const handleProfileClick = () => {
+    if (role === 'creator') {
+      router.push('/(creator)/dashboard');
+    } else if (role === 'vendor') {
+      router.push('/(community)/vendor');
+    } else {
+      router.push('/(user)/profile');
+    }
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+        <TouchableOpacity onPress={handleProfileClick}>
           <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
