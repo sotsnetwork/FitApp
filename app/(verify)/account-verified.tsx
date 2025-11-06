@@ -10,6 +10,13 @@ export default function AccountVerified() {
   const role = (params.role as string) || 'user';
   const [skipWithdrawal, setSkipWithdrawal] = React.useState(false);
 
+  // Users should not see this screen - redirect them to user details
+  React.useEffect(() => {
+    if (role === 'user') {
+      router.replace({ pathname: '/(onboarding)/user-details', params: { role } });
+    }
+  }, [role]);
+
   return (
     <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, alignItems: 'center', justifyContent: 'center' }}>
       <TouchableOpacity onPress={() => router.back()} style={{ position: 'absolute', top: 64, left: spacing.lg }}>
