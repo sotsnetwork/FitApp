@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserRole } from '../../contexts/UserRoleContext';
 
 export default function Signup() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { setRole } = useUserRole();
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -83,10 +85,11 @@ export default function Signup() {
         <Button 
           title="Get Started" 
           disabled={!canSubmit} 
-          onPress={() => {
+          onPress={async () => {
             if (!canSubmit) {
               return;
             }
+            await setRole(role as 'user' | 'creator' | 'vendor');
             router.push(`/(verify)/verify-email?role=${role}`);
           }} 
         />
