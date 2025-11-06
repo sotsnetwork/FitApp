@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, Modal } from 'react-native';
+import React, { useEffect, useRef } from 'react';
+import { View, Text, TouchableOpacity, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { spacing, fonts, colors } from '../../theme/tokens';
@@ -11,6 +11,24 @@ interface MenuOverlayProps {
 }
 
 export default function UserMenuOverlay({ visible, onClose, currentScreen }: MenuOverlayProps) {
+  const slideAnim = useRef(new Animated.Value(-340)).current;
+
+  useEffect(() => {
+    if (visible) {
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    } else {
+      Animated.timing(slideAnim, {
+        toValue: -340,
+        duration: 300,
+        useNativeDriver: true,
+      }).start();
+    }
+  }, [visible]);
+
   const menuItems = [
     { id: 'home', label: 'Home', icon: 'home-outline', route: '/(user)/home' },
     { id: 'saved-videos', label: 'Saved Videos', icon: 'bookmark-outline', route: '/(user)/saved-videos' },
@@ -23,9 +41,9 @@ export default function UserMenuOverlay({ visible, onClose, currentScreen }: Men
   };
 
   return (
-    <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
+    <Modal visible={visible} transparent animationType="none" onRequestClose={onClose}>
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ width: 340, backgroundColor: 'white' }}>
+        <Animated.View style={{ width: 340, backgroundColor: 'white', transform: [{ translateX: slideAnim }] }}>
           {/* Profile Section */}
           <View style={{ padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md }}>
@@ -58,7 +76,7 @@ export default function UserMenuOverlay({ visible, onClose, currentScreen }: Men
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </Animated.View>
         <TouchableOpacity style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)' }} activeOpacity={1} onPress={onClose} />
       </View>
     </Modal>
