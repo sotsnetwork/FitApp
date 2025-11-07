@@ -32,7 +32,7 @@ export default function UserMenuOverlay({ visible, onClose, currentScreen }: Men
   const menuItems = [
     { id: 'home', label: 'Home', icon: 'home-outline', route: '/(user)/home' },
     { id: 'saved-videos', label: 'Saved Videos', icon: 'bookmark-outline', route: '/(user)/saved-videos' },
-    { id: 'shopping-cart', label: 'Shopping Cart', icon: 'bag-outline', route: '/(user)/shop' },
+    { id: 'shopping-cart', label: 'Shopping Cart', icon: 'bag-outline', route: '/(user)/shopping-cart' },
   ];
 
   const handleNavigation = (route: string) => {
