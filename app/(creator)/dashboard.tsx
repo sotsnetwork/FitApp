@@ -101,6 +101,20 @@ export default function CreatorDashboard() {
   const [selectedComment, setSelectedComment] = React.useState<Comment | null>(null);
   const [replyText, setReplyText] = React.useState('');
 
+  // Calculate total video views from all posts
+  const totalVideoViews = React.useMemo(() => {
+    const total = Object.values(postStates).reduce((sum, post) => sum + post.viewCount, 0);
+    return total;
+  }, [postStates]);
+
+  // Format total views (e.g., 57k for 57000)
+  const formatTotalViews = (count: number) => {
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(0)}k`;
+    }
+    return count.toString();
+  };
+
   const handleLike = (postId: number, e: any) => {
     e.stopPropagation();
     setPostStates((prev) => {
@@ -215,7 +229,7 @@ export default function CreatorDashboard() {
                 <Ionicons name="eye-outline" size={24} color="white" />
               </View>
               <View>
-                <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: 'white' }}>57k Total Video views</Text>
+                <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: 'white' }}>{formatTotalViews(totalVideoViews)} Total Video views</Text>
               </View>
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.sm }}>
