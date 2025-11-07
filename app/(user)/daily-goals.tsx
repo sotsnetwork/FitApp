@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -105,7 +105,18 @@ export default function DailyGoals() {
                   <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
                   <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>3</Text>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => router.push('/(user)/post-detail')}>
+                <TouchableOpacity
+                  onPress={async () => {
+                    try {
+                      await Share.share({
+                        message: 'Check out this amazing fitness post on FitApp!',
+                        title: 'Share Post',
+                      });
+                    } catch (error) {
+                      console.error('Error sharing:', error);
+                    }
+                  }}
+                >
                   <Ionicons name="share-outline" size={20} color={colors.text} />
                 </TouchableOpacity>
               </View>
