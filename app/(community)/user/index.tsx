@@ -33,15 +33,14 @@ export default function UserCommunity() {
       </View>
 
       {/* Tabs */}
-      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border, marginBottom: 0 }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, gap: spacing.xs }}>
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, gap: spacing.xs }}>
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab}
               onPress={() => setSelectedTab(tab)}
               style={{
                 paddingHorizontal: spacing.md,
-                paddingVertical: 3,
                 borderRadius: 16,
                 backgroundColor: selectedTab === tab ? colors.text : 'transparent',
                 height: 36,
@@ -49,7 +48,7 @@ export default function UserCommunity() {
                 alignItems: 'center',
               }}
             >
-              <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedTab === tab ? 'white' : colors.subtext }}>
+              <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedTab === tab ? 'white' : colors.subtext, textAlign: 'center' }}>
                 {tab}
               </Text>
             </TouchableOpacity>
@@ -110,7 +109,7 @@ export default function UserCommunity() {
             <>
         {/* Feed Posts */}
           {/* Post 1 */}
-          <View style={{ marginTop: 0, marginBottom: spacing.xl }}>
+          <View style={{ marginBottom: spacing.xl }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
                 <Text style={{ fontSize: 16 }}>👤</Text>
