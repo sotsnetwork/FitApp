@@ -77,15 +77,16 @@ export default function UserWorkout() {
                 onPress={() => setSelectedCategory(category)}
                 style={{
                   paddingHorizontal: spacing.md,
-                  paddingVertical: 3,
                   borderRadius: 16,
                   backgroundColor: selectedCategory === category ? colors.brand : 'white',
                   borderWidth: 1,
                   borderColor: selectedCategory === category ? colors.brand : colors.border,
                   height: 36,
+                  alignItems: 'center',
+                  justifyContent: 'center',
                 }}
               >
-                <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedCategory === category ? '#0F0F0F' : colors.subtext }}>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 13, color: selectedCategory === category ? '#0F0F0F' : colors.subtext, textAlign: 'center' }}>
                   {category}
                 </Text>
               </TouchableOpacity>
