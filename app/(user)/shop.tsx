@@ -95,7 +95,13 @@ export default function UserShop() {
                       if (saved) {
                         unsaveProduct(product.id);
                       } else {
-                        saveProduct(product);
+                        saveProduct({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          discount: product.discount,
+                          imageColor: product.color,
+                        });
                       }
                     }}
                     hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
