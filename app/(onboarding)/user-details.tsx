@@ -9,9 +9,9 @@ import { spacing, fonts, colors } from '../../theme/tokens';
 export default function UserDetails() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
-  const [firstName, setFirstName] = React.useState('Victor');
-  const [lastName, setLastName] = React.useState('Dra');
-  const [birthdate, setBirthdate] = React.useState('February 18, 1995');
+  const [firstName, setFirstName] = React.useState('');
+  const [lastName, setLastName] = React.useState('');
+  const [birthdate, setBirthdate] = React.useState('');
   const [gender, setGender] = React.useState('');
   const [showDatePicker, setShowDatePicker] = React.useState(false);
   const [selectedMonth, setSelectedMonth] = React.useState('February');
@@ -34,59 +34,83 @@ export default function UserDetails() {
       <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.lg }}>
         <Ionicons name="arrow-back" size={24} color={colors.text} />
       </TouchableOpacity>
-      <Text style={{ fontSize: 32, fontFamily: fonts.bold, marginBottom: spacing.md }}>Tell us who you are</Text>
+      <Text style={{ fontSize: 32, fontFamily: fonts.bold, marginBottom: spacing.xl }}>Tell us who you are</Text>
 
+      {/* First name */}
+      <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, marginBottom: spacing.xs }}>First name</Text>
       <Input 
-        placeholder="First name" 
+        placeholder="" 
         value={firstName} 
-        onChangeText={setFirstName} 
-        leftIcon="person-outline" 
-      />
-      <Input 
-        placeholder="Last Name" 
-        value={lastName} 
-        onChangeText={setLastName} 
-        leftIcon="person-outline" 
+        onChangeText={setFirstName}
+        style={{ marginBottom: spacing.md }}
       />
 
-      {/* Birthdate Input */}
+      {/* Last Name */}
+      <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, marginBottom: spacing.xs }}>Last Name</Text>
+      <Input 
+        placeholder="" 
+        value={lastName} 
+        onChangeText={setLastName}
+        style={{ marginBottom: spacing.md }}
+      />
+
+      {/* Birthdate */}
+      <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, marginBottom: spacing.xs }}>Birthdate</Text>
       <TouchableOpacity 
         onPress={() => setShowDatePicker(true)}
         style={{ 
-          marginBottom: 12, 
+          marginBottom: spacing.md, 
           borderWidth: 1, 
           borderColor: colors.border, 
           borderRadius: 8, 
           padding: spacing.md,
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between'
+          backgroundColor: 'white',
         }}
       >
         <Text style={{ fontFamily: fonts.regular, color: birthdate ? colors.text : colors.subtext }}>
-          {birthdate || 'Birthdate'}
+          {birthdate ? `${selectedMonth} ${selectedDay}, ${selectedYear}` : '--/--/--'}
         </Text>
-        <Ionicons name="calendar-outline" size={20} color={colors.subtext} />
       </TouchableOpacity>
 
       {/* Gender Selection */}
-      <Text style={{ fontFamily: fonts.semibold, marginBottom: spacing.sm, marginTop: spacing.xs }}>Gender</Text>
-      <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.md }}>
+      <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, marginBottom: spacing.sm }}>Gender</Text>
+      <View style={{ marginBottom: spacing.xl }}>
         {['Man', 'Woman', 'Rather not say'].map((option) => (
           <TouchableOpacity
             key={option}
             onPress={() => setGender(option)}
             style={{
-              flex: 1,
-              padding: spacing.md,
-              borderRadius: 8,
-              borderWidth: 2,
-              borderColor: gender === option ? colors.brand : colors.border,
-              backgroundColor: gender === option ? colors.brandTint : 'transparent',
+              flexDirection: 'row',
               alignItems: 'center',
+              paddingVertical: spacing.md,
+              marginBottom: spacing.xs,
             }}
           >
-            <Text style={{ fontFamily: fonts.regular, color: gender === option ? colors.brand : colors.text }}>
+            <View
+              style={{
+                width: 24,
+                height: 24,
+                borderRadius: 12,
+                borderWidth: 2,
+                borderColor: gender === option ? colors.brand : colors.border,
+                backgroundColor: gender === option ? colors.brand : 'transparent',
+                alignItems: 'center',
+                justifyContent: 'center',
+                marginRight: spacing.md,
+              }}
+            >
+              {gender === option && (
+                <View
+                  style={{
+                    width: 12,
+                    height: 12,
+                    borderRadius: 6,
+                    backgroundColor: 'white',
+                  }}
+                />
+              )}
+            </View>
+            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>
               {option}
             </Text>
           </TouchableOpacity>
