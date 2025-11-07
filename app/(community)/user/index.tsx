@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -136,7 +136,20 @@ export default function UserCommunity() {
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
               </View>
-              <Ionicons name="share-outline" size={20} color={colors.text} />
+              <TouchableOpacity
+                onPress={async () => {
+                  try {
+                    await Share.share({
+                      message: 'Check out this amazing fitness post on FitApp!',
+                      title: 'Share Post',
+                    });
+                  } catch (error) {
+                    console.error('Error sharing:', error);
+                  }
+                }}
+              >
+                <Ionicons name="share-outline" size={20} color={colors.text} />
+              </TouchableOpacity>
             </View>
           </View>
 
@@ -167,7 +180,20 @@ export default function UserCommunity() {
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
               </View>
-              <Ionicons name="share-outline" size={20} color={colors.text} />
+              <TouchableOpacity
+                onPress={async () => {
+                  try {
+                    await Share.share({
+                      message: 'Check out this amazing fitness post on FitApp!',
+                      title: 'Share Post',
+                    });
+                  } catch (error) {
+                    console.error('Error sharing:', error);
+                  }
+                }}
+              >
+                <Ionicons name="share-outline" size={20} color={colors.text} />
+              </TouchableOpacity>
             </View>
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20 }}>
               Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
