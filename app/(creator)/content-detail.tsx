@@ -1,9 +1,10 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Platform, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useSavedPosts } from '../../contexts/SavedPostsContext';
 
 interface Comment {
   id: string;
@@ -14,6 +15,7 @@ interface Comment {
 }
 
 export default function ContentDetail() {
+  const { savePost, unsavePost, isSaved } = useSavedPosts();
   const [commentsModalVisible, setCommentsModalVisible] = React.useState(false);
   const [replyModalVisible, setReplyModalVisible] = React.useState(false);
   const [selectedComment, setSelectedComment] = React.useState<Comment | null>(null);
@@ -24,6 +26,16 @@ export default function ContentDetail() {
     { id: '3', name: 'Alfredo', date: '5th February,2023 3PM', comment: 'Amazing place and experience! We had a great time. The kids loved it.', replies: [] },
     { id: '4', name: 'Alfredo', date: '5th February,2023 3PM', comment: 'Amazing place and experience! We had a great time. The kids loved it.', replies: [] },
   ]);
+
+  // Mock video/post data
+  const videoPost = {
+    id: 'video-1',
+    title: 'Lorem ipsum dolor sit amet consectetur. Sagittis dictum sit a.',
+    activityTag: 'Workout',
+    isSponsored: false,
+  };
+
+  const saved = isSaved(videoPost.id);
 
   const handleReply = (comment: Comment) => {
     setSelectedComment(comment);
@@ -61,11 +73,30 @@ export default function ContentDetail() {
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={async () => {
+              try {
+                await Share.share({
+                  message: 'Check out this amazing fitness video on FitApp!',
+                  title: 'Share Video',
+                });
+              } catch (error) {
+                console.error('Error sharing:', error);
+              }
+            }}
+          >
             <Ionicons name="share-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="bookmark-outline" size={24} color={colors.text} />
+          <TouchableOpacity
+            onPress={() => {
+              if (saved) {
+                unsavePost(videoPost.id);
+              } else {
+                savePost(videoPost);
+              }
+            }}
+          >
+            <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={24} color={saved ? colors.brand : colors.text} />
           </TouchableOpacity>
         </View>
       </View>
