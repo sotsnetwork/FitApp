@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, TextInput, KeyboardAvoidingView, Platform, Share } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -30,9 +30,18 @@ export default function PostDetail() {
     }
   };
 
-  const handleShare = () => {
-    // Share functionality - can be implemented with Linking or Share API
-    // For now, just show a placeholder
+  const handleShare = async () => {
+    try {
+      const result = await Share.share({
+        message: 'Check out this amazing fitness post on FitApp!',
+        title: 'Share Post',
+      });
+      if (result.action === Share.sharedAction) {
+        setShareCount(shareCount + 1);
+      }
+    } catch (error) {
+      console.error('Error sharing:', error);
+    }
   };
 
   const formatCount = (count: number) => {
