@@ -17,19 +17,47 @@ export default function Signup() {
   const [phone, setPhone] = React.useState('');
   const [referralCode, setReferralCode] = React.useState('');
 
-  // Relaxed email validation to improve UX during onboarding
-  const emailOk = email.trim().length >= 2; // previously: /.+@.+\..+/.test(email)
+  // Email validation - only allow valid email format
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailOk = emailRegex.test(email.trim());
+  const emailError = email.length > 0 && !emailOk;
+
+  // Username validation - only allow alphabets and figures (alphanumeric)
+  const usernameRegex = /^[A-Za-z0-9]*$/;
+  const usernameOk = username.length >= 2 && usernameRegex.test(username);
+  const usernameError = username.length > 0 && !usernameOk;
+
+  // Password validation
   const hasLowerCase = /[a-z]/.test(password);
   const hasUpperCase = /[A-Z]/.test(password);
   const hasNumber = /\d/.test(password);
   const hasSpecialChar = /[^A-Za-z0-9]/.test(password);
   const hasMinLength = password.length >= 8;
   const pwdOk = hasMinLength && hasLowerCase && hasUpperCase && hasNumber && hasSpecialChar;
-  // Phone validation: Extract digits only and check for at least 10 digits (supports country codes like +15551234567)
+
+  // Phone validation: Only allow numbers (figures)
   const phoneDigits = phone.replace(/\D/g, ''); // Remove all non-digits
   const phoneOk = phoneDigits.length >= 10;
   const phoneError = phone.length > 0 && !phoneOk;
-  const canSubmit = emailOk && username.length >= 2 && pwdOk && phoneOk;
+
+  const canSubmit = emailOk && usernameOk && pwdOk && phoneOk;
+
+  // Handle phone input - only allow numbers
+  const handlePhoneChange = (text: string) => {
+    const numbersOnly = text.replace(/\D/g, ''); // Remove all non-digits
+    setPhone(numbersOnly);
+  };
+
+  // Handle username input - only allow alphabets and figures
+  const handleUsernameChange = (text: string) => {
+    const alphanumericOnly = text.replace(/[^A-Za-z0-9]/g, ''); // Remove all non-alphanumeric
+    setUsername(alphanumericOnly);
+  };
+
+  // Handle email input - validate email format
+  const handleEmailChange = (text: string) => {
+    setEmail(text);
+  };
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -46,8 +74,27 @@ export default function Signup() {
         <Text style={{ color: colors.subtext, marginBottom: spacing.md, fontFamily: fonts.regular }}>
           New users can earn up to ₦5000 upon Registration.
         </Text>
-        <Input value={email} onChangeText={setEmail} placeholder="Enter email" leftIcon="mail-outline" showClearIcon />
-        <Input value={username} onChangeText={setUsername} placeholder="Enter username" leftIcon="person-outline" showClearIcon />
+        <Input 
+          value={email} 
+          onChangeText={handleEmailChange} 
+          placeholder="Enter email" 
+          leftIcon="mail-outline" 
+          showClearIcon
+          keyboardType="email-address"
+          autoCapitalize="none"
+          autoCorrect={false}
+          error={emailError ? 'Please enter a valid email address' : ''}
+        />
+        <Input 
+          value={username} 
+          onChangeText={handleUsernameChange} 
+          placeholder="Enter username" 
+          leftIcon="person-outline" 
+          showClearIcon
+          autoCapitalize="none"
+          autoCorrect={false}
+          error={usernameError ? 'Username can only contain letters and numbers' : ''}
+        />
         <View>
           <Input value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry leftIcon="lock-closed-outline" showClearIcon />
           <View style={{ marginTop: spacing.xs, marginBottom: spacing.md }}>
@@ -74,10 +121,10 @@ export default function Signup() {
         </View>
         <Input
           value={phone}
-          onChangeText={setPhone}
+          onChangeText={handlePhoneChange}
           placeholder="Phone number"
           keyboardType="phone-pad"
-          error={phoneError ? 'Oh, snapp! Some error message.' : ''}
+          error={phoneError ? 'Phone number must be at least 10 digits' : ''}
         />
         <Input value={referralCode} onChangeText={setReferralCode} placeholder="Referral code (optional)" />
 
