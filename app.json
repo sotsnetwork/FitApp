@@ -8,9 +8,9 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/panda.png",
+      "image": "",
       "resizeMode": "contain",
-      "backgroundColor": "#66FFCC"
+      "backgroundColor": "#0F0F0F"
     },
     "ios": {
       "supportsTablet": true
