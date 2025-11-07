@@ -1,15 +1,51 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useSavedProducts } from '../../contexts/SavedProductsContext';
+import { useCart } from '../../contexts/CartContext';
 
 export default function ProductDetail() {
+  const params = useLocalSearchParams();
+  const productId = (params.productId as string) || '1';
+  const { saveProduct, unsaveProduct, isSaved } = useSavedProducts();
+  const { addToCart } = useCart();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
   const [selectedSize, setSelectedSize] = React.useState('36');
   const [selectedColor, setSelectedColor] = React.useState('BROWN');
+
+  // Mock product data - in a real app, this would come from an API or context
+  const product = {
+    id: productId,
+    name: "Nike Free Metcon 6 Women's Workout Shoes",
+    price: '₦19,500.00',
+    discount: '60%',
+    description: 'Find the Nike Free Metcon 6 Women\'s Workout Shoes',
+    category: 'NIKE AIRFORCE SNICKERS',
+  };
+
+  const saved = isSaved(product.id);
+  const [itemAdded, setItemAdded] = React.useState(false);
+
+  const handleAddToCart = () => {
+    addToCart({
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      discount: product.discount,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: 1,
+    });
+    setItemAdded(true);
+    Alert.alert('Success', 'Item added to cart!', [
+      { text: 'OK', onPress: () => router.push('/(user)/shopping-cart') },
+      { text: 'Continue Shopping', style: 'cancel', onPress: () => setItemAdded(false) },
+    ]);
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -32,10 +68,10 @@ export default function ProductDetail() {
         {/* Product Info */}
         <View style={{ padding: spacing.lg }}>
           <Text style={{ fontSize: 16, fontFamily: fonts.regular, marginBottom: spacing.sm }}>
-            Nike Free Metcon 6 Women's Workout Shoes
+            {product.name}
           </Text>
           <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, marginBottom: spacing.md }}>
-            Find the Nike Free Metcon 6 Women's Workout Shoes
+            {product.description}
           </Text>
 
           {/* Size Selection */}
@@ -50,15 +86,29 @@ export default function ProductDetail() {
 
           {/* Product Details */}
           <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>
-            NIKE AIRFORCE SNICKERS
+            {product.category}
           </Text>
           <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg }}>
-            <Text style={{ fontSize: 16, fontFamily: fonts.regular }}>₦19,500.00</Text>
+            <Text style={{ fontSize: 16, fontFamily: fonts.regular }}>{product.price}</Text>
             <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: '#FFA500', marginLeft: spacing.sm }}>
-              60% Discount
+              {product.discount} Discount
             </Text>
-            <TouchableOpacity style={{ marginLeft: 'auto' }}>
-              <Ionicons name="bookmark-outline" size={24} color={colors.text} />
+            <TouchableOpacity
+              style={{ marginLeft: 'auto' }}
+              onPress={() => {
+                if (saved) {
+                  unsaveProduct(product.id);
+                } else {
+                  saveProduct({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    discount: product.discount,
+                  });
+                }
+              }}
+            >
+              <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={24} color={saved ? colors.brand : colors.text} />
             </TouchableOpacity>
           </View>
         </View>
@@ -77,10 +127,22 @@ export default function ProductDetail() {
       {/* Add Button */}
       <View style={{ padding: spacing.lg, borderTopWidth: 1, borderTopColor: colors.border }}>
         <TouchableOpacity
-          onPress={() => router.push('/(user)/shopping-cart')}
-          style={{ backgroundColor: colors.brand, paddingVertical: spacing.md, borderRadius: 12, alignItems: 'center' }}
+          onPress={handleAddToCart}
+          disabled={itemAdded}
+          style={{
+            backgroundColor: itemAdded ? colors.brand : colors.brand,
+            paddingVertical: spacing.md,
+            borderRadius: 12,
+            alignItems: 'center',
+            opacity: itemAdded ? 0.8 : 1,
+          }}
         >
-          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, color: '#0F0F0F' }}>Add</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}>
+            {itemAdded && <Ionicons name="checkmark-circle" size={20} color="#0F0F0F" style={{ marginRight: spacing.xs }} />}
+            <Text style={{ fontFamily: fonts.semibold, fontSize: 16, color: '#0F0F0F' }}>
+              {itemAdded ? 'Added to Cart' : 'Add'}
+            </Text>
+          </View>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
