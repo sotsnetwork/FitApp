@@ -6,6 +6,8 @@ import { useFonts, Inter_400Regular, Inter_600SemiBold, Inter_700Bold } from '@e
 import * as SplashScreen from 'expo-splash-screen';
 import { SavedPostsProvider } from '../contexts/SavedPostsContext';
 import { UserRoleProvider } from '../contexts/UserRoleContext';
+import { SavedProductsProvider } from '../contexts/SavedProductsContext';
+import { CartProvider } from '../contexts/CartContext';
 
 // Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
@@ -31,11 +33,15 @@ export default function RootLayout() {
   return (
     <UserRoleProvider>
       <SavedPostsProvider>
-        <SafeAreaProvider>
-          <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
-            <Stack screenOptions={{ headerShown: false }} />
-          </View>
-        </SafeAreaProvider>
+        <SavedProductsProvider>
+          <CartProvider>
+            <SafeAreaProvider>
+              <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+                <Stack screenOptions={{ headerShown: false }} />
+              </View>
+            </SafeAreaProvider>
+          </CartProvider>
+        </SavedProductsProvider>
       </SavedPostsProvider>
     </UserRoleProvider>
   );
