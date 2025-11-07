@@ -93,23 +93,24 @@ export default function ProductDetail() {
             <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: '#FFA500', marginLeft: spacing.sm }}>
               {product.discount} Discount
             </Text>
-            <TouchableOpacity
-              style={{ marginLeft: 'auto' }}
-              onPress={() => {
-                if (saved) {
-                  unsaveProduct(product.id);
-                } else {
-                  saveProduct({
-                    id: product.id,
-                    name: product.name,
-                    price: product.price,
-                    discount: product.discount,
-                  });
-                }
-              }}
-            >
-              <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={24} color={saved ? colors.brand : colors.text} />
-            </TouchableOpacity>
+                    <TouchableOpacity
+                      style={{ marginLeft: 'auto' }}
+                      onPress={() => {
+                        if (saved) {
+                          unsaveProduct(product.id);
+                        } else {
+                          saveProduct({
+                            id: product.id,
+                            name: product.name,
+                            price: product.price,
+                            discount: product.discount,
+                            imageColor: colors.border,
+                          });
+                        }
+                      }}
+                    >
+                      <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={24} color={saved ? colors.brand : colors.text} />
+                    </TouchableOpacity>
           </View>
         </View>
 
