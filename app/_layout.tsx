@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { Stack } from 'expo-router';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { View } from 'react-native';
@@ -9,26 +9,23 @@ import { UserRoleProvider } from '../contexts/UserRoleContext';
 import { SavedProductsProvider } from '../contexts/SavedProductsContext';
 import { CartProvider } from '../contexts/CartContext';
 
-// Prevent the splash screen from auto-hiding before asset loading is complete
+// Prevent splash screen from auto-hiding, we'll hide it manually
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_600SemiBold, Inter_700Bold });
 
-  const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
+  React.useEffect(() => {
+    // Hide splash screen immediately when component mounts
+    // Don't wait for fonts - they'll load in the background
+    const hideSplash = async () => {
       await SplashScreen.hideAsync();
-    }
-  }, [fontsLoaded]);
+    };
+    hideSplash();
+  }, []);
 
-  if (!fontsLoaded) {
-    return null;
-  }
+  // Show app immediately, don't wait for fonts
+  // Fonts will load in the background and apply when ready
 
   return (
     <UserRoleProvider>
@@ -36,7 +33,7 @@ export default function RootLayout() {
         <SavedProductsProvider>
           <CartProvider>
             <SafeAreaProvider>
-              <View style={{ flex: 1 }} onLayout={onLayoutRootView}>
+              <View style={{ flex: 1 }}>
                 <Stack screenOptions={{ headerShown: false }} />
               </View>
             </SafeAreaProvider>
