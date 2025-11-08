@@ -36,20 +36,47 @@ export default function Search() {
   const { searchHistory, addToHistory, removeFromHistory, clearHistory } = useSearchHistory();
   const [isSearching, setIsSearching] = React.useState(false);
 
+  // Extract username from query (remove @ if present)
+  const getSearchQuery = () => {
+    return searchQuery.trim().replace(/^@/, '').toLowerCase();
+  };
+
+  // Check if query is a username search (starts with @ or matches username pattern)
+  const isUsernameSearch = () => {
+    return searchQuery.trim().startsWith('@') || /^[a-zA-Z0-9_]+$/.test(searchQuery.trim());
+  };
+
   // Filter results based on search query
   const filteredAccounts = React.useMemo(() => {
     if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase();
-    return mockAccounts.filter(
-      (account) =>
-        account.username.toLowerCase().includes(query) ||
-        account.name.toLowerCase().includes(query)
-    );
+    const query = getSearchQuery();
+    const isUsernameQuery = isUsernameSearch();
+    
+    return mockAccounts.filter((account) => {
+      const usernameMatch = account.username.toLowerCase().includes(query);
+      const nameMatch = account.name.toLowerCase().includes(query);
+      
+      // If it's a username search (starts with @), prioritize username matches
+      if (isUsernameQuery) {
+        return usernameMatch || (query.length > 0 && account.username.toLowerCase().startsWith(query));
+      }
+      
+      return usernameMatch || nameMatch;
+    });
   }, [searchQuery]);
 
   const filteredPosts = React.useMemo(() => {
     if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase();
+    const query = getSearchQuery();
+    const isUsernameQuery = isUsernameSearch();
+    
+    // If searching for username, filter posts by author username
+    if (isUsernameQuery) {
+      return mockPosts.filter((post) =>
+        post.author.toLowerCase().includes(query)
+      );
+    }
+    
     return mockPosts.filter(
       (post) =>
         post.title.toLowerCase().includes(query) ||
@@ -59,7 +86,10 @@ export default function Search() {
 
   const filteredKeywords = React.useMemo(() => {
     if (!searchQuery.trim()) return [];
-    const query = searchQuery.toLowerCase();
+    // Don't show keywords if it's a username search
+    if (isUsernameSearch()) return [];
+    
+    const query = getSearchQuery();
     return mockKeywords.filter((keyword) =>
       keyword.keyword.toLowerCase().includes(query)
     );
@@ -132,7 +162,9 @@ export default function Search() {
 
     return (
       <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}>
-        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Accounts</Text>
+        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>
+          {isUsernameSearch() ? 'Usernames' : 'Accounts'}
+        </Text>
         {filteredAccounts.map((account) => (
           <TouchableOpacity
             key={account.id}
@@ -149,7 +181,7 @@ export default function Search() {
             </View>
             <View style={{ flex: 1 }}>
               <Text style={{ fontSize: 14, fontFamily: fonts.semibold, color: colors.text }}>{account.name}</Text>
-              <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext }}>@{account.username}</Text>
+              <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: colors.brand }}>@{account.username}</Text>
               <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext }}>{account.followers} followers</Text>
             </View>
             <TouchableOpacity
@@ -284,12 +316,14 @@ export default function Search() {
         <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
           <Ionicons name="search-outline" size={20} color={colors.subtext} />
           <TextInput
-            placeholder="Search accounts, posts, keywords..."
+            placeholder="Search accounts, posts, keywords, @username..."
             placeholderTextColor={colors.subtext}
             value={searchQuery}
             onChangeText={handleSearch}
             style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular, fontSize: 14, color: colors.text }}
             autoFocus
+            autoCapitalize="none"
+            autoCorrect={false}
           />
           {searchQuery.length > 0 && (
             <TouchableOpacity onPress={handleClearSearch} style={{ padding: spacing.xs }}>
