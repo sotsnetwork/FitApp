@@ -28,40 +28,13 @@ export default function UserCommunity() {
   }, []);
 
   const pickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setCreatePostModalVisible(false);
-        // TODO: Handle the selected image (upload to server, create post, etc.)
-        Alert.alert('Image Selected', 'Image has been selected. Post creation functionality will be implemented.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to pick image');
-    }
+    setCreatePostModalVisible(false);
+    router.push({ pathname: '/(user)/create-post', params: { type: 'picture' } });
   };
 
   const pickVideo = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setCreatePostModalVisible(false);
-        // TODO: Handle the selected video (upload to server, create post, etc.)
-        Alert.alert('Video Selected', 'Video has been selected. Post creation functionality will be implemented.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to pick video');
-    }
+    setCreatePostModalVisible(false);
+    router.push({ pathname: '/(user)/create-post', params: { type: 'video' } });
   };
 
   return (
@@ -286,7 +259,7 @@ export default function UserCommunity() {
           <Ionicons name="home-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/workout')} style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(user)/search')} style={{ alignItems: 'center' }}>
           <Ionicons name="search-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
@@ -442,8 +415,7 @@ export default function UserCommunity() {
             <TouchableOpacity
               onPress={() => {
                 setCreatePostModalVisible(false);
-                // TODO: Navigate to create post screen with text option
-                router.push('/(user)/home');
+                router.push({ pathname: '/(user)/create-post', params: { type: 'text' } });
               }}
               style={{
                 flexDirection: 'row',
