@@ -26,40 +26,13 @@ export default function CreatorCommunity() {
   }, []);
 
   const pickImage = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setCreatePostModalVisible(false);
-        // TODO: Handle the selected image (upload to server, create post, etc.)
-        Alert.alert('Image Selected', 'Image has been selected. Post creation functionality will be implemented.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to pick image');
-    }
+    setCreatePostModalVisible(false);
+    router.push({ pathname: '/(creator)/create-post', params: { type: 'picture' } });
   };
 
   const pickVideo = async () => {
-    try {
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
-        allowsEditing: true,
-        quality: 1,
-      });
-
-      if (!result.canceled) {
-        setCreatePostModalVisible(false);
-        // TODO: Handle the selected video (upload to server, create post, etc.)
-        Alert.alert('Video Selected', 'Video has been selected. Post creation functionality will be implemented.');
-      }
-    } catch (error) {
-      Alert.alert('Error', 'Failed to pick video');
-    }
+    setCreatePostModalVisible(false);
+    router.push({ pathname: '/(creator)/create-post', params: { type: 'video' } });
   };
 
   return (
@@ -618,8 +591,7 @@ export default function CreatorCommunity() {
             <TouchableOpacity
               onPress={() => {
                 setCreatePostModalVisible(false);
-                // TODO: Navigate to create post screen with text option
-                router.push('/(creator)/dashboard');
+                router.push({ pathname: '/(creator)/create-post', params: { type: 'text' } });
               }}
               style={{
                 flexDirection: 'row',
