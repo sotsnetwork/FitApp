@@ -12,12 +12,43 @@ export default function UserShop() {
   const [selectedTab, setSelectedTab] = React.useState('GEARS');
   const { saveProduct, unsaveProduct, isSaved } = useSavedProducts();
 
-  const products = [
-    { id: '1', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF' },
-    { id: '2', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2' },
-    { id: '3', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF' },
-    { id: '4', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2' },
+  // Products categorized by type
+  const gears = [
+    { id: '1', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF', category: 'GEARS' },
+    { id: '2', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2', category: 'GEARS' },
+    { id: '3', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF', category: 'GEARS' },
+    { id: '4', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2', category: 'GEARS' },
   ];
+
+  const supplements = [
+    { id: '5', name: 'Protein Powder', price: '₦15,000.00', discount: '30%', color: '#FFE5B4', category: 'SUPPLEMENTS' },
+    { id: '6', name: 'Multivitamin Pack', price: '₦8,500.00', discount: '25%', color: '#E8F5E9', category: 'SUPPLEMENTS' },
+    { id: '9', name: 'Creatine Monohydrate', price: '₦12,000.00', discount: '20%', color: '#FFF3E0', category: 'SUPPLEMENTS' },
+    { id: '10', name: 'BCAA Supplement', price: '₦10,500.00', discount: '15%', color: '#F1F8E9', category: 'SUPPLEMENTS' },
+  ];
+
+  const plans = [
+    { id: '7', name: 'Monthly Plan', price: '₦25,000.00', discount: '40%', color: '#E3F2FD', category: 'PLANS' },
+    { id: '8', name: 'Annual Plan', price: '₦200,000.00', discount: '50%', color: '#F3E5F5', category: 'PLANS' },
+    { id: '11', name: '3-Month Plan', price: '₦60,000.00', discount: '35%', color: '#E8EAF6', category: 'PLANS' },
+    { id: '12', name: '6-Month Plan', price: '₦110,000.00', discount: '45%', color: '#FCE4EC', category: 'PLANS' },
+  ];
+
+  // Get products based on selected tab
+  const getProducts = () => {
+    switch (selectedTab) {
+      case 'GEARS':
+        return gears;
+      case 'SUPPLEMENTS':
+        return supplements;
+      case 'PLANS':
+        return plans;
+      default:
+        return gears;
+    }
+  };
+
+  const products = getProducts();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
