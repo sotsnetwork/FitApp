@@ -26,11 +26,23 @@ export default function UserWorkout() {
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const [sponsoredDropdownVisible, setSponsoredDropdownVisible] = React.useState(false);
   const [selectedFilter, setSelectedFilter] = React.useState('Sponsored');
+  const [searchVisible, setSearchVisible] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
   const { savePost, unsavePost, isSaved } = useSavedPosts();
 
-  // Filter posts based on selected category
+  // Filter posts based on selected category and search query
   const filteredPosts = React.useMemo(() => {
     let filtered = allPosts;
+    
+    // Filter by search query (activity name or title)
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter((post) => {
+        const activityMatch = post.activityTag.toLowerCase().includes(query);
+        const titleMatch = post.title.toLowerCase().includes(query);
+        return activityMatch || titleMatch;
+      });
+    }
     
     // Filter by activity tag
     if (selectedCategory !== 'All') {
@@ -45,7 +57,7 @@ export default function UserWorkout() {
     }
 
     return filtered;
-  }, [selectedCategory, selectedFilter]);
+  }, [selectedCategory, selectedFilter, searchQuery]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -58,7 +70,7 @@ export default function UserWorkout() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>WORKOUT</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => setSearchVisible(true)}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push('/(user)/saved-videos')}>
@@ -171,6 +183,179 @@ export default function UserWorkout() {
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Search Modal */}
+      <Modal
+        visible={searchVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setSearchVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => setSearchVisible(false)}
+          />
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
+            {/* Handle/Grabber */}
+            <View style={{ alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.md }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: colors.border,
+                }}
+              />
+            </View>
+
+            {/* Search Bar */}
+            <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.md }}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
+                <Ionicons name="search-outline" size={20} color={colors.subtext} />
+                <TextInput
+                  placeholder="Search workout activities..."
+                  placeholderTextColor={colors.subtext}
+                  value={searchQuery}
+                  onChangeText={setSearchQuery}
+                  style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular, fontSize: 14, color: colors.text }}
+                  autoFocus
+                  autoCapitalize="none"
+                />
+                {searchQuery.length > 0 && (
+                  <TouchableOpacity onPress={() => setSearchQuery('')} style={{ padding: spacing.xs }}>
+                    <Ionicons name="close-circle" size={20} color={colors.subtext} />
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+
+            {/* Suggested Activities */}
+            {searchQuery.length === 0 && (
+              <View style={{ paddingHorizontal: spacing.lg }}>
+                <Text style={{ fontSize: 14, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>
+                  Suggested Activities
+                </Text>
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.xs }}>
+                  {categories.filter(cat => cat !== 'All').map((category) => (
+                    <TouchableOpacity
+                      key={category}
+                      onPress={() => {
+                        setSearchQuery(category);
+                        setSelectedCategory(category);
+                      }}
+                      style={{
+                        paddingHorizontal: spacing.md,
+                        paddingVertical: spacing.sm,
+                        borderRadius: 16,
+                        backgroundColor: colors.brandTint,
+                        borderWidth: 1,
+                        borderColor: colors.brand,
+                      }}
+                    >
+                      <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.brand }}>
+                        {category}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+            )}
+
+            {/* Search Results */}
+            {searchQuery.length > 0 && (
+              <ScrollView style={{ maxHeight: 400 }} showsVerticalScrollIndicator={false}>
+                <View style={{ paddingHorizontal: spacing.lg }}>
+                  <Text style={{ fontSize: 14, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>
+                    Search Results
+                  </Text>
+                  {filteredPosts.length === 0 ? (
+                    <View style={{ paddingVertical: spacing.xl, alignItems: 'center' }}>
+                      <Ionicons name="search-outline" size={48} color={colors.subtext} />
+                      <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginTop: spacing.md, color: colors.subtext }}>
+                        No workout activities found
+                      </Text>
+                    </View>
+                  ) : (
+                    filteredPosts.map((post) => {
+                      const saved = isSaved(post.id);
+                      return (
+                        <TouchableOpacity
+                          key={post.id}
+                          onPress={() => {
+                            setSearchVisible(false);
+                            router.push('/(user)/post-detail');
+                          }}
+                          style={{
+                            flexDirection: 'row',
+                            alignItems: 'center',
+                            paddingVertical: spacing.md,
+                            borderBottomWidth: 1,
+                            borderBottomColor: colors.border,
+                          }}
+                        >
+                          <View style={{ width: 60, height: 60, backgroundColor: colors.border, borderRadius: 8, marginRight: spacing.md }} />
+                          <View style={{ flex: 1 }}>
+                            <Text style={{ fontSize: 14, fontFamily: fonts.semibold, color: colors.text, marginBottom: spacing.xs }}>
+                              {post.title}
+                            </Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.sm }}>
+                              <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: 4 }}>
+                                <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: colors.brand }}>
+                                  {post.activityTag}
+                                </Text>
+                              </View>
+                              {post.isSponsored && (
+                                <View style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.xs, paddingVertical: 2, borderRadius: 4 }}>
+                                  <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>
+                                    Sponsored
+                                  </Text>
+                                </View>
+                              )}
+                            </View>
+                          </View>
+                          <TouchableOpacity
+                            onPress={(e) => {
+                              e.stopPropagation();
+                              if (saved) {
+                                unsavePost(post.id);
+                              } else {
+                                savePost(post);
+                              }
+                            }}
+                            style={{ padding: spacing.xs }}
+                          >
+                            <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={20} color={saved ? colors.brand : colors.text} />
+                          </TouchableOpacity>
+                        </TouchableOpacity>
+                      );
+                    })
+                  )}
+                </View>
+              </ScrollView>
+            )}
+
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => {
+                setSearchVisible(false);
+                setSearchQuery('');
+              }}
+              style={{
+                backgroundColor: colors.text,
+                marginHorizontal: spacing.lg,
+                marginTop: spacing.lg,
+                paddingVertical: spacing.md,
+                borderRadius: 12,
+                alignItems: 'center',
+              }}
+            >
+              <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: 'white' }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
 
       {/* Sponsored Dropdown Modal */}
       <Modal
