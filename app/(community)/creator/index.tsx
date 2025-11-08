@@ -34,7 +34,7 @@ export default function CreatorCommunity() {
 
       {/* Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, gap: spacing.xs }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, paddingVertical: spacing.xs, gap: spacing.xs }}>
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab}
@@ -43,7 +43,7 @@ export default function CreatorCommunity() {
                 paddingHorizontal: spacing.md,
                 borderRadius: 16,
                 backgroundColor: selectedTab === tab ? colors.text : 'transparent',
-                height: 36,
+                height: 28,
                 justifyContent: 'center',
                 alignItems: 'center',
               }}
