@@ -38,7 +38,15 @@ export default function AccountAdded() {
       <View style={{ alignSelf: 'stretch' }}>
         <Button 
           title="Continue" 
-          onPress={() => router.push(`/(onboarding)/user-details?role=${role}`)} 
+          onPress={() => {
+            // Creator and Vendor have the same onboarding flow - both go to activities
+            // Users go to user-details
+            if (role === 'creator' || role === 'vendor') {
+              router.push({ pathname: '/(onboarding)/activities', params: { role } });
+            } else {
+              router.push({ pathname: '/(onboarding)/user-details', params: { role } });
+            }
+          }} 
         />
       </View>
     </View>
