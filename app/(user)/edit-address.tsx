@@ -1,12 +1,14 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import Input from '../../components/ui/Input';
 
 export default function EditAddress() {
+  const params = useLocalSearchParams();
+  const total = params.total as string || '0';
   const [name, setName] = React.useState('');
   const [surname, setSurname] = React.useState('');
   const [address, setAddress] = React.useState('');
@@ -97,10 +99,17 @@ export default function EditAddress() {
         </View>
       </ScrollView>
 
-      {/* Proceed Button */}
+      {/* Total and Proceed Button */}
       <View style={{ padding: spacing.lg, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+          <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Total Amount</Text>
+          <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>₦{parseFloat(total).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+        </View>
         <TouchableOpacity
-          onPress={() => router.push('/(user)/select-payment')}
+          onPress={() => router.push({ 
+            pathname: '/(user)/select-payment', 
+            params: { total } 
+          })}
           style={{ backgroundColor: colors.brand, paddingVertical: spacing.md, borderRadius: 12, alignItems: 'center' }}
         >
           <Text style={{ fontFamily: fonts.semibold, fontSize: 16, color: '#0F0F0F' }}>Proceed to Payment</Text>
