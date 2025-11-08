@@ -52,8 +52,16 @@ export default function AccountVerified() {
       </View>
 
       {/* Later in settings link */}
-      <TouchableOpacity style={{ marginTop: spacing.lg }} onPress={() => router.push(`/(onboarding)/user-details?role=${role}`)}>
-        <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#9A9A9A' }}>Later in settings</Text>
+      <TouchableOpacity style={{ marginTop: spacing.lg }} onPress={() => {
+        // Creator and Vendor have the same onboarding flow - both go to activities
+        // Users go to user-details
+        if (role === 'creator' || role === 'vendor') {
+          router.push({ pathname: '/(onboarding)/activities', params: { role } });
+        } else {
+          router.push({ pathname: '/(onboarding)/user-details', params: { role } });
+        }
+      }}>
+        <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#9A9A9A' }}>Skip for now</Text>
       </TouchableOpacity>
     </View>
   );
