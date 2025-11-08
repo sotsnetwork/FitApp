@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, Share } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Share, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../../theme/tokens';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
@@ -11,6 +12,57 @@ export default function UserCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
+  const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
+  const [following, setFollowing] = React.useState<{ [key: string]: boolean }>({});
+
+  // Request permissions for image/video picker
+  React.useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Permission needed', 'Sorry, we need camera roll permissions to upload images and videos!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setCreatePostModalVisible(false);
+        // TODO: Handle the selected image (upload to server, create post, etc.)
+        Alert.alert('Image Selected', 'Image has been selected. Post creation functionality will be implemented.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to pick image');
+    }
+  };
+
+  const pickVideo = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setCreatePostModalVisible(false);
+        // TODO: Handle the selected video (upload to server, create post, etc.)
+        Alert.alert('Video Selected', 'Video has been selected. Post creation functionality will be implemented.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to pick video');
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -117,8 +169,20 @@ export default function UserCommunity() {
               <View style={{ flex: 1 }}>
                 <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Hey, Guyyyyyys</Text>
               </View>
-              <TouchableOpacity style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: 16 }}>
-                <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Follow</Text>
+              <TouchableOpacity 
+                onPress={() => setFollowing({ ...following, 'hey-guys': !following['hey-guys'] })}
+                style={{ 
+                  backgroundColor: following['hey-guys'] ? 'transparent' : colors.brand, 
+                  borderWidth: following['hey-guys'] ? 1 : 0,
+                  borderColor: colors.border,
+                  paddingHorizontal: spacing.md, 
+                  paddingVertical: spacing.xs, 
+                  borderRadius: 16 
+                }}
+              >
+                <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: following['hey-guys'] ? colors.text : '#0F0F0F' }}>
+                  {following['hey-guys'] ? 'Following' : 'Follow'}
+                </Text>
               </TouchableOpacity>
             </View>
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.sm, lineHeight: 20 }}>
@@ -311,6 +375,125 @@ export default function UserCommunity() {
                 alignItems: 'center',
                 justifyContent: 'center',
                 gap: spacing.xs,
+              }}
+            >
+              <Ionicons name="close" size={20} color={colors.text} />
+              <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Close</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Create Post Floating Button */}
+      <TouchableOpacity
+        onPress={() => setCreatePostModalVisible(true)}
+        style={{
+          position: 'absolute',
+          bottom: 100,
+          right: spacing.lg,
+          backgroundColor: colors.brand,
+          width: 56,
+          height: 56,
+          borderRadius: 28,
+          alignItems: 'center',
+          justifyContent: 'center',
+          shadowColor: '#000',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+          elevation: 5,
+        }}
+      >
+        <Text style={{ fontSize: 28, fontFamily: fonts.bold, color: '#0F0F0F' }}>+</Text>
+      </TouchableOpacity>
+
+      {/* Create Post Modal */}
+      <Modal
+        visible={createPostModalVisible}
+        transparent
+        animationType="slide"
+        onRequestClose={() => setCreatePostModalVisible(false)}
+      >
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.4)', justifyContent: 'flex-end' }}>
+          <TouchableOpacity
+            style={{ flex: 1 }}
+            activeOpacity={1}
+            onPress={() => setCreatePostModalVisible(false)}
+          />
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl }}>
+            {/* Handle/Grabber */}
+            <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
+              <View
+                style={{
+                  width: 40,
+                  height: 4,
+                  borderRadius: 2,
+                  backgroundColor: colors.border,
+                }}
+              />
+            </View>
+
+            {/* Title */}
+            <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: colors.text, marginBottom: spacing.lg, textAlign: 'center' }}>
+              Create Post
+            </Text>
+
+            {/* Options */}
+            <TouchableOpacity
+              onPress={() => {
+                setCreatePostModalVisible(false);
+                // TODO: Navigate to create post screen with text option
+                router.push('/(user)/home');
+              }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: spacing.md,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+              }}
+            >
+              <Ionicons name="document-text-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
+              <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.text }}>Text</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={pickImage}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: spacing.md,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+              }}
+            >
+              <Ionicons name="image-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
+              <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.text }}>Picture</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={pickVideo}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: spacing.md,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+              }}
+            >
+              <Ionicons name="videocam-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
+              <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.text }}>Video</Text>
+            </TouchableOpacity>
+
+            {/* Close Button */}
+            <TouchableOpacity
+              onPress={() => setCreatePostModalVisible(false)}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: spacing.xs,
+                marginTop: spacing.lg,
               }}
             >
               <Ionicons name="close" size={20} color={colors.text} />
