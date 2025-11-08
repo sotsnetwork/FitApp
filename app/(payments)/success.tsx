@@ -7,6 +7,7 @@ import { router, useLocalSearchParams } from 'expo-router';
 export default function PaymentSuccess() {
   const params = useLocalSearchParams();
   const role = params.role as string || 'user'; // Default to user if no role specified
+  const total = params.total as string || '0';
 
   const getCommunityRoute = () => {
     switch (role) {
@@ -15,7 +16,7 @@ export default function PaymentSuccess() {
       case 'vendor':
         return '/(community)/vendor';
       default:
-        return '/(community)/user';
+        return '/(user)/home';
     }
   };
 
@@ -26,12 +27,20 @@ export default function PaymentSuccess() {
           <Text style={{ fontSize: 36 }}>✓</Text>
         </View>
       </View>
-      <Text style={{ fontSize: 32, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Challenge Accepted</Text>
-      <Text style={{ color: colors.subtext, textAlign: 'center', marginBottom: spacing.xl, fontFamily: fonts.regular }}>
-        Lorem ipsum dolor sit amet consectetur. Id purus quis magna varius mollis nullam. Diam sed quisque lectus.
+      <Text style={{ fontSize: 32, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Payment Successful</Text>
+      <Text style={{ color: colors.subtext, textAlign: 'center', marginBottom: spacing.md, fontFamily: fonts.regular }}>
+        Your payment has been processed successfully.
       </Text>
+      <View style={{ backgroundColor: colors.brandTint, padding: spacing.md, borderRadius: 12, marginBottom: spacing.xl, minWidth: 200 }}>
+        <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.xs }}>
+          Amount Deducted
+        </Text>
+        <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.text, textAlign: 'center' }}>
+          ₦{parseFloat(total).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+        </Text>
+      </View>
       <View style={{ position: 'absolute', bottom: spacing.lg, left: spacing.lg, right: spacing.lg }}>
-        <Button title="Go to Dashboard" onPress={() => router.replace(getCommunityRoute())} />
+        <Button title="Continue Shopping" onPress={() => router.replace('/(user)/shop')} />
       </View>
     </View>
   );
