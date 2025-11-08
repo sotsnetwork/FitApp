@@ -75,7 +75,7 @@ export default function Activities() {
           await setRole(role as 'user' | 'creator' | 'vendor');
           // Route based on role
           if (role === 'creator') {
-            router.replace('/(creator)/dashboard');
+            router.replace('/(creator)/home');
           } else if (role === 'vendor') {
             router.replace('/(community)/vendor');
           } else {
