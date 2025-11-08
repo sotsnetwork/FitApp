@@ -122,7 +122,7 @@ export default function CreatorHome() {
           <Ionicons name="search-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(community)/user')} style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(community)/creator')} style={{ alignItems: 'center' }}>
           <Ionicons name="people-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Community</Text>
         </TouchableOpacity>
