@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Modal, Share } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Share, Alert, Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../../theme/tokens';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
@@ -11,6 +12,55 @@ export default function CreatorCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
+
+  // Request permissions for image/video picker
+  React.useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          Alert.alert('Permission needed', 'Sorry, we need camera roll permissions to upload images and videos!');
+        }
+      }
+    })();
+  }, []);
+
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setCreatePostModalVisible(false);
+        // TODO: Handle the selected image (upload to server, create post, etc.)
+        Alert.alert('Image Selected', 'Image has been selected. Post creation functionality will be implemented.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to pick image');
+    }
+  };
+
+  const pickVideo = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Videos,
+        allowsEditing: true,
+        quality: 1,
+      });
+
+      if (!result.canceled) {
+        setCreatePostModalVisible(false);
+        // TODO: Handle the selected video (upload to server, create post, etc.)
+        Alert.alert('Video Selected', 'Video has been selected. Post creation functionality will be implemented.');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to pick video');
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -568,9 +618,23 @@ export default function CreatorCommunity() {
             <TouchableOpacity
               onPress={() => {
                 setCreatePostModalVisible(false);
-                // TODO: Navigate to create post screen with picture option
+                // TODO: Navigate to create post screen with text option
                 router.push('/(creator)/dashboard');
               }}
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                paddingVertical: spacing.md,
+                borderBottomWidth: 1,
+                borderBottomColor: colors.border,
+              }}
+            >
+              <Ionicons name="document-text-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
+              <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.text }}>Text</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={pickImage}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
@@ -584,11 +648,7 @@ export default function CreatorCommunity() {
             </TouchableOpacity>
 
             <TouchableOpacity
-              onPress={() => {
-                setCreatePostModalVisible(false);
-                // TODO: Navigate to create post screen with video option
-                router.push('/(creator)/dashboard');
-              }}
+              onPress={pickVideo}
               style={{
                 flexDirection: 'row',
                 alignItems: 'center',
