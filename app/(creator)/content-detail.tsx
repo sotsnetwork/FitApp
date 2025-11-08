@@ -4,7 +4,6 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
-import { useSavedPosts } from '../../contexts/SavedPostsContext';
 
 interface Comment {
   id: string;
@@ -15,7 +14,6 @@ interface Comment {
 }
 
 export default function ContentDetail() {
-  const { savePost, unsavePost, isSaved } = useSavedPosts();
   const [commentsModalVisible, setCommentsModalVisible] = React.useState(false);
   const [replyModalVisible, setReplyModalVisible] = React.useState(false);
   const [selectedComment, setSelectedComment] = React.useState<Comment | null>(null);
@@ -26,16 +24,6 @@ export default function ContentDetail() {
     { id: '3', name: 'Alfredo', date: '5th February,2023 3PM', comment: 'Amazing place and experience! We had a great time. The kids loved it.', replies: [] },
     { id: '4', name: 'Alfredo', date: '5th February,2023 3PM', comment: 'Amazing place and experience! We had a great time. The kids loved it.', replies: [] },
   ]);
-
-  // Mock video/post data
-  const videoPost = {
-    id: 'video-1',
-    title: 'Lorem ipsum dolor sit amet consectetur. Sagittis dictum sit a.',
-    activityTag: 'Workout',
-    isSponsored: false,
-  };
-
-  const saved = isSaved(videoPost.id);
 
   const handleReply = (comment: Comment) => {
     setSelectedComment(comment);
@@ -89,14 +77,11 @@ export default function ContentDetail() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              if (saved) {
-                unsavePost(videoPost.id);
-              } else {
-                savePost(videoPost);
-              }
+              // Handle edit post functionality
+              // TODO: Navigate to edit post screen or open edit modal
             }}
           >
-            <Ionicons name={saved ? 'bookmark' : 'bookmark-outline'} size={24} color={saved ? colors.brand : colors.text} />
+            <Ionicons name="pencil-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
@@ -112,10 +97,10 @@ export default function ContentDetail() {
           <Text style={{ fontSize: 22, fontFamily: fonts.semibold, color: colors.text, marginBottom: spacing.sm, lineHeight: 28 }}>
             Lorem ipsum dolor sit amet consectetur. Sagittis dictum sit a.
           </Text>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg, backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, borderRadius: 6, alignSelf: 'flex-start' }}>
-            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: '#6d6d6d' }}>13/15/2023</Text>
-            <View style={{ width: 5, height: 5, borderRadius: 2.5, backgroundColor: '#6d6d6d', marginHorizontal: spacing.sm }} />
-            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: '#6d6d6d' }}>Published</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.lg, backgroundColor: colors.brand, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, borderRadius: 16, alignSelf: 'flex-start' }}>
+            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: '#0F0F0F' }}>13/15/2023</Text>
+            <View style={{ width: 4, height: 4, borderRadius: 2, backgroundColor: '#0F0F0F', marginHorizontal: spacing.sm }} />
+            <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: '#0F0F0F' }}>Published</Text>
           </View>
 
           {/* Post Performance */}
