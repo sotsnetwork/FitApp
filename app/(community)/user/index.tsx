@@ -128,14 +128,20 @@ export default function UserCommunity() {
               <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.md }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <TouchableOpacity
+                onPress={() => router.push('/(user)/post-detail')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
                 <Ionicons name="heart" size={20} color={colors.brand} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.push('/(user)/post-detail')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
-              </View>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
                   try {
@@ -172,14 +178,20 @@ export default function UserCommunity() {
               <Text style={{ color: colors.subtext }}>Post Image</Text>
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              <TouchableOpacity
+                onPress={() => router.push('/(user)/post-detail')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
                 <Ionicons name="heart" size={20} color={colors.brand} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
-              </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.push('/(user)/post-detail')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
-              </View>
+              </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
                   try {
