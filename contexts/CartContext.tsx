@@ -15,8 +15,8 @@ export interface CartItem {
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: CartItem) => void;
-  removeFromCart: (itemId: string) => void;
-  updateQuantity: (itemId: string, quantity: number) => void;
+  removeFromCart: (itemId: string, size?: string, color?: string) => void;
+  updateQuantity: (itemId: string, quantity: number, size?: string, color?: string) => void;
   clearCart: () => void;
   getCartTotal: () => number;
   getCartCount: () => number;
@@ -58,18 +58,34 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const removeFromCart = async (itemId: string) => {
-    const updated = cartItems.filter((item) => item.id !== itemId);
+  const removeFromCart = async (itemId: string, size?: string, color?: string) => {
+    const updated = cartItems.filter((item) => {
+      // Remove item by matching id, size, and color to handle same product with different variants
+      if (size && color) {
+        return !(item.id === itemId && item.size === size && item.color === color);
+      }
+      return item.id !== itemId;
+    });
     setCartItems(updated);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
 
-  const updateQuantity = async (itemId: string, quantity: number) => {
+  const updateQuantity = async (itemId: string, quantity: number, size?: string, color?: string) => {
     if (quantity <= 0) {
-      removeFromCart(itemId);
+      removeFromCart(itemId, size, color);
       return;
     }
-    const updated = cartItems.map((item) => (item.id === itemId ? { ...item, quantity } : item));
+    const updated = cartItems.map((item) => {
+      // Update quantity by matching id, size, and color
+      if (size && color) {
+        if (item.id === itemId && item.size === size && item.color === color) {
+          return { ...item, quantity };
+        }
+      } else if (item.id === itemId) {
+        return { ...item, quantity };
+      }
+      return item;
+    });
     setCartItems(updated);
     await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
   };
