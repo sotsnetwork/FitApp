@@ -16,7 +16,7 @@ export default function CreatorCommunity() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <TouchableOpacity onPress={() => router.push('/(creator)/dashboard')}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/home')}>
           <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
@@ -79,6 +79,36 @@ export default function CreatorCommunity() {
                 <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
                   <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
                 </View>
+                <View style={{ flexDirection: 'row', gap: spacing.md }}>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="heart" size={20} color={colors.brand} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await Share.share({
+                          message: 'Check out this amazing fitness post on FitApp!',
+                          title: 'Share Post',
+                        });
+                      } catch (error) {
+                        console.error('Error sharing:', error);
+                      }
+                    }}
+                  >
+                    <Ionicons name="share-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Post 2 - Runnnnnnnnnnn!!! with Following tag and + Create button */}
@@ -100,6 +130,36 @@ export default function CreatorCommunity() {
                 >
                   <Text style={{ color: colors.subtext }}>Post Image</Text>
                 </TouchableOpacity>
+                <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="heart" size={20} color={colors.brand} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await Share.share({
+                          message: 'Check out this amazing fitness post on FitApp!',
+                          title: 'Share Post',
+                        });
+                      } catch (error) {
+                        console.error('Error sharing:', error);
+                      }
+                    }}
+                  >
+                    <Ionicons name="share-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
                 {/* + Create Button */}
                 <TouchableOpacity
                   onPress={() => setCreatePostModalVisible(true)}
@@ -145,6 +205,36 @@ export default function CreatorCommunity() {
                 <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
                   <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
                 </View>
+                <View style={{ flexDirection: 'row', gap: spacing.md }}>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="heart" size={20} color={colors.brand} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await Share.share({
+                          message: 'Check out this amazing fitness post on FitApp!',
+                          title: 'Share Post',
+                        });
+                      } catch (error) {
+                        console.error('Error sharing:', error);
+                      }
+                    }}
+                  >
+                    <Ionicons name="share-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
               </View>
 
               {/* Post 2 - Daily Exercise Post */}
@@ -165,6 +255,36 @@ export default function CreatorCommunity() {
                 >
                   <Text style={{ color: colors.subtext }}>Post Image</Text>
                 </TouchableOpacity>
+                <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="heart" size={20} color={colors.brand} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await Share.share({
+                          message: 'Check out this amazing fitness post on FitApp!',
+                          title: 'Share Post',
+                        });
+                      } catch (error) {
+                        console.error('Error sharing:', error);
+                      }
+                    }}
+                  >
+                    <Ionicons name="share-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
                 <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20, marginBottom: spacing.sm }}>
                   Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
                 </Text>
@@ -270,6 +390,36 @@ export default function CreatorCommunity() {
                 >
                   <Text style={{ color: colors.subtext }}>Post Image</Text>
                 </TouchableOpacity>
+                <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="heart" size={20} color={colors.brand} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => router.push('/(creator)/content-detail')}
+                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                  >
+                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={async () => {
+                      try {
+                        await Share.share({
+                          message: 'Check out this amazing fitness post on FitApp!',
+                          title: 'Share Post',
+                        });
+                      } catch (error) {
+                        console.error('Error sharing:', error);
+                      }
+                    }}
+                  >
+                    <Ionicons name="share-outline" size={20} color={colors.text} />
+                  </TouchableOpacity>
+                </View>
               </View>
             </>
           ) : (
