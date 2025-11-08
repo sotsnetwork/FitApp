@@ -1,11 +1,15 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Modal } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useCart } from '../../contexts/CartContext';
 
 export default function SelectPayment() {
+  const params = useLocalSearchParams();
+  const total = params.total as string || '0';
+  const { clearCart } = useCart();
   const [selectedPayment, setSelectedPayment] = React.useState('NGN Debit/Credit Card');
   const [showSavedCards, setShowSavedCards] = React.useState(false);
 
@@ -45,8 +49,12 @@ export default function SelectPayment() {
                       setShowSavedCards(true);
                       setSelectedPayment(method.name);
                     } else {
-                      // Handle other payment methods
-                      router.push('/(user)/home');
+                      // Handle other payment methods (Wallet, Paystack)
+                      clearCart();
+                      router.push({ 
+                        pathname: '/(payments)/success', 
+                        params: { total, role: 'user' } 
+                      });
                     }
                   }}
                   style={{
@@ -147,12 +155,21 @@ export default function SelectPayment() {
         </View>
       </ScrollView>
 
-      {/* Next Button */}
+      {/* Total and Next Button */}
       <View style={{ padding: spacing.lg, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.md }}>
+          <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Total Amount</Text>
+          <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>₦{parseFloat(total).toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
+        </View>
         <TouchableOpacity
           onPress={() => {
             if (showSavedCards) {
-              router.push('/(user)/home');
+              // Clear cart and proceed to payment success
+              clearCart();
+              router.push({ 
+                pathname: '/(payments)/success', 
+                params: { total, role: 'user' } 
+              });
             } else {
               // Handle payment selection
             }
