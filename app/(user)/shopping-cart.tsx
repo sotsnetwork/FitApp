@@ -6,8 +6,33 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useCart } from '../../contexts/CartContext';
 
+// Products from shop categorized by type (gears, supplements, plans)
+const gears = [
+  { id: '1', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF', category: 'GEARS' },
+  { id: '2', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2', category: 'GEARS' },
+  { id: '3', name: 'NIKE ARFORCE SNI...', price: '₦19,500.00', discount: '60%', color: '#FFFFFF', category: 'GEARS' },
+  { id: '4', name: 'NEW BALANCE 2.0', price: '₦21,000.00', discount: '12%', color: '#1877F2', category: 'GEARS' },
+];
+
+const supplements = [
+  { id: '5', name: 'Protein Powder', price: '₦15,000.00', discount: '30%', color: '#FFE5B4', category: 'SUPPLEMENTS' },
+  { id: '6', name: 'Multivitamin Pack', price: '₦8,500.00', discount: '25%', color: '#E8F5E9', category: 'SUPPLEMENTS' },
+  { id: '9', name: 'Creatine Monohydrate', price: '₦12,000.00', discount: '20%', color: '#FFF3E0', category: 'SUPPLEMENTS' },
+  { id: '10', name: 'BCAA Supplement', price: '₦10,500.00', discount: '15%', color: '#F1F8E9', category: 'SUPPLEMENTS' },
+];
+
+const plans = [
+  { id: '7', name: 'Monthly Plan', price: '₦25,000.00', discount: '40%', color: '#E3F2FD', category: 'PLANS' },
+  { id: '8', name: 'Annual Plan', price: '₦200,000.00', discount: '50%', color: '#F3E5F5', category: 'PLANS' },
+  { id: '11', name: '3-Month Plan', price: '₦60,000.00', discount: '35%', color: '#E8EAF6', category: 'PLANS' },
+  { id: '12', name: '6-Month Plan', price: '₦110,000.00', discount: '45%', color: '#FCE4EC', category: 'PLANS' },
+];
+
+// Combine all products for recommendations
+const allProducts = [...gears, ...supplements, ...plans];
+
 export default function ShoppingCart() {
-  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal, addToCart } = useCart();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
   const [editingItemId, setEditingItemId] = React.useState<string | null>(null);
@@ -105,15 +130,54 @@ export default function ShoppingCart() {
         <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.lg }}>
           <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.md }}>YOU MAY ALSO LIKE</Text>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {[1, 2].map((item) => (
-              <TouchableOpacity
-                key={item}
-                onPress={() => router.push('/(user)/product-detail')}
-                style={{ width: 120, height: 120, backgroundColor: colors.border, borderRadius: 12, marginRight: spacing.md, alignItems: 'center', justifyContent: 'center' }}
-              >
-                <Ionicons name="football-outline" size={40} color={colors.subtext} />
-              </TouchableOpacity>
-            ))}
+            {allProducts
+              .filter((product) => !cartItems.some((item) => item.id === product.id))
+              .slice(0, 4)
+              .map((product) => (
+                <TouchableOpacity
+                  key={product.id}
+                  onPress={() => router.push({ pathname: '/(user)/product-detail', params: { productId: product.id } })}
+                  style={{ width: 140, marginRight: spacing.md, backgroundColor: '#F9F9F9', borderRadius: 12, overflow: 'hidden' }}
+                >
+                  <View style={{ width: '100%', height: 120, backgroundColor: product.color, alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="football-outline" size={50} color={colors.subtext} />
+                  </View>
+                  <View style={{ padding: spacing.sm }}>
+                    <Text style={{ fontSize: 11, fontFamily: fonts.regular, marginBottom: spacing.xs, color: colors.subtext }} numberOfLines={1}>
+                      {product.name}
+                    </Text>
+                    <Text style={{ fontSize: 12, fontFamily: fonts.semibold, marginBottom: spacing.xs }}>{product.price}</Text>
+                    {product.discount && (
+                      <Text style={{ fontSize: 9, fontFamily: fonts.semibold, color: '#FFA500' }}>
+                        {product.discount} Discount
+                      </Text>
+                    )}
+                    <TouchableOpacity
+                      onPress={(e) => {
+                        e.stopPropagation();
+                        addToCart({
+                          id: product.id,
+                          name: product.name,
+                          price: product.price,
+                          discount: product.discount,
+                          size: '36', // Default size
+                          color: 'BROWN', // Default color
+                          quantity: 1,
+                        });
+                      }}
+                      style={{
+                        backgroundColor: colors.brand,
+                        paddingVertical: spacing.xs,
+                        borderRadius: 8,
+                        alignItems: 'center',
+                        marginTop: spacing.xs,
+                      }}
+                    >
+                      <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Add to Cart</Text>
+                    </TouchableOpacity>
+                  </View>
+                </TouchableOpacity>
+              ))}
           </ScrollView>
         </View>
       </ScrollView>
@@ -121,10 +185,26 @@ export default function ShoppingCart() {
       {/* Continue Button */}
       <View style={{ padding: spacing.lg, borderTopWidth: 1, borderTopColor: colors.border }}>
         <TouchableOpacity
-          onPress={() => router.push('/(user)/edit-address')}
-          style={{ backgroundColor: colors.brand, paddingVertical: spacing.md, borderRadius: 12, alignItems: 'center' }}
+          onPress={() => {
+            if (cartItems.length === 0) {
+              return;
+            }
+            const total = getCartTotal();
+            router.push({ 
+              pathname: '/(user)/edit-address', 
+              params: { total: total.toString() } 
+            });
+          }}
+          disabled={cartItems.length === 0}
+          style={{ 
+            backgroundColor: cartItems.length === 0 ? colors.border : colors.brand, 
+            paddingVertical: spacing.md, 
+            borderRadius: 12, 
+            alignItems: 'center',
+            opacity: cartItems.length === 0 ? 0.5 : 1,
+          }}
         >
-          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, color: '#0F0F0F' }}>Continue</Text>
+          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, color: cartItems.length === 0 ? colors.subtext : '#0F0F0F' }}>Continue</Text>
         </TouchableOpacity>
       </View>
 
