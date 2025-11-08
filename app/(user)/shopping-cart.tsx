@@ -4,10 +4,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useCart } from '../../contexts/CartContext';
 
 export default function ShoppingCart() {
+  const { cartItems, removeFromCart, updateQuantity, getCartTotal } = useCart();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
+  const [editingItemId, setEditingItemId] = React.useState<string | null>(null);
   const [selectedSize, setSelectedSize] = React.useState('36');
   const [selectedColor, setSelectedColor] = React.useState('BROWN');
 
@@ -18,7 +21,7 @@ export default function ShoppingCart() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>SHOPPING CART (1)</Text>
+        <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>SHOPPING CART ({cartItems.length})</Text>
         <TouchableOpacity>
           <Ionicons name="heart-outline" size={24} color={colors.text} />
         </TouchableOpacity>
@@ -26,50 +29,76 @@ export default function ShoppingCart() {
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ padding: spacing.lg }}>
-          {/* Cart Item */}
-          <View style={{ flexDirection: 'row', marginBottom: spacing.xl }}>
-            <View style={{ width: 120, height: 140, backgroundColor: colors.border, borderRadius: 12, marginRight: spacing.md, alignItems: 'center', justifyContent: 'center' }}>
-              <Ionicons name="football-outline" size={60} color={colors.subtext} />
+          {cartItems.length === 0 ? (
+            <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.xl }}>
+              <Ionicons name="bag-outline" size={64} color={colors.subtext} />
+              <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginTop: spacing.md, color: colors.text }}>Your cart is empty</Text>
+              <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginTop: spacing.sm, color: colors.subtext }}>Add items to your cart to see them here</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.sm }}>
-                <Text style={{ fontSize: 14, fontFamily: fonts.semibold, flex: 1 }}>NIKE AIRFORCE SNICKERS</Text>
-                <TouchableOpacity>
-                  <Ionicons name="close" size={20} color={colors.subtext} />
-                </TouchableOpacity>
+          ) : (
+            <>
+              {/* Cart Items */}
+              {cartItems.map((item) => (
+                <View key={`${item.id}-${item.size}-${item.color}`} style={{ flexDirection: 'row', marginBottom: spacing.xl }}>
+                  <View style={{ width: 120, height: 140, backgroundColor: colors.border, borderRadius: 12, marginRight: spacing.md, alignItems: 'center', justifyContent: 'center' }}>
+                    <Ionicons name="football-outline" size={60} color={colors.subtext} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: spacing.sm }}>
+                      <Text style={{ fontSize: 14, fontFamily: fonts.semibold, flex: 1 }}>{item.name}</Text>
+                      <TouchableOpacity onPress={() => removeFromCart(item.id, item.size, item.color)}>
+                        <Ionicons name="close" size={20} color={colors.subtext} />
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
+                      <Text style={{ fontSize: 14, fontFamily: fonts.regular }}>{item.price}</Text>
+                      {item.discount && (
+                        <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#FFA500', marginLeft: spacing.sm }}>
+                          {item.discount} Discount
+                        </Text>
+                      )}
+                    </View>
+
+                    {/* Size Display */}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm }}>
+                      <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Size: {item.size}</Text>
+                    </View>
+
+                    {/* Color Display */}
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm }}>
+                      <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Colour: {item.color}</Text>
+                    </View>
+
+                    {/* Quantity Controls */}
+                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.sm }}>
+                      <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Quantity:</Text>
+                      <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+                        <TouchableOpacity
+                          onPress={() => updateQuantity(item.id, item.quantity - 1, item.size, item.color)}
+                          style={{ width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <Ionicons name="remove" size={16} color={colors.text} />
+                        </TouchableOpacity>
+                        <Text style={{ fontSize: 14, fontFamily: fonts.semibold, minWidth: 30, textAlign: 'center' }}>{item.quantity}</Text>
+                        <TouchableOpacity
+                          onPress={() => updateQuantity(item.id, item.quantity + 1, item.size, item.color)}
+                          style={{ width: 32, height: 32, borderRadius: 16, borderWidth: 1, borderColor: colors.border, alignItems: 'center', justifyContent: 'center' }}
+                        >
+                          <Ionicons name="add" size={16} color={colors.text} />
+                        </TouchableOpacity>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              ))}
+
+              {/* Total */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: spacing.md, borderTopWidth: 1, borderTopColor: colors.border, marginTop: spacing.md }}>
+                <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Total</Text>
+                <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>₦{getCartTotal().toLocaleString('en-NG', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
               </View>
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                <Text style={{ fontSize: 14, fontFamily: fonts.regular }}>₦19,500.00</Text>
-                <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#FFA500', marginLeft: spacing.sm }}>
-                  60% Discount
-                </Text>
-              </View>
-
-              {/* Size Dropdown */}
-              <TouchableOpacity
-                onPress={() => setSizeModalVisible(true)}
-                style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm }}
-              >
-                <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Size: {selectedSize}</Text>
-                <Ionicons name="chevron-down" size={16} color={colors.subtext} />
-              </TouchableOpacity>
-
-              {/* Color Dropdown */}
-              <TouchableOpacity
-                onPress={() => setColorModalVisible(true)}
-                style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs }}
-              >
-                <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Colour: {selectedColor}</Text>
-                <Ionicons name="chevron-down" size={16} color={colors.subtext} />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Total */}
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingVertical: spacing.md, borderTopWidth: 1, borderTopColor: colors.border }}>
-            <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Total</Text>
-            <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>₦19,000.00</Text>
-          </View>
+            </>
+          )}
         </View>
 
         {/* You May Also Like */}
