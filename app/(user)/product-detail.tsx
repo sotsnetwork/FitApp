@@ -11,7 +11,7 @@ export default function ProductDetail() {
   const params = useLocalSearchParams();
   const productId = (params.productId as string) || '1';
   const { saveProduct, unsaveProduct, isSaved } = useSavedProducts();
-  const { addToCart } = useCart();
+  const { addToCart, getCartCount } = useCart();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
   const [selectedSize, setSelectedSize] = React.useState('36');
@@ -54,8 +54,13 @@ export default function ProductDetail() {
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')}>
+        <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')} style={{ position: 'relative' }}>
           <Ionicons name="bag-outline" size={24} color={colors.text} />
+          {getCartCount() > 0 && (
+            <View style={{ position: 'absolute', top: -8, right: -8, backgroundColor: colors.brand, borderRadius: 10, minWidth: 20, height: 20, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 }}>
+              <Text style={{ fontSize: 10, fontFamily: fonts.bold, color: '#0F0F0F' }}>{getCartCount()}</Text>
+            </View>
+          )}
         </TouchableOpacity>
       </View>
 
