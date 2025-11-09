@@ -5,9 +5,11 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useSavedPosts } from '../../contexts/SavedPostsContext';
+import { useSavedProducts } from '../../contexts/SavedProductsContext';
 
 export default function SavedVideos() {
   const { savedPosts, unsavePost } = useSavedPosts();
+  const { savedProducts, unsaveProduct } = useSavedProducts();
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
