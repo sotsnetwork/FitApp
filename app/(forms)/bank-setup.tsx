@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function BankSetup() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { updateProfile } = useUserProfile();
   const [accountType, setAccountType] = React.useState('');
   const [bankName, setBankName] = React.useState('');
   const [accountNumber, setAccountNumber] = React.useState('');
@@ -52,7 +54,16 @@ export default function BankSetup() {
       <View style={{ height: spacing.lg }} />
       <Button 
         title="Next" 
-        onPress={() => router.push({ pathname: '/(verify)/account-added', params: { role } })} 
+        onPress={async () => {
+          // Save bank account information
+          await updateProfile({
+            accountType,
+            bankName,
+            accountNumber,
+            accountName,
+          });
+          router.push({ pathname: '/(verify)/account-added', params: { role } });
+        }} 
       />
     </View>
   );
