@@ -5,9 +5,18 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import MenuOverlay from './menu-overlay';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function CreatorProfile() {
+  const { profile } = useUserProfile();
   const [menuVisible, setMenuVisible] = React.useState(false);
+
+  // Get display name from profile or use defaults
+  const displayName = profile 
+    ? `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username || 'User'
+    : 'User';
+  
+  const displayBio = profile?.bio || 'Enthusiast about exercise, health fitness and recreation';
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -29,9 +38,9 @@ export default function CreatorProfile() {
           <View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md }}>
             <Text style={{ fontSize: 48 }}>👤</Text>
           </View>
-          <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.xs }}>Victor Drason</Text>
+          <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.xs }}>{displayName}</Text>
           <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.lg }}>
-            Enthusiast about exercise, health fitness and recreation
+            {displayBio}
           </Text>
         </View>
       </ScrollView>
