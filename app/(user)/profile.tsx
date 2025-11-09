@@ -4,9 +4,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function UserProfile() {
+  const { profile } = useUserProfile();
   const [selectedMenu, setSelectedMenu] = React.useState('Home');
+
+  // Get display name from profile or use defaults
+  const displayName = profile 
+    ? `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username || 'User'
+    : 'User';
+  
+  const displayBio = profile?.bio || 'Enthusiast about exercise, health fitness and recreation';
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -25,12 +34,12 @@ export default function UserProfile() {
             
             {/* Name */}
             <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.text, marginBottom: spacing.xs }}>
-              Victor Drason
+              {displayName}
             </Text>
             
             {/* Bio */}
             <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, lineHeight: 20 }}>
-              Enthusiast about exercise, health fitness and recreation
+              {displayBio}
             </Text>
           </View>
         </View>
