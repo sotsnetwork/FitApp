@@ -5,12 +5,15 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function UserDetails() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { updateProfile } = useUserProfile();
   const [firstName, setFirstName] = React.useState('');
   const [lastName, setLastName] = React.useState('');
+  const [bio, setBio] = React.useState('');
   const [birthdate, setBirthdate] = React.useState('');
   const [gender, setGender] = React.useState('');
   const [showDatePicker, setShowDatePicker] = React.useState(false);
@@ -52,6 +55,17 @@ export default function UserDetails() {
         value={lastName} 
         onChangeText={setLastName}
         style={{ marginBottom: spacing.md }}
+      />
+
+      {/* Bio */}
+      <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, marginBottom: spacing.xs }}>Bio (optional)</Text>
+      <Input 
+        placeholder="Tell us about yourself" 
+        value={bio} 
+        onChangeText={setBio}
+        multiline
+        numberOfLines={3}
+        style={{ marginBottom: spacing.md, minHeight: 80 }}
       />
 
       {/* Birthdate */}
@@ -121,7 +135,17 @@ export default function UserDetails() {
       <Button 
         title="Next" 
         disabled={!canContinue}
-        onPress={() => router.push(`/(onboarding)/activities?role=${role}`)} 
+        onPress={async () => {
+          // Save user profile data
+          await updateProfile({
+            firstName,
+            lastName,
+            bio: bio || undefined,
+            birthdate,
+            gender,
+          });
+          router.push(`/(onboarding)/activities?role=${role}`);
+        }} 
       />
 
       {/* Date Picker Modal - Figma Styled */}
