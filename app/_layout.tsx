@@ -9,6 +9,7 @@ import { UserRoleProvider } from '../contexts/UserRoleContext';
 import { SavedProductsProvider } from '../contexts/SavedProductsContext';
 import { CartProvider } from '../contexts/CartContext';
 import { SearchHistoryProvider } from '../contexts/SearchHistoryContext';
+import { UserProfileProvider } from '../contexts/UserProfileContext';
 
 // Prevent splash screen from auto-hiding, we'll hide it manually
 SplashScreen.preventAutoHideAsync();
@@ -30,19 +31,21 @@ export default function RootLayout() {
 
   return (
     <UserRoleProvider>
-      <SavedPostsProvider>
-        <SavedProductsProvider>
-          <CartProvider>
-            <SearchHistoryProvider>
-              <SafeAreaProvider>
-                <View style={{ flex: 1 }}>
-                  <Stack screenOptions={{ headerShown: false }} />
-                </View>
-              </SafeAreaProvider>
-            </SearchHistoryProvider>
-          </CartProvider>
-        </SavedProductsProvider>
-      </SavedPostsProvider>
+      <UserProfileProvider>
+        <SavedPostsProvider>
+          <SavedProductsProvider>
+            <CartProvider>
+              <SearchHistoryProvider>
+                <SafeAreaProvider>
+                  <View style={{ flex: 1 }}>
+                    <Stack screenOptions={{ headerShown: false }} />
+                  </View>
+                </SafeAreaProvider>
+              </SearchHistoryProvider>
+            </CartProvider>
+          </SavedProductsProvider>
+        </SavedPostsProvider>
+      </UserProfileProvider>
     </UserRoleProvider>
   );
 }
