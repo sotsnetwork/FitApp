@@ -6,11 +6,13 @@ import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useUserRole } from '../../contexts/UserRoleContext';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function Signup() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
   const { setRole } = useUserRole();
+  const { updateProfile } = useUserProfile();
   const [email, setEmail] = React.useState('');
   const [username, setUsername] = React.useState('');
   const [password, setPassword] = React.useState('');
@@ -136,6 +138,12 @@ export default function Signup() {
             if (!canSubmit) {
               return;
             }
+            // Save user profile data from signup
+            await updateProfile({
+              username,
+              email,
+              phone,
+            });
             await setRole(role as 'user' | 'creator' | 'vendor');
             router.push(`/(verify)/verify-email?role=${role}`);
           }} 
