@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function AccountVerification() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { updateProfile } = useUserProfile();
   const [businessName, setBusinessName] = React.useState('');
   const [productCategory, setProductCategory] = React.useState('');
 
@@ -28,7 +30,12 @@ export default function AccountVerification() {
       <View style={{ height: spacing.lg }} />
       <Button 
         title="Next" 
-        onPress={() => {
+        onPress={async () => {
+          // Save creator/vendor business information
+          await updateProfile({
+            businessName,
+            productCategory,
+          });
           // Both Creators and Vendors need to fill Contact Details (Shop Address, Closest Landmark)
           // Users skip both Account Verification and Contact Details
           if (role === 'creator' || role === 'vendor') {
