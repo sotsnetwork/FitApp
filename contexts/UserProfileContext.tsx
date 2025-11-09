@@ -10,6 +10,22 @@ export interface UserProfile {
   bio?: string;
   birthdate?: string;
   gender?: string;
+  // Creator/Vendor specific fields
+  businessName?: string;
+  productCategory?: string;
+  country?: string;
+  state?: string;
+  city?: string;
+  shopAddress?: string;
+  landmark?: string;
+  accountType?: string;
+  bankName?: string;
+  accountNumber?: string;
+  accountName?: string;
+  // Social media links
+  tiktok?: string;
+  instagram?: string;
+  facebook?: string;
 }
 
 interface UserProfileContextType {
