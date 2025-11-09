@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function LinkSocial() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { updateProfile } = useUserProfile();
   const [tiktok, setTiktok] = React.useState('');
   const [instagram, setInstagram] = React.useState('');
   const [facebook, setFacebook] = React.useState('');
@@ -60,7 +62,15 @@ export default function LinkSocial() {
       <View style={{ paddingBottom: spacing.lg }}>
         <Button 
           title="Next" 
-          onPress={() => router.push({ pathname: '/(verify)/account-verified', params: { role } })} 
+          onPress={async () => {
+            // Save social media links
+            await updateProfile({
+              tiktok,
+              instagram,
+              facebook,
+            });
+            router.push({ pathname: '/(verify)/account-verified', params: { role } });
+          }} 
         />
       </View>
     </View>
