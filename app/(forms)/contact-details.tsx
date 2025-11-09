@@ -5,10 +5,12 @@ import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
 import Button from '../../components/ui/Button';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 export default function ContactDetails() {
   const params = useLocalSearchParams();
   const role = (params.role as string) || 'user';
+  const { updateProfile } = useUserProfile();
   const [country, setCountry] = React.useState('');
   const [state, setState] = React.useState('');
   const [city, setCity] = React.useState('');
@@ -154,7 +156,17 @@ export default function ContactDetails() {
       <View style={{ height: spacing.lg }} />
       <Button 
         title="Next" 
-        onPress={() => router.push({ pathname: '/(forms)/link-social', params: { role } })} 
+        onPress={async () => {
+          // Save contact details
+          await updateProfile({
+            country,
+            state,
+            city,
+            shopAddress,
+            landmark,
+          });
+          router.push({ pathname: '/(forms)/link-social', params: { role } });
+        }} 
       />
       {/* Country Picker Modal */}
       <Modal visible={countryOpen} transparent animationType="slide">
