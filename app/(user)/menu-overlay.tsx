@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, Modal, Animated } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useUserProfile } from '../../contexts/UserProfileContext';
 
 interface MenuOverlayProps {
   visible: boolean;
@@ -11,6 +12,14 @@ interface MenuOverlayProps {
 }
 
 export default function UserMenuOverlay({ visible, onClose, currentScreen }: MenuOverlayProps) {
+  const { profile } = useUserProfile();
+
+  // Get display name from profile or use defaults
+  const displayName = profile 
+    ? `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username || 'User'
+    : 'User';
+  
+  const displayBio = profile?.bio || 'Enthusiast about exercise, health fitness and recreation';
   const slideAnim = useRef(new Animated.Value(-340)).current;
 
   useEffect(() => {
@@ -49,9 +58,9 @@ export default function UserMenuOverlay({ visible, onClose, currentScreen }: Men
             <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md }}>
               <Text style={{ fontSize: 24 }}>👤</Text>
             </View>
-            <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.xs }}>Victor Drason</Text>
+            <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.xs }}>{displayName}</Text>
             <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, lineHeight: 20 }}>
-              Enthusiast about exercise, health fitness and recreation
+              {displayBio}
             </Text>
           </View>
 
