@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, NativeScrollEvent, NativeSyntheticEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
@@ -21,6 +21,45 @@ export default function UserDetails() {
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const years = Array.from({ length: 60 }, (_, i) => 1980 + i);
+
+  // Refs for scroll views
+  const monthScrollRef = React.useRef<ScrollView>(null);
+  const dayScrollRef = React.useRef<ScrollView>(null);
+  const yearScrollRef = React.useRef<ScrollView>(null);
+
+  const ITEM_HEIGHT = 44;
+  const SELECTION_OFFSET = 68; // Top padding to center the selection
+
+  // Initialize scroll positions when modal opens
+  React.useEffect(() => {
+    if (showDatePicker) {
+      // Scroll to selected values
+      const monthIndex = months.indexOf(selectedMonth);
+      const dayIndex = days.indexOf(selectedDay);
+      const yearIndex = years.indexOf(selectedYear);
+      
+      setTimeout(() => {
+        monthScrollRef.current?.scrollTo({ y: monthIndex * ITEM_HEIGHT, animated: false });
+        dayScrollRef.current?.scrollTo({ y: dayIndex * ITEM_HEIGHT, animated: false });
+        yearScrollRef.current?.scrollTo({ y: yearIndex * ITEM_HEIGHT, animated: false });
+      }, 100);
+    }
+  }, [showDatePicker]);
+
+  const handleScrollEnd = (scrollRef: React.RefObject<ScrollView>, values: any[], setter: (value: any) => void) => {
+    return (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+      const y = event.nativeEvent.contentOffset.y;
+      // Calculate which item is in the center (highlighted position)
+      const index = Math.round((y + SELECTION_OFFSET) / ITEM_HEIGHT);
+      const clampedIndex = Math.max(0, Math.min(index, values.length - 1));
+      
+      // Set the selected value
+      setter(values[clampedIndex]);
+      
+      // Snap to the exact position
+      scrollRef.current?.scrollTo({ y: clampedIndex * ITEM_HEIGHT, animated: true });
+    };
+  };
 
   const handleDateConfirm = () => {
     setBirthdate(`${selectedMonth} ${selectedDay}, ${selectedYear}`);
@@ -135,35 +174,74 @@ export default function UserDetails() {
 
             {/* Wheels */}
             <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.xl }}>
-              <View style={{ height: 180, flexDirection: 'row', justifyContent: 'space-between' }}>
+              <View style={{ height: 180, flexDirection: 'row', justifyContent: 'space-between', position: 'relative' }}>
                 {/* selection highlight */}
-                <View pointerEvents="none" style={{ position: 'absolute', left: spacing.lg, right: spacing.lg, top: 68, height: 44, backgroundColor: '#F5FFF9', borderRadius: 12 }} />
+                <View pointerEvents="none" style={{ position: 'absolute', left: spacing.lg, right: spacing.lg, top: SELECTION_OFFSET, height: ITEM_HEIGHT, backgroundColor: colors.brandTint, borderRadius: 12 }} />
 
                 {/* Month */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
-                  {months.map((m) => (
-                    <TouchableOpacity key={m} onPress={() => setSelectedMonth(m)} style={{ height: 44, justifyContent: 'center' }}>
-                      <Text style={{ textAlign: 'left', fontFamily: fonts.regular, color: selectedMonth === m ? colors.text : '#B3B3B3', fontSize: 18 }}>{m}</Text>
-                    </TouchableOpacity>
-                  ))}
+                <ScrollView
+                  ref={monthScrollRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: SELECTION_OFFSET }}
+                  onMomentumScrollEnd={handleScrollEnd(monthScrollRef, months, setSelectedMonth)}
+                  onScrollEndDrag={handleScrollEnd(monthScrollRef, months, setSelectedMonth)}
+                  snapToInterval={ITEM_HEIGHT}
+                  snapToAlignment="start"
+                  decelerationRate="fast"
+                  style={{ flex: 1 }}
+                >
+                  {months.map((m, index) => {
+                    const isSelected = selectedMonth === m;
+                    return (
+                      <View key={m} style={{ height: ITEM_HEIGHT, justifyContent: 'center' }}>
+                        <Text style={{ textAlign: 'left', fontFamily: fonts.regular, color: isSelected ? colors.text : '#B3B3B3', fontSize: 18 }}>{m}</Text>
+                      </View>
+                    );
+                  })}
                 </ScrollView>
 
                 {/* Day */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
-                  {days.map((d) => (
-                    <TouchableOpacity key={d} onPress={() => setSelectedDay(d)} style={{ height: 44, justifyContent: 'center', paddingHorizontal: spacing.md }}>
-                      <Text style={{ textAlign: 'center', fontFamily: fonts.regular, color: selectedDay === d ? colors.text : '#B3B3B3', fontSize: 18 }}>{d}</Text>
-                    </TouchableOpacity>
-                  ))}
+                <ScrollView
+                  ref={dayScrollRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: SELECTION_OFFSET }}
+                  onMomentumScrollEnd={handleScrollEnd(dayScrollRef, days, setSelectedDay)}
+                  onScrollEndDrag={handleScrollEnd(dayScrollRef, days, setSelectedDay)}
+                  snapToInterval={ITEM_HEIGHT}
+                  snapToAlignment="start"
+                  decelerationRate="fast"
+                  style={{ flex: 1 }}
+                >
+                  {days.map((d, index) => {
+                    const isSelected = selectedDay === d;
+                    return (
+                      <View key={d} style={{ height: ITEM_HEIGHT, justifyContent: 'center', paddingHorizontal: spacing.md }}>
+                        <Text style={{ textAlign: 'center', fontFamily: fonts.regular, color: isSelected ? colors.text : '#B3B3B3', fontSize: 18 }}>{d}</Text>
+                      </View>
+                    );
+                  })}
                 </ScrollView>
 
                 {/* Year */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
-                  {years.map((y) => (
-                    <TouchableOpacity key={y} onPress={() => setSelectedYear(y)} style={{ height: 44, justifyContent: 'center', alignItems: 'flex-end' }}>
-                      <Text style={{ textAlign: 'right', fontFamily: fonts.regular, color: selectedYear === y ? colors.text : '#B3B3B3', fontSize: 18 }}>{y}</Text>
-                    </TouchableOpacity>
-                  ))}
+                <ScrollView
+                  ref={yearScrollRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: SELECTION_OFFSET }}
+                  onMomentumScrollEnd={handleScrollEnd(yearScrollRef, years, setSelectedYear)}
+                  onScrollEndDrag={handleScrollEnd(yearScrollRef, years, setSelectedYear)}
+                  snapToInterval={ITEM_HEIGHT}
+                  snapToAlignment="start"
+                  decelerationRate="fast"
+                  style={{ flex: 1 }}
+                >
+                  {years.map((y, index) => {
+                    const isSelected = selectedYear === y;
+                    return (
+                      <View key={y} style={{ height: ITEM_HEIGHT, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text style={{ textAlign: 'right', fontFamily: fonts.regular, color: isSelected ? colors.text : '#B3B3B3', fontSize: 18 }}>{y}</Text>
+                      </View>
+                    );
+                  })}
                 </ScrollView>
               </View>
             </View>
