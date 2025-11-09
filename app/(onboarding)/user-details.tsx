@@ -142,7 +142,7 @@ export default function UserDetails() {
           title="Next" 
           disabled={!canContinue}
           onPress={async () => {
-            // Save user profile data
+            // Save user profile data (firstName, lastName, bio, birthdate, gender)
             await updateProfile({
               firstName,
               lastName,
@@ -150,7 +150,8 @@ export default function UserDetails() {
               birthdate,
               gender,
             });
-            router.push(`/(onboarding)/activities?role=${role}`);
+            // All roles go to activities after personal details
+            router.push({ pathname: '/(onboarding)/activities', params: { role } });
           }} 
         />
       </ScrollView>
