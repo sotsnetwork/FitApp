@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../../theme/tokens';
+import MenuOverlay from '../../creator/menu-overlay';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
@@ -12,6 +13,7 @@ export default function CreatorCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
+  const [menuVisible, setMenuVisible] = React.useState(false);
   const [likedPosts, setLikedPosts] = React.useState<{ [key: string]: boolean }>({});
   const [postLikeCounts, setPostLikeCounts] = React.useState<{ [key: string]: number }>({
     'challenge-post-1': 12,
@@ -64,7 +66,7 @@ export default function CreatorCommunity() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <TouchableOpacity onPress={() => router.push('/(creator)/home')}>
+        <TouchableOpacity onPress={() => setMenuVisible(true)}>
           <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
@@ -480,6 +482,33 @@ export default function CreatorCommunity() {
           )}
         </View>
       </ScrollView>
+
+      {/* Bottom Navigation */}
+      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderTopColor: colors.border, paddingVertical: spacing.md, paddingHorizontal: spacing.lg, justifyContent: 'space-around' }}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/home')} style={{ alignItems: 'center' }}>
+          <Ionicons name="home-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Home</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(creator)/search')} style={{ alignItems: 'center' }}>
+          <Ionicons name="search-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={{ alignItems: 'center' }}>
+          <Ionicons name="people" size={24} color={colors.text} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Community</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(creator)/workout')} style={{ alignItems: 'center' }}>
+          <Ionicons name="barbell-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Workout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(creator)/shop')} style={{ alignItems: 'center' }}>
+          <Ionicons name="bag-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* Menu Overlay */}
+      <MenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="community" />
 
       {/* Challenge Accepted Modal */}
       <Modal
