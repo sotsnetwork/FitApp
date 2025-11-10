@@ -33,7 +33,7 @@ export default function CreatorVideos() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>MY VIDEOS</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity onPress={() => router.push('/(creator)/create-post')}>
+          <TouchableOpacity onPress={() => router.push('/(creator)/upload-video')}>
             <Ionicons name="cloud-upload-outline" size={24} color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity>
