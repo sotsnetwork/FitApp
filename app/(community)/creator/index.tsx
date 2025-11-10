@@ -481,26 +481,6 @@ export default function CreatorCommunity() {
         </View>
       </ScrollView>
 
-      {/* Bottom Navigation */}
-      <View style={{ flexDirection: 'row', borderTopWidth: 1, borderTopColor: colors.border, paddingVertical: spacing.md, paddingHorizontal: spacing.lg, justifyContent: 'space-around' }}>
-        <TouchableOpacity onPress={() => router.push('/(creator)/home')} style={{ alignItems: 'center' }}>
-          <Ionicons name="home-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Home</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(creator)/dashboard')} style={{ alignItems: 'center' }}>
-          <Ionicons name="stats-chart" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Dashboard</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="people" size={24} color={colors.text} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Community</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(creator)/profile')} style={{ alignItems: 'center' }}>
-          <Ionicons name="person-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Profile</Text>
-        </TouchableOpacity>
-      </View>
-
       {/* Challenge Accepted Modal */}
       <Modal
         visible={challengeAcceptedVisible}
