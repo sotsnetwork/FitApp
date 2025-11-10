@@ -63,10 +63,10 @@ export default function UserProfile() {
             <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Home</Text>
           </TouchableOpacity>
 
-          {/* Saved Videos */}
+          {/* Bookmarked */}
           <TouchableOpacity
             onPress={() => {
-              setSelectedMenu('Saved Videos');
+              setSelectedMenu('Bookmarked');
               router.push('/(user)/saved-videos');
             }}
             style={{
@@ -77,7 +77,7 @@ export default function UserProfile() {
             }}
           >
             <Ionicons name="bookmark-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
-            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Saved Videos</Text>
+            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Bookmarked</Text>
           </TouchableOpacity>
 
           {/* Shopping Cart */}
