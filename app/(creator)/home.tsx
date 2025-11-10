@@ -19,7 +19,7 @@ export default function CreatorHome() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>HOME</Text>
-        <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
           <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
@@ -118,7 +118,7 @@ export default function CreatorHome() {
           <Ionicons name="home" size={24} color={colors.text} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/search')} style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/search')} style={{ alignItems: 'center' }}>
           <Ionicons name="search-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
@@ -126,11 +126,11 @@ export default function CreatorHome() {
           <Ionicons name="people-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Community</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/workout')} style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/workout')} style={{ alignItems: 'center' }}>
           <Ionicons name="barbell-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Workout</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => router.push('/(user)/shop')} style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/shop')} style={{ alignItems: 'center' }}>
           <Ionicons name="bag-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
