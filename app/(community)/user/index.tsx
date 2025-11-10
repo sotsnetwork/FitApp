@@ -14,6 +14,26 @@ export default function UserCommunity() {
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
   const [following, setFollowing] = React.useState<{ [key: string]: boolean }>({});
+  const [likedPosts, setLikedPosts] = React.useState<{ [key: string]: boolean }>({});
+  const [postLikeCounts, setPostLikeCounts] = React.useState<{ [key: string]: number }>({
+    'post-1': 12,
+    'post-2': 12,
+  });
+
+  const handleLike = (postId: string) => {
+    const isLiked = likedPosts[postId] || false;
+    const currentCount = postLikeCounts[postId] || 0;
+    
+    setLikedPosts({
+      ...likedPosts,
+      [postId]: !isLiked,
+    });
+    
+    setPostLikeCounts({
+      ...postLikeCounts,
+      [postId]: isLiked ? currentCount - 1 : currentCount + 1,
+    });
+  };
 
   // Request permissions for image/video picker
   React.useEffect(() => {
@@ -166,11 +186,11 @@ export default function UserCommunity() {
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.md }}>
               <TouchableOpacity
-                onPress={() => router.push('/(user)/post-detail')}
+                onPress={() => handleLike('post-1')}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
-                <Ionicons name="heart" size={20} color={colors.brand} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                <Ionicons name={likedPosts['post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-1'] ? colors.brand : colors.text} />
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-1'] || 12}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/(user)/post-detail')}
@@ -216,11 +236,11 @@ export default function UserCommunity() {
             </TouchableOpacity>
             <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
               <TouchableOpacity
-                onPress={() => router.push('/(user)/post-detail')}
+                onPress={() => handleLike('post-2')}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
-                <Ionicons name="heart" size={20} color={colors.brand} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                <Ionicons name={likedPosts['post-2'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-2'] ? colors.brand : colors.text} />
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-2'] || 12}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/(user)/post-detail')}
