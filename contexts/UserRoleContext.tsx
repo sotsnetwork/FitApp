@@ -17,11 +17,15 @@ export function UserRoleProvider({ children }: { children: ReactNode }) {
 
   React.useEffect(() => {
     // Load saved role from storage
-    AsyncStorage.getItem(STORAGE_KEY).then((data) => {
-      if (data) {
-        setRoleState(data as UserRole);
-      }
-    });
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((data) => {
+        if (data && (data === 'user' || data === 'creator' || data === 'vendor')) {
+          setRoleState(data as UserRole);
+        }
+      })
+      .catch((error) => {
+        console.error('Error loading role:', error);
+      });
   }, []);
 
   const setRole = async (newRole: UserRole) => {
