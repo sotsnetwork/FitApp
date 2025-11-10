@@ -25,7 +25,7 @@ export default function JoinFit() {
       {/* Logo */}
       <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
         <Image
-          source={require('../../assets/black fit logo.png')}
+          source={require('../../assets/BLACK ICON.png')}
           style={{ width: 84, height: 84, resizeMode: 'contain', marginBottom: spacing.lg }}
         />
         <Text style={{ fontSize: 36, fontFamily: fonts.bold, marginBottom: spacing.xl }}>Join Fit</Text>
