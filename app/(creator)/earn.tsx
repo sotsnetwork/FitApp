@@ -55,32 +55,19 @@ export default function CreatorEarn() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>EARN</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity
-            onPress={async () => {
-              try {
-                await Share.share({
-                  message: 'Check out my earnings on FitApp!',
-                  title: 'Share Earnings',
-                });
-              } catch (error) {
-                console.error('Error sharing:', error);
-              }
-            }}
-          >
-            <Ionicons name="share-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="settings-outline" size={24} color={colors.text} />
+          {/* Receipt icon to open Payment History */}
+          <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
+            <Ionicons name="receipt-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ padding: spacing.lg }}>
-          {/* Total Balance Card */}
-          <View style={{ backgroundColor: colors.brand, borderRadius: 12, padding: spacing.lg, marginBottom: spacing.lg }}>
-            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#0F0F0F', marginBottom: spacing.xs }}>Total balance</Text>
-            <Text style={{ fontSize: 32, fontFamily: fonts.bold, color: '#0F0F0F' }}>EP $5,678</Text>
+          {/* Total Balance Card (match product design: dark card with light text) */}
+          <View style={{ backgroundColor: '#3B3B3B', borderRadius: 12, padding: spacing.lg, marginBottom: spacing.lg }}>
+            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#FFFFFF', opacity: 0.9, marginBottom: spacing.xs }}>Total balance</Text>
+            <Text style={{ fontSize: 32, fontFamily: fonts.bold, color: '#FFFFFF' }}>EP $5,678</Text>
           </View>
 
           {/* Activity Categories */}
