@@ -69,32 +69,33 @@ export default function PostDetail() {
         </View>
       </View>
 
-      {/* Top Overlay - Close Button and Engagement Metrics */}
-      <View style={{ position: 'absolute', top: spacing.lg, left: spacing.lg, zIndex: 1000, pointerEvents: 'box-none' }}>
-        {/* Close Button */}
-        <TouchableOpacity
-          onPress={() => {
-            router.back();
-          }}
-          activeOpacity={0.7}
-          hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: 20,
-            backgroundColor: 'rgba(0,0,0,0.6)',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: spacing.md,
-            zIndex: 1001,
-          }}
-          pointerEvents="auto"
-        >
-          <Ionicons name="close" size={24} color="white" />
-        </TouchableOpacity>
+      {/* Close Button - Separate from engagement metrics */}
+      <TouchableOpacity
+        onPress={() => {
+          router.back();
+        }}
+        activeOpacity={0.7}
+        hitSlop={{ top: 15, bottom: 15, left: 15, right: 15 }}
+        style={{
+          position: 'absolute',
+          top: spacing.lg,
+          left: spacing.lg,
+          width: 40,
+          height: 40,
+          borderRadius: 20,
+          backgroundColor: 'rgba(0,0,0,0.6)',
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 1001,
+        }}
+      >
+        <Ionicons name="close" size={24} color="white" />
+      </TouchableOpacity>
 
-        {/* Engagement Metrics - Aligned to Left */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+      {/* Top Overlay - Engagement Metrics */}
+      <View style={{ position: 'absolute', top: spacing.lg, left: spacing.lg, zIndex: 1000, pointerEvents: 'box-none' }}>
+        {/* Engagement Metrics - Aligned to Left, below close button */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: 56 }}>
           <TouchableOpacity onPress={handleLike} style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}>
             <Ionicons name={isLiked ? 'heart' : 'heart-outline'} size={20} color={isLiked ? colors.brand : 'white'} />
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: 'white' }}>{likeCount}</Text>
