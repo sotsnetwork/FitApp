@@ -44,11 +44,21 @@ export function UserProfileProvider({ children }: { children: ReactNode }) {
 
   React.useEffect(() => {
     // Load saved profile from storage
-    AsyncStorage.getItem(STORAGE_KEY).then((data) => {
-      if (data) {
-        setProfileState(JSON.parse(data));
-      }
-    });
+    AsyncStorage.getItem(STORAGE_KEY)
+      .then((data) => {
+        if (data) {
+          try {
+            setProfileState(JSON.parse(data));
+          } catch (error) {
+            console.error('Error parsing profile data:', error);
+            // Clear corrupted data
+            AsyncStorage.removeItem(STORAGE_KEY);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error('Error loading profile:', error);
+      });
   }, []);
 
   const setProfile = async (newProfile: UserProfile) => {
