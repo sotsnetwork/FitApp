@@ -1,11 +1,28 @@
 import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity, Share } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Share, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useCart } from '../../contexts/CartContext';
 
 export default function DailyGoals() {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = (productId: string, productName: string, price: string, discount: string) => {
+    addToCart({
+      id: productId,
+      name: productName,
+      price: price,
+      discount: discount,
+      quantity: 1,
+    });
+    Alert.alert('Success', 'Product added to cart!', [
+      { text: 'OK' },
+      { text: 'View Cart', onPress: () => router.push('/(user)/shopping-cart') },
+    ]);
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
@@ -18,40 +35,48 @@ export default function DailyGoals() {
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.md, paddingBottom: spacing.xl }}>
-          {[1, 2].map((item) => (
-            <View key={item} style={{ marginBottom: spacing.xl }}>
-              {/* Header */}
-              <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginBottom: spacing.sm }}>
-                Daily Goal
-              </Text>
+          {[1, 2].map((item) => {
+            // Product data for each daily goal
+            const productId = `daily-goal-${item}`;
+            const productName = 'Nike Free Metcon 6 Women\'s Workout Shoes';
+            const productPrice = '₦19,500.00';
+            const productDiscount = '60%';
 
-              {/* Workout Title */}
-              <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>
-                Simple Dumbbell Handless for Thighs, Buttock & Ankle
-              </Text>
-
-              {/* Product Recommendation */}
-              <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.text }}>
-                  Nike Free Metcon 6
+            return (
+              <View key={item} style={{ marginBottom: spacing.xl }}>
+                {/* Header */}
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginBottom: spacing.sm }}>
+                  Daily Goal
                 </Text>
-                <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#FFA500', marginLeft: spacing.xs }}>
-                  – 60% Discount
-                </Text>
-              </View>
 
-              {/* Shop For Product Button */}
-              <TouchableOpacity
-                style={{
-                  backgroundColor: colors.brand,
-                  paddingVertical: spacing.sm,
-                  borderRadius: 8,
-                  alignItems: 'center',
-                  marginBottom: spacing.sm,
-                }}
-              >
-                <Text style={{ fontFamily: fonts.semibold, color: '#0F0F0F', fontSize: 14 }}>Shop For Product</Text>
-              </TouchableOpacity>
+                {/* Workout Title */}
+                <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>
+                  Simple Dumbbell Handless for Thighs, Buttock & Ankle
+                </Text>
+
+                {/* Product Recommendation */}
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
+                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.text }}>
+                    Nike Free Metcon 6
+                  </Text>
+                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#FFA500', marginLeft: spacing.xs }}>
+                    – 60% Discount
+                  </Text>
+                </View>
+
+                {/* Shop For Product Button */}
+                <TouchableOpacity
+                  onPress={() => handleAddToCart(productId, productName, productPrice, productDiscount)}
+                  style={{
+                    backgroundColor: colors.brand,
+                    paddingVertical: spacing.sm,
+                    borderRadius: 8,
+                    alignItems: 'center',
+                    marginBottom: spacing.sm,
+                  }}
+                >
+                  <Text style={{ fontFamily: fonts.semibold, color: '#0F0F0F', fontSize: 14 }}>Shop For Product</Text>
+                </TouchableOpacity>
 
               {/* Product Category */}
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.md }}>
@@ -121,7 +146,8 @@ export default function DailyGoals() {
                 </TouchableOpacity>
               </View>
             </View>
-          ))}
+            );
+          })}
         </View>
       </ScrollView>
     </SafeAreaView>
