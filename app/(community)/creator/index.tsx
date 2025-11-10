@@ -12,6 +12,31 @@ export default function CreatorCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
+  const [likedPosts, setLikedPosts] = React.useState<{ [key: string]: boolean }>({});
+  const [postLikeCounts, setPostLikeCounts] = React.useState<{ [key: string]: number }>({
+    'challenge-post-1': 12,
+    'challenge-post-2': 12,
+    'popular-post-1': 12,
+    'popular-post-2': 12,
+    'popular-post-3': 0,
+    'popular-post-4': 0,
+    'following-post-1': 12,
+  });
+
+  const handleLike = (postId: string) => {
+    const isLiked = likedPosts[postId] || false;
+    const currentCount = postLikeCounts[postId] || 0;
+    
+    setLikedPosts({
+      ...likedPosts,
+      [postId]: !isLiked,
+    });
+    
+    setPostLikeCounts({
+      ...postLikeCounts,
+      [postId]: isLiked ? currentCount - 1 : currentCount + 1,
+    });
+  };
 
   // Request permissions for image/video picker
   React.useEffect(() => {
@@ -104,11 +129,11 @@ export default function CreatorCommunity() {
                 </View>
                 <View style={{ flexDirection: 'row', gap: spacing.md }}>
                   <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
+                    onPress={() => handleLike('challenge-post-1')}
                     style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
                   >
-                    <Ionicons name="heart" size={20} color={colors.brand} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                    <Ionicons name={likedPosts['challenge-post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['challenge-post-1'] ? colors.brand : colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['challenge-post-1'] || 12}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => router.push('/(creator)/content-detail')}
@@ -155,11 +180,11 @@ export default function CreatorCommunity() {
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
                   <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
+                    onPress={() => handleLike('challenge-post-2')}
                     style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
                   >
-                    <Ionicons name="heart" size={20} color={colors.brand} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                    <Ionicons name={likedPosts['challenge-post-2'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['challenge-post-2'] ? colors.brand : colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['challenge-post-2'] || 12}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => router.push('/(creator)/content-detail')}
@@ -230,11 +255,11 @@ export default function CreatorCommunity() {
                 </View>
                 <View style={{ flexDirection: 'row', gap: spacing.md }}>
                   <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
+                    onPress={() => handleLike('challenge-post-1')}
                     style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
                   >
-                    <Ionicons name="heart" size={20} color={colors.brand} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                    <Ionicons name={likedPosts['challenge-post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['challenge-post-1'] ? colors.brand : colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['challenge-post-1'] || 12}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => router.push('/(creator)/content-detail')}
@@ -280,11 +305,11 @@ export default function CreatorCommunity() {
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
                   <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
+                    onPress={() => handleLike('popular-post-2')}
                     style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
                   >
-                    <Ionicons name="heart" size={20} color={colors.brand} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
+                    <Ionicons name={likedPosts['popular-post-2'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['popular-post-2'] ? colors.brand : colors.text} />
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['popular-post-2'] || 12}</Text>
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() => router.push('/(creator)/content-detail')}
@@ -392,42 +417,42 @@ export default function CreatorCommunity() {
                 </TouchableOpacity>
               </View>
             </>
-          ) : selectedTab === 'Following' ? (
-            <>
-              {/* Following Posts */}
-              <View style={{ marginBottom: spacing.xl }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                  <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-                    <Text style={{ fontSize: 16 }}>👤</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
-                    <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start', marginTop: spacing.xs }}>
-                      <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: colors.brand }}>Following</Text>
+              ) : selectedTab === 'Following' ? (
+                <>
+                  {/* Following Posts */}
+                  <View style={{ marginBottom: spacing.xl }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
+                      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
+                        <Text style={{ fontSize: 16 }}>👤</Text>
+                      </View>
+                      <View style={{ flex: 1 }}>
+                        <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
+                        <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start', marginTop: spacing.xs }}>
+                          <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: colors.brand }}>Following</Text>
+                        </View>
+                      </View>
                     </View>
-                  </View>
-                </View>
-                <TouchableOpacity
-                  onPress={() => router.push('/(creator)/content-detail')}
-                  style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
-                >
-                  <Text style={{ color: colors.subtext }}>Post Image</Text>
-                </TouchableOpacity>
-                <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
-                  <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name="heart" size={20} color={colors.brand} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>12</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => router.push('/(creator)/content-detail')}
+                      style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
+                    >
+                      <Text style={{ color: colors.subtext }}>Post Image</Text>
+                    </TouchableOpacity>
+                    <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
+                      <TouchableOpacity
+                        onPress={() => handleLike('following-post-1')}
+                        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                      >
+                        <Ionicons name={likedPosts['following-post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['following-post-1'] ? colors.brand : colors.text} />
+                        <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['following-post-1'] || 12}</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        onPress={() => router.push('/(creator)/content-detail')}
+                        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+                      >
+                        <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                        <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
+                      </TouchableOpacity>
                   <TouchableOpacity
                     onPress={async () => {
                       try {
