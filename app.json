@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/panda.png",
     "userInterfaceStyle": "light",
+    "scheme": "fitapp",
     "newArchEnabled": true,
     "splash": {
       "image": "",
