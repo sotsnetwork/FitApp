@@ -52,7 +52,7 @@ export default function PostDetail() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'black' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: 'black' }}>
       {/* Post Video/Image - Full Screen */}
       <View style={{ flex: 1, backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center' }}>
         <View
@@ -74,7 +74,6 @@ export default function PostDetail() {
         {/* Close Button */}
         <TouchableOpacity
           onPress={() => {
-            console.log('Close button pressed');
             router.back();
           }}
           activeOpacity={0.7}
@@ -89,6 +88,7 @@ export default function PostDetail() {
             marginBottom: spacing.md,
             zIndex: 1001,
           }}
+          pointerEvents="auto"
         >
           <Ionicons name="close" size={24} color="white" />
         </TouchableOpacity>
@@ -244,7 +244,7 @@ export default function PostDetail() {
           </View>
         </KeyboardAvoidingView>
       </Modal>
-    </View>
+    </SafeAreaView>
   );
 }
 
