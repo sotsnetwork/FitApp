@@ -15,16 +15,22 @@ import { UserProfileProvider } from '../contexts/UserProfileContext';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  const [fontsLoaded] = useFonts({ Inter_400Regular, Inter_600SemiBold, Inter_700Bold });
+  const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_600SemiBold, Inter_700Bold });
 
   React.useEffect(() => {
-    // Hide splash screen immediately when component mounts
-    // Don't wait for fonts - they'll load in the background
+    // Hide splash screen after fonts load or if there's an error
     const hideSplash = async () => {
-      await SplashScreen.hideAsync();
+      try {
+        await SplashScreen.hideAsync();
+      } catch (error) {
+        console.error('Error hiding splash screen:', error);
+      }
     };
-    hideSplash();
-  }, []);
+    
+    if (fontsLoaded || fontError) {
+      hideSplash();
+    }
+  }, [fontsLoaded, fontError]);
 
   // Show app immediately, don't wait for fonts
   // Fonts will load in the background and apply when ready
