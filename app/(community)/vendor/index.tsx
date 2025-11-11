@@ -4,18 +4,26 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../../theme/tokens';
+import MenuOverlay from '../../vendor/menu-overlay';
 
 export default function VendorCommunity() {
+  const [menuVisible, setMenuVisible] = React.useState(false);
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
-      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <Text style={{ fontSize: 24, fontFamily: fonts.bold }}>Vendor Dashboard</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
+        <TouchableOpacity onPress={() => setMenuVisible(true)}>
+          <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
+            <Text style={{ fontSize: 20 }}>👤</Text>
+          </View>
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>COMMUNITY</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
           <TouchableOpacity>
-            <Ionicons name="add-circle-outline" size={24} color={colors.text} />
+            <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
+          <TouchableOpacity onPress={() => router.push('/(vendor)/payment-history')}>
             <Ionicons name="notifications-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -100,23 +108,30 @@ export default function VendorCommunity() {
 
       {/* Bottom Navigation */}
       <View style={{ flexDirection: 'row', borderTopWidth: 1, borderTopColor: colors.border, paddingVertical: spacing.md, paddingHorizontal: spacing.lg, justifyContent: 'space-around' }}>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => router.push('/(vendor)/home')} style={{ alignItems: 'center' }}>
           <Ionicons name="home-outline" size={24} color={colors.subtext} />
           <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Home</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="storefront" size={24} color={colors.brand} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.brand, marginTop: spacing.xs }}>Shop</Text>
+        <TouchableOpacity onPress={() => router.push('/(vendor)/shop')} style={{ alignItems: 'center' }}>
+          <Ionicons name="bag-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Shop</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="people-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Community</Text>
+          <Ionicons name="people" size={24} color={colors.text} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.text, marginTop: spacing.xs }}>Community</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{ alignItems: 'center' }}>
-          <Ionicons name="person-outline" size={24} color={colors.subtext} />
-          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Profile</Text>
+        <TouchableOpacity onPress={() => router.push('/(vendor)/workout')} style={{ alignItems: 'center' }}>
+          <Ionicons name="barbell-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Workout</Text>
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => router.push('/(vendor)/search')} style={{ alignItems: 'center' }}>
+          <Ionicons name="search-outline" size={24} color={colors.subtext} />
+          <Text style={{ fontSize: 10, fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Search</Text>
         </TouchableOpacity>
       </View>
+
+      {/* Menu Overlay */}
+      <MenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="community" />
     </SafeAreaView>
   );
 }
