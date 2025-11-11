@@ -9,7 +9,8 @@ import { useUserRole } from '../../contexts/UserRoleContext';
 import { useUserProfile } from '../../contexts/UserProfileContext';
 
 // Country codes with flags - Comprehensive list of all countries
-const countries = [
+// Remove duplicates by creating a unique list
+const allCountriesRaw = [
   { code: '+1', flag: '🇺🇸', name: 'United States' },
   { code: '+1', flag: '🇨🇦', name: 'Canada' },
   { code: '+234', flag: '🇳🇬', name: 'Nigeria' },
@@ -412,7 +413,18 @@ const countries = [
   { code: '+1869', flag: '🇰🇳', name: 'Saint Kitts and Nevis' },
   { code: '+1876', flag: '🇯🇲', name: 'Jamaica' },
   { code: '+1939', flag: '🇵🇷', name: 'Puerto Rico' },
-].sort((a, b) => a.name.localeCompare(b.name));
+];
+
+// Remove duplicates by using a Map with name as key
+const uniqueCountriesMap = new Map<string, { code: string; flag: string; name: string }>();
+allCountriesRaw.forEach(country => {
+  if (!uniqueCountriesMap.has(country.name)) {
+    uniqueCountriesMap.set(country.name, country);
+  }
+});
+
+// Convert back to array and sort
+const countries = Array.from(uniqueCountriesMap.values()).sort((a, b) => a.name.localeCompare(b.name));
 
 export default function Signup() {
   const params = useLocalSearchParams();
@@ -645,9 +657,9 @@ export default function Signup() {
                   <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>No countries found</Text>
                 </View>
               ) : (
-                filteredCountries.map((country) => (
+                filteredCountries.map((country, index) => (
                 <TouchableOpacity
-                  key={country.code}
+                  key={`${country.code}-${country.name}-${index}`}
                   onPress={() => {
                     setSelectedCountry(country);
                     setCountryPickerVisible(false);
