@@ -17,14 +17,11 @@ export default function VendorProductDetail() {
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
+          <TouchableOpacity onPress={() => router.push('/(vendor)/products')}>
+            <Ionicons name="create-outline" size={24} color={colors.text} />
+          </TouchableOpacity>
           <TouchableOpacity>
             <Ionicons name="share-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="heart-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')}>
-            <Ionicons name="bag-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
