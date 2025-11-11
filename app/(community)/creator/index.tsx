@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../../theme/tokens';
-import MenuOverlay from '../../creator/menu-overlay';
+import MenuOverlay from '../../(creator)/menu-overlay';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
