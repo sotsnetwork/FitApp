@@ -4,6 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
+import { useVendorProducts } from '../../contexts/VendorProductsContext';
 
 export default function UploadProduct() {
   const [title, setTitle] = React.useState('');
@@ -13,6 +14,8 @@ export default function UploadProduct() {
   const [promoPrice, setPromoPrice] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [state, setState] = React.useState('');
+
+  const { addProduct } = useVendorProducts();
 
   const canProceed = title.trim().length > 0 && qty.trim().length > 0 && price.trim().length > 0;
 
@@ -55,7 +58,7 @@ export default function UploadProduct() {
                 <TextInput
                   value={qty}
                   onChangeText={setQty}
-                  placeholder="Enter quantity (e.g. 50 pcs)"
+                  placeholder="Enter quantity"
                   keyboardType="numeric"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
@@ -123,7 +126,24 @@ export default function UploadProduct() {
           {/* Next Button */}
           <TouchableOpacity
             disabled={!canProceed}
-            onPress={() => router.push('/(vendor)/upload-product-shipping')}
+            onPress={async () => {
+              // Parse price values back to numbers
+              const toNumber = (v: string) => {
+                const digits = v.replace(/\D/g, '');
+                return digits ? parseInt(digits, 10) : 0;
+              };
+              const priceNaira = toNumber(price);
+              const promoPriceNaira = hasPromo ? toNumber(promoPrice) : undefined;
+              // Fallback category for now: use selectedCategory if we had it, else GEARS
+              await addProduct({
+                id: Date.now().toString(),
+                name: title.trim(),
+                category: 'GEARS',
+                priceNaira,
+                promoPriceNaira,
+              });
+              router.push('/(vendor)/upload-product-shipping');
+            }}
             style={{ backgroundColor: canProceed ? colors.brand : colors.border, paddingVertical: spacing.md, borderRadius: 12, alignItems: 'center' }}
           >
             <Text style={{ fontFamily: fonts.semibold, color: canProceed ? '#0F0F0F' : colors.subtext }}>Next</Text>
