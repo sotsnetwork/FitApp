@@ -11,12 +11,12 @@ export default function UserHome() {
   const { role } = useUserRole();
   const [menuVisible, setMenuVisible] = React.useState(false);
 
-  // Redirect creators to their own home screen
+  // Redirect creators and vendors to their own home screens
   React.useEffect(() => {
     if (role === 'creator') {
       router.replace('/(creator)/home');
     } else if (role === 'vendor') {
-      router.replace('/(community)/vendor');
+      router.replace('/(vendor)/home');
     }
   }, [role]);
 
@@ -24,7 +24,7 @@ export default function UserHome() {
     if (role === 'creator') {
       router.push('/(creator)/home');
     } else if (role === 'vendor') {
-      router.push('/(community)/vendor');
+      router.push('/(vendor)/home');
     } else {
       setMenuVisible(true);
     }
