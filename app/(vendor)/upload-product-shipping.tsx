@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
-import * as DocumentPicker from 'expo-document-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 export default function UploadProductShipping() {
   const [rules, setRules] = React.useState('');
@@ -12,16 +12,20 @@ export default function UploadProductShipping() {
 
   const openPicker = async () => {
     try {
-      const result = await DocumentPicker.getDocumentAsync({
-        type: ['image/*', 'application/pdf'],
-        multiple: true,
-        copyToCacheDirectory: true,
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsMultipleSelection: true,
+        quality: 1,
       });
       if (result.canceled) return;
-      const assets = Array.isArray(result.assets) ? result.assets : [];
-      setSelectedFiles(assets.map(a => ({ name: a.name })));
+      const assets = result.assets || [];
+      setSelectedFiles(assets.map(a => ({ name: a.fileName || a.uri.split('/').pop() })));
     } catch (e) {
-      // no-op; keep UX silent
+      // no-op
     }
   };
 
@@ -66,7 +70,7 @@ export default function UploadProductShipping() {
           >
             <Ionicons name="cloud-upload-outline" size={28} color={colors.subtext} />
             <Text style={{ fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.sm }}>Drag & drop file or <Text style={{ color: colors.text }}>Browse</Text></Text>
-            <Text style={{ fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Supported formats: JPEG, PNG & PDF</Text>
+            <Text style={{ fontFamily: fonts.regular, color: colors.subtext, marginTop: spacing.xs }}>Supported formats: JPEG, PNG</Text>
             {selectedFiles.length > 0 && (
               <View style={{ marginTop: spacing.md, alignItems: 'center' }}>
                 <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>{selectedFiles.length} file(s) selected</Text>
