@@ -11,8 +11,8 @@ export default function UploadProduct() {
   const [price, setPrice] = React.useState('');
   const [hasPromo, setHasPromo] = React.useState(false);
   const [promoPrice, setPromoPrice] = React.useState('');
-  const [country, setCountry] = React.useState('Nigeria');
-  const [state, setState] = React.useState('Lagos');
+  const [country, setCountry] = React.useState('');
+  const [state, setState] = React.useState('');
 
   const canProceed = title.trim().length > 0 && qty.trim().length > 0 && price.trim().length > 0;
 
@@ -33,7 +33,7 @@ export default function UploadProduct() {
             <TextInput
               value={title}
               onChangeText={setTitle}
-              placeholder="Nike Superfly"
+              placeholder="Enter product title"
               style={{ height: 48, fontFamily: fonts.regular }}
             />
           </View>
@@ -46,7 +46,7 @@ export default function UploadProduct() {
                 <TextInput
                   value={qty}
                   onChangeText={setQty}
-                  placeholder="50 pcs"
+                  placeholder="Enter quantity (e.g. 50 pcs)"
                   keyboardType="numeric"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
@@ -58,7 +58,7 @@ export default function UploadProduct() {
                 <TextInput
                   value={price}
                   onChangeText={setPrice}
-                  placeholder="₦250,000"
+                  placeholder="Enter price"
                   keyboardType="numeric"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
@@ -93,7 +93,7 @@ export default function UploadProduct() {
                 <TextInput
                   value={country}
                   onChangeText={setCountry}
-                  placeholder="Nigeria"
+                  placeholder="Enter country"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
               </View>
@@ -104,7 +104,7 @@ export default function UploadProduct() {
                 <TextInput
                   value={state}
                   onChangeText={setState}
-                  placeholder="Lagos"
+                  placeholder="Enter state"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
               </View>
