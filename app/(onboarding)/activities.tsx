@@ -77,7 +77,7 @@ export default function Activities() {
           if (role === 'creator') {
             router.replace('/(creator)/home');
           } else if (role === 'vendor') {
-            router.replace('/(community)/vendor');
+            router.replace('/(vendor)/home');
           } else {
             router.replace('/(user)/home');
           }
