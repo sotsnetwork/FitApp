@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import MenuOverlay from './menu-overlay';
+import { useVendorProducts } from '../../contexts/VendorProductsContext';
 
 const categories = ['GEARS', 'EQUIPMENTS', 'SUPPLEMENTS'];
 
@@ -33,6 +34,25 @@ export default function VendorShop() {
   const [timeModalVisible, setTimeModalVisible] = React.useState(false);
 
   const filteredProducts = allProducts.filter(p => p.category === selectedCategory);
+  const { products } = useVendorProducts();
+
+  const mergedProducts = React.useMemo(() => {
+    // map context products into display structure
+    const mapped = products
+      .filter(p => p.category === (selectedCategory as any))
+      .map(p => ({
+        id: p.id,
+        name: p.name,
+        price: `₦${p.priceNaira.toLocaleString('en-NG')}`,
+        promoPrice: p.promoPriceNaira ? `₦${p.promoPriceNaira.toLocaleString('en-NG')}` : undefined,
+        discountPercent: p.promoPriceNaira && p.promoPriceNaira < p.priceNaira
+          ? Math.round(100 - (p.promoPriceNaira / p.priceNaira) * 100)
+          : undefined,
+        category: p.category,
+      }));
+    // show saved products first, then mock ones
+    return [...mapped, ...filteredProducts];
+  }, [products, selectedCategory]);
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -100,7 +120,7 @@ export default function VendorShop() {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ padding: spacing.lg }}>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-            {filteredProducts.map((product) => (
+            {mergedProducts.map((product: any) => (
               <TouchableOpacity
                 key={product.id}
                 onPress={() => router.push('/(vendor)/product-detail')}
@@ -110,7 +130,17 @@ export default function VendorShop() {
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12, marginBottom: spacing.xs }} numberOfLines={1}>
                   {product.name}
                 </Text>
-                <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.brand }}>{product.price}</Text>
+                {product.promoPrice ? (
+                  <View>
+                    <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.brand }}>{product.promoPrice}</Text>
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 11, color: colors.subtext, textDecorationLine: 'line-through' }}>{product.price}</Text>
+                    {product.discountPercent ? (
+                      <Text style={{ fontFamily: fonts.semibold, fontSize: 10, color: colors.brand }}>{product.discountPercent}% OFF</Text>
+                    ) : null}
+                  </View>
+                ) : (
+                  <Text style={{ fontFamily: fonts.bold, fontSize: 14, color: colors.brand }}>{product.price}</Text>
+                )}
               </TouchableOpacity>
             ))}
           </View>
