@@ -16,6 +16,15 @@ export default function UploadProduct() {
 
   const canProceed = title.trim().length > 0 && qty.trim().length > 0 && price.trim().length > 0;
 
+  // Helpers to format input as Nigerian Naira and enforce numeric-only
+  const formatNaira = (text: string) => {
+    const digitsOnly = text.replace(/\D/g, '');
+    if (!digitsOnly) return '';
+    const amount = parseInt(digitsOnly, 10);
+    if (isNaN(amount)) return '';
+    return '₦' + amount.toLocaleString('en-NG');
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
@@ -57,9 +66,9 @@ export default function UploadProduct() {
               <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md }}>
                 <TextInput
                   value={price}
-                  onChangeText={setPrice}
-                  placeholder="Enter price"
-                  keyboardType="numeric"
+                  onChangeText={(t) => setPrice(formatNaira(t))}
+                  placeholder="₦0"
+                  keyboardType="number-pad"
                   style={{ height: 48, fontFamily: fonts.regular }}
                 />
               </View>
@@ -77,9 +86,9 @@ export default function UploadProduct() {
           <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, marginBottom: spacing.lg, opacity: hasPromo ? 1 : 0.4 }}>
             <TextInput
               value={promoPrice}
-              onChangeText={setPromoPrice}
-              placeholder="Enter Promo Price"
-              keyboardType="numeric"
+              onChangeText={(t) => setPromoPrice(formatNaira(t))}
+              placeholder="₦0"
+              keyboardType="number-pad"
               editable={hasPromo}
               style={{ height: 48, fontFamily: fonts.regular }}
             />
