@@ -45,14 +45,11 @@ export default function VendorShop() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>MY SHOP</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
-            <Ionicons name="search-outline" size={24} color={colors.text} />
+          <TouchableOpacity onPress={() => router.push('/(vendor)/upload-product')}>
+            <Ionicons name="cloud-upload-outline" size={24} color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')}>
             <Ionicons name="bag-outline" size={24} color={colors.text} />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <Ionicons name="ellipsis-vertical" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
       </View>
