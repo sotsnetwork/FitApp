@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../../theme/tokens';
-import MenuOverlay from '../../vendor/menu-overlay';
+import MenuOverlay from '../../(vendor)/menu-overlay';
 
 export default function VendorCommunity() {
   const [menuVisible, setMenuVisible] = React.useState(false);
