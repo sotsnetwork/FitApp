@@ -68,7 +68,7 @@ export default function CreatorShop() {
       </View>
 
       {/* Category Tabs */}
-      <View style={{ flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: colors.border, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm }}>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', borderBottomWidth: 1, borderBottomColor: colors.border, paddingHorizontal: spacing.lg, paddingVertical: spacing.sm }}>
         {tabs.map((tab) => (
           <TouchableOpacity
             key={tab}
