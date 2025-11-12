@@ -28,6 +28,7 @@ export default function UserWorkout() {
   const [selectedFilter, setSelectedFilter] = React.useState('Sponsored');
   const [searchVisible, setSearchVisible] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [menuVisible, setMenuVisible] = React.useState(false);
   const { savePost, unsavePost, isSaved } = useSavedPosts();
 
   // Filter posts based on selected category and search query
@@ -63,7 +64,7 @@ export default function UserWorkout() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+        <TouchableOpacity onPress={() => setMenuVisible(true)}>
           <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
@@ -461,6 +462,9 @@ export default function UserWorkout() {
           </View>
         </View>
       </Modal>
+
+      {/* Menu Overlay */}
+      <UserMenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="workout" />
     </SafeAreaView>
   );
 }
