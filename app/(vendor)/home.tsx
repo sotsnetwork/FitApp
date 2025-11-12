@@ -19,7 +19,7 @@ export default function VendorHome() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>HOME</Text>
-        <TouchableOpacity onPress={() => router.push('/(vendor)/payment-history')}>
+        <TouchableOpacity onPress={() => router.push('/(vendor)/notifications')}>
           <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
