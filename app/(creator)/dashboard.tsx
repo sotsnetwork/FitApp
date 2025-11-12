@@ -102,6 +102,14 @@ export default function CreatorDashboard() {
   const [selectedComment, setSelectedComment] = React.useState<Comment | null>(null);
   const [replyText, setReplyText] = React.useState('');
 
+  // Format total views (e.g., 57k for 57000)
+  const formatTotalViews = (count: number) => {
+    if (count >= 1000) {
+      return `${(count / 1000).toFixed(0)}k`;
+    }
+    return count.toString();
+  };
+
   // Calculate total video views from all posts
   const totalVideoViews = React.useMemo(() => {
     const total = Object.values(postStates).reduce((sum, post) => sum + post.viewCount, 0);
@@ -110,18 +118,6 @@ export default function CreatorDashboard() {
 
   const metricCards = React.useMemo(() => (
     [
-      {
-        id: 'earnings',
-        title: '$78k',
-        subtitle: 'Accepted here',
-        icon: 'bag-outline' as const,
-        backgroundColor: colors.brand,
-        titleColor: '#0F0F0F',
-        subtitleColor: '#0F0F0F',
-        iconColor: '#0F0F0F',
-        iconBackground: 'rgba(15,15,15,0.08)',
-        arrowsColor: '#0F0F0F',
-      },
       {
         id: 'views',
         title: `${formatTotalViews(totalVideoViews)} Total Video views`,
@@ -133,6 +129,18 @@ export default function CreatorDashboard() {
         iconColor: '#FFFFFF',
         iconBackground: 'rgba(255,255,255,0.15)',
         arrowsColor: '#FFFFFF',
+      },
+      {
+        id: 'earnings',
+        title: '$78k',
+        subtitle: 'Accepted here',
+        icon: 'bag-outline' as const,
+        backgroundColor: colors.brand,
+        titleColor: '#0F0F0F',
+        subtitleColor: '#0F0F0F',
+        iconColor: '#0F0F0F',
+        iconBackground: 'rgba(15,15,15,0.08)',
+        arrowsColor: '#0F0F0F',
       },
     ]
   ), [totalVideoViews]);
@@ -147,14 +155,6 @@ export default function CreatorDashboard() {
   };
 
   const currentMetric = metricCards[currentMetricIndex];
-
-  // Format total views (e.g., 57k for 57000)
-  const formatTotalViews = (count: number) => {
-    if (count >= 1000) {
-      return `${(count / 1000).toFixed(0)}k`;
-    }
-    return count.toString();
-  };
 
   const handleLike = (postId: number, e: any) => {
     e.stopPropagation();
@@ -246,26 +246,26 @@ export default function CreatorDashboard() {
         <View style={{ padding: spacing.lg }}>
           {/* Metric Carousel Card */}
           <View style={{ backgroundColor: currentMetric.backgroundColor, borderRadius: 12, padding: spacing.lg, marginBottom: spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1, marginRight: spacing.md }}>
               <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: currentMetric.iconBackground, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
                 <Ionicons name={currentMetric.icon} size={24} color={currentMetric.iconColor} />
               </View>
-              <View>
-                <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: currentMetric.titleColor }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: currentMetric.titleColor }} numberOfLines={2}>
                   {currentMetric.title}
                 </Text>
                 {currentMetric.subtitle ? (
-                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: currentMetric.subtitleColor }}>
+                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: currentMetric.subtitleColor }} numberOfLines={1}>
                     {currentMetric.subtitle}
                   </Text>
                 ) : null}
               </View>
             </View>
-            <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-              <TouchableOpacity onPress={() => handleMetricNavigate('prev')}>
+            <View style={{ flexDirection: 'row', gap: spacing.sm, flexShrink: 0 }}>
+              <TouchableOpacity onPress={() => handleMetricNavigate('prev')} style={{ padding: spacing.xs }}>
                 <Ionicons name="chevron-back" size={20} color={currentMetric.arrowsColor} />
               </TouchableOpacity>
-              <TouchableOpacity onPress={() => handleMetricNavigate('next')}>
+              <TouchableOpacity onPress={() => handleMetricNavigate('next')} style={{ padding: spacing.xs }}>
                 <Ionicons name="chevron-forward" size={20} color={currentMetric.arrowsColor} />
               </TouchableOpacity>
             </View>
