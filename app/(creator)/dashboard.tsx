@@ -196,7 +196,7 @@ export default function CreatorDashboard() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>DASHBOARD</Text>
-        <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
           <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
