@@ -75,7 +75,7 @@ export default function CreatorWorkout() {
           <TouchableOpacity onPress={() => setSearchVisible(true)}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/saved-videos')}>
+          <TouchableOpacity onPress={() => router.push('/(creator)/videos')}>
             <Ionicons name="bookmark-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
