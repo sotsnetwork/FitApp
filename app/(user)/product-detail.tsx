@@ -6,26 +6,52 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useSavedProducts } from '../../contexts/SavedProductsContext';
 import { useCart } from '../../contexts/CartContext';
+import { useVendorProducts } from '../../contexts/VendorProductsContext';
 
 export default function ProductDetail() {
   const params = useLocalSearchParams();
   const productId = (params.productId as string) || '1';
   const { saveProduct, unsaveProduct, isSaved } = useSavedProducts();
   const { addToCart, getCartCount } = useCart();
+  const { products: vendorProducts } = useVendorProducts();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
-  const [selectedSize, setSelectedSize] = React.useState('36');
-  const [selectedColor, setSelectedColor] = React.useState('BROWN');
+  const [selectedSize, setSelectedSize] = React.useState('');
+  const [selectedColor, setSelectedColor] = React.useState('');
 
-  // Mock product data - in a real app, this would come from an API or context
-  const product = {
+  // Try to find vendor product first, otherwise use mock data
+  const vendorProduct = vendorProducts.find(p => p.id === productId);
+  const product = vendorProduct ? {
+    id: vendorProduct.id,
+    name: vendorProduct.name,
+    price: `₦${vendorProduct.priceNaira.toLocaleString('en-NG')}`,
+    discount: vendorProduct.promoPriceNaira && vendorProduct.promoPriceNaira < vendorProduct.priceNaira
+      ? `${Math.round(100 - (vendorProduct.promoPriceNaira / vendorProduct.priceNaira) * 100)}%`
+      : undefined,
+    description: vendorProduct.name,
+    category: vendorProduct.category,
+    availableSizes: vendorProduct.availableSizes,
+    availableColors: vendorProduct.availableColors,
+  } : {
     id: productId,
     name: "Nike Free Metcon 6 Women's Workout Shoes",
     price: '₦19,500.00',
     discount: '60%',
     description: 'Find the Nike Free Metcon 6 Women\'s Workout Shoes',
     category: 'NIKE AIRFORCE SNICKERS',
+    availableSizes: undefined,
+    availableColors: undefined,
   };
+
+  // Set default size and color if available
+  React.useEffect(() => {
+    if (product.availableSizes && product.availableSizes.length > 0 && !selectedSize) {
+      setSelectedSize(product.availableSizes[0]);
+    }
+    if (product.availableColors && product.availableColors.length > 0 && !selectedColor) {
+      setSelectedColor(product.availableColors[0]);
+    }
+  }, [product.availableSizes, product.availableColors]);
 
   const saved = isSaved(product.id);
   const [itemAdded, setItemAdded] = React.useState(false);
@@ -36,9 +62,11 @@ export default function ProductDetail() {
       name: product.name,
       price: product.price,
       discount: product.discount,
-      size: selectedSize,
-      color: selectedColor,
+      size: selectedSize || undefined,
+      color: selectedColor || undefined,
       quantity: 1,
+      availableSizes: product.availableSizes,
+      availableColors: product.availableColors,
     });
     setItemAdded(true);
     Alert.alert('Success', 'Item added to cart!', [
@@ -80,14 +108,64 @@ export default function ProductDetail() {
           </Text>
 
           {/* Size Selection */}
-          <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.sm }}>
-            SIZE: {selectedSize} 38 42 43 45
-          </Text>
+          {product.availableSizes && product.availableSizes.length > 0 && (
+            <View style={{ marginBottom: spacing.md }}>
+              <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.sm }}>SIZE:</Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                {product.availableSizes.map((size) => (
+                  <TouchableOpacity
+                    key={size}
+                    onPress={() => {
+                      setSelectedSize(size);
+                      setSizeModalVisible(false);
+                    }}
+                    style={{
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.xs,
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: selectedSize === size ? colors.brand : colors.border,
+                      backgroundColor: selectedSize === size ? colors.brandTint : 'transparent',
+                    }}
+                  >
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: selectedSize === size ? colors.brand : colors.text }}>
+                      {size}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
 
           {/* Color Selection */}
-          <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.lg }}>
-            COLOUR: {selectedColor} BLACK GREY
-          </Text>
+          {product.availableColors && product.availableColors.length > 0 && (
+            <View style={{ marginBottom: spacing.lg }}>
+              <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.sm }}>COLOUR:</Text>
+              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing.sm }}>
+                {product.availableColors.map((color) => (
+                  <TouchableOpacity
+                    key={color}
+                    onPress={() => {
+                      setSelectedColor(color);
+                      setColorModalVisible(false);
+                    }}
+                    style={{
+                      paddingHorizontal: spacing.md,
+                      paddingVertical: spacing.xs,
+                      borderRadius: 8,
+                      borderWidth: 1,
+                      borderColor: selectedColor === color ? colors.brand : colors.border,
+                      backgroundColor: selectedColor === color ? colors.brandTint : 'transparent',
+                    }}
+                  >
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: selectedColor === color ? colors.brand : colors.text }}>
+                      {color}
+                    </Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          )}
 
           {/* Product Details */}
           <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>
