@@ -68,7 +68,7 @@ export default function VendorShop() {
           <TouchableOpacity onPress={() => router.push('/(vendor)/upload-product')}>
             <Ionicons name="cloud-upload-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')}>
+          <TouchableOpacity onPress={() => router.push('/(vendor)/orders')}>
             <Ionicons name="bag-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
