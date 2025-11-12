@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useCart } from '../../contexts/CartContext';
+import { useVendorProducts } from '../../contexts/VendorProductsContext';
 
 // Products from shop categorized by type (gears, supplements, plans)
 const gears = [
@@ -33,11 +34,25 @@ const allProducts = [...gears, ...supplements, ...plans];
 
 export default function ShoppingCart() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, addToCart } = useCart();
+  const { products: vendorProducts } = useVendorProducts();
   const [sizeModalVisible, setSizeModalVisible] = React.useState(false);
   const [colorModalVisible, setColorModalVisible] = React.useState(false);
-  const [editingItemId, setEditingItemId] = React.useState<string | null>(null);
-  const [selectedSize, setSelectedSize] = React.useState('36');
-  const [selectedColor, setSelectedColor] = React.useState('BROWN');
+  const [editingItem, setEditingItem] = React.useState<{ id: string; size?: string; color?: string } | null>(null);
+  const [selectedSize, setSelectedSize] = React.useState('');
+  const [selectedColor, setSelectedColor] = React.useState('');
+
+  // Helper to get vendor product data for a product ID
+  const getVendorProduct = (productId: string) => {
+    return vendorProducts.find(p => p.id === productId);
+  };
+
+  // Get available sizes and colors for the currently editing item
+  const editingCartItem = editingItem ? cartItems.find(
+    item => item.id === editingItem.id && item.size === editingItem.size && item.color === editingItem.color
+  ) : null;
+  const vendorProductForEditing = editingItem ? getVendorProduct(editingItem.id) : null;
+  const availableSizes = editingCartItem?.availableSizes || vendorProductForEditing?.availableSizes || [];
+  const availableColors = editingCartItem?.availableColors || vendorProductForEditing?.availableColors || [];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
@@ -84,15 +99,79 @@ export default function ShoppingCart() {
                       )}
                     </View>
 
-                    {/* Size Display */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm }}>
-                      <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Size: {item.size}</Text>
-                    </View>
+                    {/* Size Display - Clickable if sizes available */}
+                    {(() => {
+                      // Get available sizes from item or vendor product
+                      const sizes = item.availableSizes || getVendorProduct(item.id)?.availableSizes || [];
+                      const currentSize = item.size || (sizes.length > 0 ? sizes[0] : 'N/A');
+                      
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (sizes.length > 0) {
+                              setEditingItem({ id: item.id, size: item.size, color: item.color });
+                              setSelectedSize(item.size || sizes[0]);
+                              setSizeModalVisible(true);
+                            }
+                          }}
+                          disabled={sizes.length === 0}
+                          style={{ 
+                            flexDirection: 'row', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center', 
+                            borderWidth: 1, 
+                            borderColor: colors.border, 
+                            borderRadius: 8, 
+                            paddingHorizontal: spacing.sm, 
+                            paddingVertical: spacing.xs, 
+                            marginBottom: spacing.sm,
+                            opacity: sizes.length > 0 ? 1 : 0.6
+                          }}
+                        >
+                          <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Size: {currentSize}</Text>
+                          {sizes.length > 0 && (
+                            <Ionicons name="chevron-down" size={16} color={colors.subtext} />
+                          )}
+                        </TouchableOpacity>
+                      );
+                    })()}
 
-                    {/* Color Display */}
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', borderWidth: 1, borderColor: colors.border, borderRadius: 8, paddingHorizontal: spacing.sm, paddingVertical: spacing.xs, marginBottom: spacing.sm }}>
-                      <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Colour: {item.color}</Text>
-                    </View>
+                    {/* Color Display - Clickable if colors available */}
+                    {(() => {
+                      // Get available colors from item or vendor product
+                      const colorsList = item.availableColors || getVendorProduct(item.id)?.availableColors || [];
+                      const currentColor = item.color || (colorsList.length > 0 ? colorsList[0] : 'N/A');
+                      
+                      return (
+                        <TouchableOpacity
+                          onPress={() => {
+                            if (colorsList.length > 0) {
+                              setEditingItem({ id: item.id, size: item.size, color: item.color });
+                              setSelectedColor(item.color || colorsList[0]);
+                              setColorModalVisible(true);
+                            }
+                          }}
+                          disabled={colorsList.length === 0}
+                          style={{ 
+                            flexDirection: 'row', 
+                            justifyContent: 'space-between', 
+                            alignItems: 'center', 
+                            borderWidth: 1, 
+                            borderColor: colors.border, 
+                            borderRadius: 8, 
+                            paddingHorizontal: spacing.sm, 
+                            paddingVertical: spacing.xs, 
+                            marginBottom: spacing.sm,
+                            opacity: colorsList.length > 0 ? 1 : 0.6
+                          }}
+                        >
+                          <Text style={{ fontSize: 12, fontFamily: fonts.regular }}>Colour: {currentColor}</Text>
+                          {colorsList.length > 0 && (
+                            <Ionicons name="chevron-down" size={16} color={colors.subtext} />
+                          )}
+                        </TouchableOpacity>
+                      );
+                    })()}
 
                     {/* Quantity Controls */}
                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: spacing.sm }}>
@@ -155,14 +234,21 @@ export default function ShoppingCart() {
                     <TouchableOpacity
                       onPress={(e) => {
                         e.stopPropagation();
+                        // Try to get vendor product data
+                        const vendorProduct = vendorProducts.find(p => p.id === product.id);
+                        const availableSizes = vendorProduct?.availableSizes || [];
+                        const availableColors = vendorProduct?.availableColors || [];
+                        
                         addToCart({
                           id: product.id,
                           name: product.name,
                           price: product.price,
                           discount: product.discount,
-                          size: '36', // Default size
-                          color: 'BROWN', // Default color
+                          size: availableSizes.length > 0 ? availableSizes[0] : undefined,
+                          color: availableColors.length > 0 ? availableColors[0] : undefined,
                           quantity: 1,
+                          availableSizes: availableSizes.length > 0 ? availableSizes : undefined,
+                          availableColors: availableColors.length > 0 ? availableColors : undefined,
                         });
                       }}
                       style={{
@@ -214,24 +300,55 @@ export default function ShoppingCart() {
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={() => setSizeModalVisible(false)} />
           <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
             <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.md }}>Select Size</Text>
-            {['36', '38', '42', '43', '44', '45'].map((size) => (
-              <TouchableOpacity
-                key={size}
-                onPress={() => {
-                  setSelectedSize(size);
-                  setSizeModalVisible(false);
-                }}
-                style={{
-                  paddingVertical: spacing.md,
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.border,
-                }}
-              >
-                <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: selectedSize === size ? colors.brand : colors.text }}>
-                  SIZE {size}
+            {(() => {
+              // Get available sizes from editing item or vendor product
+              const sizes = availableSizes.length > 0 
+                ? availableSizes 
+                : (editingItem ? (getVendorProduct(editingItem.id)?.availableSizes || []) : []);
+              
+              return sizes.length > 0 ? (
+                sizes.map((size) => (
+                <TouchableOpacity
+                  key={size}
+                  onPress={() => {
+                    if (editingItem) {
+                      // Find the cart item and update its size
+                      const itemToUpdate = cartItems.find(
+                        item => item.id === editingItem.id && item.size === editingItem.size && item.color === editingItem.color
+                      );
+                      if (itemToUpdate) {
+                        // Get vendor product to ensure we have available sizes/colors
+                        const vendorProduct = getVendorProduct(editingItem.id);
+                        // Remove old item and add new one with updated size
+                        removeFromCart(editingItem.id, editingItem.size, editingItem.color);
+                        addToCart({
+                          ...itemToUpdate,
+                          size: size,
+                          availableSizes: itemToUpdate.availableSizes || vendorProduct?.availableSizes,
+                          availableColors: itemToUpdate.availableColors || vendorProduct?.availableColors,
+                        });
+                      }
+                    }
+                    setSizeModalVisible(false);
+                    setEditingItem(null);
+                  }}
+                  style={{
+                    paddingVertical: spacing.md,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.border,
+                  }}
+                >
+                  <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: selectedSize === size ? colors.brand : colors.text }}>
+                    SIZE {size}
+                  </Text>
+                </TouchableOpacity>
+              ))
+              ) : (
+                <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.subtext, paddingVertical: spacing.md }}>
+                  No sizes available
                 </Text>
-              </TouchableOpacity>
-            ))}
+              );
+            })()}
           </View>
         </View>
       </Modal>
@@ -242,24 +359,55 @@ export default function ShoppingCart() {
           <TouchableOpacity style={{ flex: 1 }} activeOpacity={1} onPress={() => setColorModalVisible(false)} />
           <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
             <Text style={{ fontSize: 18, fontFamily: fonts.bold, marginBottom: spacing.md }}>Select Colour</Text>
-            {['BROWN', 'BLACK', 'GREY'].map((color) => (
-              <TouchableOpacity
-                key={color}
-                onPress={() => {
-                  setSelectedColor(color);
-                  setColorModalVisible(false);
-                }}
-                style={{
-                  paddingVertical: spacing.md,
-                  borderBottomWidth: 1,
-                  borderBottomColor: colors.border,
-                }}
-              >
-                <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: selectedColor === color ? colors.brand : colors.text }}>
-                  {color}
+            {(() => {
+              // Get available colors from editing item or vendor product
+              const colorsList = availableColors.length > 0 
+                ? availableColors 
+                : (editingItem ? (getVendorProduct(editingItem.id)?.availableColors || []) : []);
+              
+              return colorsList.length > 0 ? (
+                colorsList.map((color) => (
+                <TouchableOpacity
+                  key={color}
+                  onPress={() => {
+                    if (editingItem) {
+                      // Find the cart item and update its color
+                      const itemToUpdate = cartItems.find(
+                        item => item.id === editingItem.id && item.size === editingItem.size && item.color === editingItem.color
+                      );
+                      if (itemToUpdate) {
+                        // Get vendor product to ensure we have available sizes/colors
+                        const vendorProduct = getVendorProduct(editingItem.id);
+                        // Remove old item and add new one with updated color
+                        removeFromCart(editingItem.id, editingItem.size, editingItem.color);
+                        addToCart({
+                          ...itemToUpdate,
+                          color: color,
+                          availableSizes: itemToUpdate.availableSizes || vendorProduct?.availableSizes,
+                          availableColors: itemToUpdate.availableColors || vendorProduct?.availableColors,
+                        });
+                      }
+                    }
+                    setColorModalVisible(false);
+                    setEditingItem(null);
+                  }}
+                  style={{
+                    paddingVertical: spacing.md,
+                    borderBottomWidth: 1,
+                    borderBottomColor: colors.border,
+                  }}
+                >
+                  <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: selectedColor === color ? colors.brand : colors.text }}>
+                    {color}
+                  </Text>
+                </TouchableOpacity>
+              ))
+              ) : (
+                <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.subtext, paddingVertical: spacing.md }}>
+                  No colors available
                 </Text>
-              </TouchableOpacity>
-            ))}
+              );
+            })()}
           </View>
         </View>
       </Modal>
