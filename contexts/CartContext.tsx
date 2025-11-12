@@ -10,6 +10,8 @@ export interface CartItem {
   color?: string;
   quantity: number;
   imageColor?: string;
+  availableSizes?: string[]; // Available sizes from vendor product
+  availableColors?: string[]; // Available colors from vendor product
 }
 
 interface CartContextType {
