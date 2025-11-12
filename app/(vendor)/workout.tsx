@@ -75,7 +75,7 @@ export default function VendorWorkout() {
           <TouchableOpacity onPress={() => setSearchVisible(true)}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/saved-videos')}>
+          <TouchableOpacity onPress={() => router.push('/(vendor)/products')}>
             <Ionicons name="bookmark-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -123,7 +123,7 @@ export default function VendorWorkout() {
               {filteredPosts.map((post) => (
                 <TouchableOpacity
                   key={post.id}
-                  onPress={() => router.push('/(user)/product-detail')}
+                  onPress={() => router.push('/(vendor)/product-detail')}
                   style={{ width: '48%', marginBottom: spacing.md }}
                 >
                   <View style={{ width: '100%', height: 150, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.xs }} />
