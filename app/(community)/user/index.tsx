@@ -5,6 +5,7 @@ import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../../theme/tokens';
+import UserMenuOverlay from '../../(user)/menu-overlay';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
@@ -13,6 +14,7 @@ export default function UserCommunity() {
   const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
+  const [menuVisible, setMenuVisible] = React.useState(false);
   const [following, setFollowing] = React.useState<{ [key: string]: boolean }>({});
   const [likedPosts, setLikedPosts] = React.useState<{ [key: string]: boolean }>({});
   const [postLikeCounts, setPostLikeCounts] = React.useState<{ [key: string]: number }>({
@@ -61,7 +63,7 @@ export default function UserCommunity() {
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-        <TouchableOpacity onPress={() => router.push('/(user)/profile')}>
+        <TouchableOpacity onPress={() => setMenuVisible(true)}>
           <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden' }}>
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
@@ -494,6 +496,9 @@ export default function UserCommunity() {
           </View>
         </View>
       </Modal>
+
+      {/* Menu Overlay */}
+      <UserMenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="community" />
     </SafeAreaView>
   );
 }
