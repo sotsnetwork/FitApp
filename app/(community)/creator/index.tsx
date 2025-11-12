@@ -76,7 +76,7 @@ export default function CreatorCommunity() {
           <TouchableOpacity>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
+          <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
             <Ionicons name="notifications-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
