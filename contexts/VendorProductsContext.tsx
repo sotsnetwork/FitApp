@@ -7,6 +7,8 @@ export interface VendorProduct {
   category: 'GEARS' | 'EQUIPMENTS' | 'SUPPLEMENTS';
   priceNaira: number; // in naira, whole units
   promoPriceNaira?: number; // optional promo price
+  availableSizes?: string[]; // e.g., ['36', '38', '40', '42']
+  availableColors?: string[]; // e.g., ['BROWN', 'BLACK', 'GREY']
 }
 
 interface VendorProductsContextValue {
