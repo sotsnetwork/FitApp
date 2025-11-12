@@ -19,7 +19,7 @@ export default function CreatorHome() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>HOME</Text>
-        <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
+        <TouchableOpacity onPress={() => router.push('/(creator)/notifications')}>
           <Ionicons name="notifications-outline" size={24} color={colors.text} />
         </TouchableOpacity>
       </View>
