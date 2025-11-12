@@ -6,6 +6,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useSavedPosts } from '../../contexts/SavedPostsContext';
 import MenuOverlay from './menu-overlay';
+import BookmarkOverlay from '../../components/BookmarkOverlay';
 
 const categories = ['All', 'Walk', 'Run', 'Ride', 'Hike', 'Swim', 'Crossfit', 'Rock Climb'];
 
@@ -30,6 +31,7 @@ export default function CreatorWorkout() {
   const [searchVisible, setSearchVisible] = React.useState(false);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const [bookmarkVisible, setBookmarkVisible] = React.useState(false);
   const { savePost, unsavePost, isSaved } = useSavedPosts();
 
   // Filter posts based on selected category and search query
@@ -75,7 +77,7 @@ export default function CreatorWorkout() {
           <TouchableOpacity onPress={() => setSearchVisible(true)}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => router.push('/(creator)/videos')}>
+          <TouchableOpacity onPress={() => setBookmarkVisible(true)}>
             <Ionicons name="bookmark-outline" size={24} color={colors.text} />
           </TouchableOpacity>
         </View>
@@ -466,6 +468,12 @@ export default function CreatorWorkout() {
           </View>
         </View>
       </Modal>
+
+      {/* Menu Overlay */}
+      <MenuOverlay visible={menuVisible} onClose={() => setMenuVisible(false)} currentScreen="workout" />
+
+      {/* Bookmark Overlay */}
+      <BookmarkOverlay visible={bookmarkVisible} onClose={() => setBookmarkVisible(false)} userRole="creator" />
     </SafeAreaView>
   );
 }
