@@ -29,6 +29,7 @@ interface Viewer {
 
 export default function CreatorDashboard() {
   const [menuVisible, setMenuVisible] = React.useState(false);
+  const [currentMetricIndex, setCurrentMetricIndex] = React.useState(0);
   
   // State for each post's interactions
   const [postStates, setPostStates] = React.useState<{
@@ -106,6 +107,46 @@ export default function CreatorDashboard() {
     const total = Object.values(postStates).reduce((sum, post) => sum + post.viewCount, 0);
     return total;
   }, [postStates]);
+
+  const metricCards = React.useMemo(() => (
+    [
+      {
+        id: 'earnings',
+        title: '$78k',
+        subtitle: 'Accepted here',
+        icon: 'bag-outline' as const,
+        backgroundColor: colors.brand,
+        titleColor: '#0F0F0F',
+        subtitleColor: '#0F0F0F',
+        iconColor: '#0F0F0F',
+        iconBackground: 'rgba(15,15,15,0.08)',
+        arrowsColor: '#0F0F0F',
+      },
+      {
+        id: 'views',
+        title: `${formatTotalViews(totalVideoViews)} Total Video views`,
+        subtitle: '',
+        icon: 'eye-outline' as const,
+        backgroundColor: colors.text,
+        titleColor: '#FFFFFF',
+        subtitleColor: 'rgba(255,255,255,0.7)',
+        iconColor: '#FFFFFF',
+        iconBackground: 'rgba(255,255,255,0.15)',
+        arrowsColor: '#FFFFFF',
+      },
+    ]
+  ), [totalVideoViews]);
+
+  const handleMetricNavigate = (direction: 'prev' | 'next') => {
+    setCurrentMetricIndex((prev) => {
+      if (direction === 'prev') {
+        return prev === 0 ? metricCards.length - 1 : prev - 1;
+      }
+      return prev === metricCards.length - 1 ? 0 : prev + 1;
+    });
+  };
+
+  const currentMetric = metricCards[currentMetricIndex];
 
   // Format total views (e.g., 57k for 57000)
   const formatTotalViews = (count: number) => {
@@ -203,41 +244,29 @@ export default function CreatorDashboard() {
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ padding: spacing.lg }}>
-          {/* Earnings Card */}
-          <View style={{ backgroundColor: colors.brand, borderRadius: 12, padding: spacing.lg, marginBottom: spacing.md, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+          {/* Metric Carousel Card */}
+          <View style={{ backgroundColor: currentMetric.backgroundColor, borderRadius: 12, padding: spacing.lg, marginBottom: spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-              <Ionicons name="bag-outline" size={32} color="#0F0F0F" style={{ marginRight: spacing.md }} />
+              <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: currentMetric.iconBackground, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
+                <Ionicons name={currentMetric.icon} size={24} color={currentMetric.iconColor} />
+              </View>
               <View>
-                <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: '#0F0F0F' }}>$78k</Text>
-                <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: '#0F0F0F' }}>Accepted here</Text>
+                <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: currentMetric.titleColor }}>
+                  {currentMetric.title}
+                </Text>
+                {currentMetric.subtitle ? (
+                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: currentMetric.subtitleColor }}>
+                    {currentMetric.subtitle}
+                  </Text>
+                ) : null}
               </View>
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-              <TouchableOpacity>
-                <Ionicons name="chevron-back" size={20} color="#0F0F0F" />
+              <TouchableOpacity onPress={() => handleMetricNavigate('prev')}>
+                <Ionicons name="chevron-back" size={20} color={currentMetric.arrowsColor} />
               </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons name="chevron-forward" size={20} color="#0F0F0F" />
-              </TouchableOpacity>
-            </View>
-          </View>
-
-          {/* Total Views Card */}
-          <View style={{ backgroundColor: colors.text, borderRadius: 12, padding: spacing.lg, marginBottom: spacing.lg, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'row', alignItems: 'center', flex: 1 }}>
-              <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: 'rgba(255,255,255,0.2)', alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
-                <Ionicons name="eye-outline" size={24} color="white" />
-              </View>
-              <View>
-                <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: 'white' }}>{formatTotalViews(totalVideoViews)} Total Video views</Text>
-              </View>
-            </View>
-            <View style={{ flexDirection: 'row', gap: spacing.sm }}>
-              <TouchableOpacity>
-                <Ionicons name="chevron-back" size={20} color="white" />
-              </TouchableOpacity>
-              <TouchableOpacity>
-                <Ionicons name="chevron-forward" size={20} color="white" />
+              <TouchableOpacity onPress={() => handleMetricNavigate('next')}>
+                <Ionicons name="chevron-forward" size={20} color={currentMetric.arrowsColor} />
               </TouchableOpacity>
             </View>
           </View>
