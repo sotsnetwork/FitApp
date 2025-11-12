@@ -14,6 +14,8 @@ export default function UploadProduct() {
   const [promoPrice, setPromoPrice] = React.useState('');
   const [country, setCountry] = React.useState('');
   const [state, setState] = React.useState('');
+  const [sizes, setSizes] = React.useState('');
+  const [colors, setColors] = React.useState('');
 
   const { addProduct } = useVendorProducts();
 
@@ -98,7 +100,7 @@ export default function UploadProduct() {
           </View>
 
           {/* Country and State */}
-          <View style={{ flexDirection: 'row', gap: spacing.lg, marginBottom: spacing.xl }}>
+          <View style={{ flexDirection: 'row', gap: spacing.lg, marginBottom: spacing.lg }}>
             <View style={{ flex: 1 }}>
               <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Country</Text>
               <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md }}>
@@ -123,6 +125,28 @@ export default function UploadProduct() {
             </View>
           </View>
 
+          {/* Available Sizes */}
+          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Available Sizes</Text>
+          <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, marginBottom: spacing.lg }}>
+            <TextInput
+              value={sizes}
+              onChangeText={setSizes}
+              placeholder="Enter sizes (e.g., 36, 38, 40, 42)"
+              style={{ height: 48, fontFamily: fonts.regular }}
+            />
+          </View>
+
+          {/* Available Colors */}
+          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Available Colors</Text>
+          <View style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, marginBottom: spacing.xl }}>
+            <TextInput
+              value={colors}
+              onChangeText={setColors}
+              placeholder="Enter colors (e.g., BROWN, BLACK, GREY)"
+              style={{ height: 48, fontFamily: fonts.regular }}
+            />
+          </View>
+
           {/* Next Button */}
           <TouchableOpacity
             disabled={!canProceed}
@@ -134,6 +158,13 @@ export default function UploadProduct() {
               };
               const priceNaira = toNumber(price);
               const promoPriceNaira = hasPromo ? toNumber(promoPrice) : undefined;
+              // Parse sizes and colors from comma-separated strings
+              const availableSizes = sizes.trim()
+                ? sizes.split(',').map(s => s.trim()).filter(s => s.length > 0)
+                : undefined;
+              const availableColors = colors.trim()
+                ? colors.split(',').map(c => c.trim().toUpperCase()).filter(c => c.length > 0)
+                : undefined;
               // Fallback category for now: use selectedCategory if we had it, else GEARS
               await addProduct({
                 id: Date.now().toString(),
@@ -141,6 +172,8 @@ export default function UploadProduct() {
                 category: 'GEARS',
                 priceNaira,
                 promoPriceNaira,
+                availableSizes,
+                availableColors,
               });
               router.push('/(vendor)/upload-product-shipping');
             }}
