@@ -106,8 +106,8 @@ export default function CreatorCommunity() {
         </View>
       </ScrollView>
 
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, marginTop: 0, paddingBottom: spacing.lg }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 0 }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Post 1 - Hey, Guyyyyyys */}
