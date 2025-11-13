@@ -94,7 +94,7 @@ export default function VendorShop() {
 
       {/* Category Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.md, gap: spacing.sm }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'center', paddingHorizontal: spacing.lg, paddingVertical: spacing.sm, gap: spacing.sm }}>
           {categories.map((category) => (
             <TouchableOpacity
               key={category}
@@ -117,8 +117,8 @@ export default function VendorShop() {
       </ScrollView>
 
       {/* Product Grid */}
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ padding: spacing.lg }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: spacing.sm }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.lg }}>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {mergedProducts.map((product: any) => (
               <TouchableOpacity
