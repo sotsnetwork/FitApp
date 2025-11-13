@@ -117,8 +117,8 @@ export default function VendorShop() {
       </ScrollView>
 
       {/* Product Grid */}
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: spacing.sm }}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.lg }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 0 }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.xs, paddingBottom: spacing.lg }}>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {mergedProducts.map((product: any) => (
               <TouchableOpacity
