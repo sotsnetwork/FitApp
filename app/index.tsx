@@ -1,12 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'expo-router';
-import { View, Text, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableOpacity, Image, Animated } from 'react-native';
 import { fonts, colors, spacing } from '../theme/tokens';
 // Replaced PandaIllustration with static image asset
 
 const BRAND = '#66FFCC';
 
 export default function Landing() {
+  const [showSplash, setShowSplash] = useState(true);
+  const fadeAnim = useRef(new Animated.Value(1)).current;
+
+  useEffect(() => {
+    // Show splash for 2.5 seconds, then fade out and show landing
+    const timer = setTimeout(() => {
+      Animated.timing(fadeAnim, {
+        toValue: 0,
+        duration: 500,
+        useNativeDriver: true,
+      }).start(() => {
+        setShowSplash(false);
+      });
+    }, 2500);
+
+    return () => clearTimeout(timer);
+  }, [fadeAnim]);
+
+  if (showSplash) {
+    return (
+      <View style={{ flex: 1, backgroundColor: BRAND, alignItems: 'center', justifyContent: 'center' }}>
+        <Animated.View style={{ opacity: fadeAnim, alignItems: 'center', justifyContent: 'center' }}>
+          <Image
+            source={require('../assets/white.png')}
+            style={{ width: 200, height: 80, resizeMode: 'contain' }}
+          />
+        </Animated.View>
+      </View>
+    );
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
       {/* Panda Illustration Card - Top 60% */}
