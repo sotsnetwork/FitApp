@@ -9,9 +9,9 @@
     "scheme": "fitapp",
     "newArchEnabled": true,
     "splash": {
-      "image": "",
+      "image": "./assets/white.png",
       "resizeMode": "contain",
-      "backgroundColor": "#0F0F0F"
+      "backgroundColor": "#66FFCC"
     },
     "ios": {
       "supportsTablet": true
