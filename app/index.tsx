@@ -27,7 +27,7 @@ export default function Landing() {
 
   if (showSplash) {
     return (
-      <View style={{ flex: 1, backgroundColor: BRAND, alignItems: 'center', justifyContent: 'center' }}>
+      <View style={{ flex: 1, backgroundColor: '#12D585', alignItems: 'center', justifyContent: 'center' }}>
         <Animated.View style={{ opacity: fadeAnim, alignItems: 'center', justifyContent: 'center' }}>
           <Image
             source={require('../assets/white.png')}
