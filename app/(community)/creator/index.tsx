@@ -84,7 +84,7 @@ export default function CreatorCommunity() {
 
       {/* Tabs */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, paddingVertical: spacing.xs, gap: spacing.xs }}>
+        <View style={{ flexDirection: 'row', paddingHorizontal: spacing.lg, paddingTop: spacing.xs, paddingBottom: 0, gap: spacing.xs }}>
           {tabs.map((tab) => (
             <TouchableOpacity
               key={tab}
@@ -106,8 +106,8 @@ export default function CreatorCommunity() {
         </View>
       </ScrollView>
 
-      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingTop: 0 }}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
+      <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg, marginTop: 0 }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Post 1 - Hey, Guyyyyyys */}
