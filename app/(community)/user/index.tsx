@@ -106,11 +106,11 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg, marginTop: 0 }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 0, marginBottom: spacing.md }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.md }}>
                 {(['Leaderboard','Challenges'] as const).map((tab) => (
                   <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
                     <View style={{ alignItems: 'center' }}>
@@ -570,4 +570,3 @@ export default function UserCommunity() {
     </SafeAreaView>
   );
 }
-
