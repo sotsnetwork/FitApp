@@ -73,7 +73,7 @@ export default function CreatorCommunity() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>COMMUNITY</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(creator)/search')}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push('/(creator)/payment-history')}>
