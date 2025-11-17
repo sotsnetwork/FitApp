@@ -17,9 +17,11 @@ export default function UserCommunity() {
   const [menuVisible, setMenuVisible] = React.useState(false);
   const [following, setFollowing] = React.useState<{ [key: string]: boolean }>({});
   const [likedPosts, setLikedPosts] = React.useState<{ [key: string]: boolean }>({});
+  const [followingPosts, setFollowingPosts] = React.useState<{ [key: string]: boolean }>({});
   const [postLikeCounts, setPostLikeCounts] = React.useState<{ [key: string]: number }>({
     'post-1': 12,
     'post-2': 12,
+    'post-3': 12,
   });
 
   const handleLike = (postId: string) => {
@@ -175,7 +177,7 @@ export default function UserCommunity() {
                   borderRadius: 16 
                 }}
               >
-                <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: following['hey-guys'] ? colors.text : '#0F0F0F' }}>
+                <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: following['hey-guys'] ? colors.text : 'white' }}>
                   {following['hey-guys'] ? 'Following' : 'Follow'}
                 </Text>
               </TouchableOpacity>
@@ -222,7 +224,7 @@ export default function UserCommunity() {
           <View style={{ marginBottom: spacing.xl }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text }}>Daily Excerc...</Text>
+                <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text }}>Daily Excercuse</Text>
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginTop: 2 }}>10M joined</Text>
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Squat || Albs || Loins || Yoga</Text>
               </View>
@@ -269,6 +271,72 @@ export default function UserCommunity() {
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20 }}>
               Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
             </Text>
+          </View>
+
+          {/* Post 3 - Running Post */}
+          <View style={{ marginBottom: spacing.xl }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
+              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
+                <Text style={{ fontSize: 16 }}>👤</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
+              </View>
+              <TouchableOpacity 
+                onPress={() => setFollowingPosts({ ...followingPosts, 'running': !followingPosts['running'] })}
+                style={{ 
+                  backgroundColor: followingPosts['running'] ? 'transparent' : colors.brand, 
+                  borderWidth: followingPosts['running'] ? 1 : 0,
+                  borderColor: colors.border,
+                  paddingHorizontal: spacing.md, 
+                  paddingVertical: spacing.xs, 
+                  borderRadius: 16 
+                }}
+              >
+                <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: followingPosts['running'] ? colors.text : 'white' }}>
+                  {followingPosts['running'] ? 'Following' : 'Follow'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+            <TouchableOpacity
+              onPress={() => router.push('/(user)/post-detail')}
+              style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
+            >
+              <Text style={{ color: colors.subtext }}>Running Image</Text>
+            </TouchableOpacity>
+            <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
+              <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Following</Text>
+            </View>
+            <View style={{ flexDirection: 'row', gap: spacing.md }}>
+              <TouchableOpacity
+                onPress={() => handleLike('post-3')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
+                <Ionicons name={likedPosts['post-3'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-3'] ? colors.brand : colors.text} />
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-3'] || 12}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => router.push('/(user)/post-detail')}
+                style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
+              >
+                <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={async () => {
+                  try {
+                    await Share.share({
+                      message: 'Check out this amazing fitness post on FitApp!',
+                      title: 'Share Post',
+                    });
+                  } catch (error) {
+                    console.error('Error sharing:', error);
+                  }
+                }}
+              >
+                <Ionicons name="share-outline" size={20} color={colors.text} />
+              </TouchableOpacity>
+            </View>
           </View>
             </>
           )}
@@ -386,7 +454,7 @@ export default function UserCommunity() {
           position: 'absolute',
           bottom: 100,
           right: spacing.lg,
-          backgroundColor: colors.brand,
+          backgroundColor: colors.brandTint,
           width: 56,
           height: 56,
           borderRadius: 28,
