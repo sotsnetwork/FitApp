@@ -104,7 +104,7 @@ export default function VendorCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg, marginTop: 0 }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Sub tabs */}
