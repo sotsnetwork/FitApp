@@ -72,7 +72,7 @@ export default function UserCommunity() {
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>COMMUNITY</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
-          <TouchableOpacity>
+          <TouchableOpacity onPress={() => router.push('/(user)/search')}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
           </TouchableOpacity>
           <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
