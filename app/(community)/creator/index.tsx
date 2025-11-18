@@ -11,6 +11,7 @@ const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
 export default function CreatorCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
+  const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -109,6 +110,53 @@ export default function CreatorCommunity() {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
+            <>
+              {/* Sub tabs */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.md }}>
+                {(['Leaderboard','Challenges'] as const).map((tab) => (
+                  <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
+                    <View style={{ alignItems: 'center' }}>
+                      <Text style={{ fontFamily: fonts.semibold, color: challengeSubTab === tab ? colors.text : colors.subtext }}>{tab}</Text>
+                      {challengeSubTab === tab && (
+                        <View style={{ height: 2, backgroundColor: colors.text, width: 100, marginTop: 8 }} />
+                      )}
+                    </View>
+                  </TouchableOpacity>
+                ))}
+              </View>
+
+              {/* Hero card */}
+              <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm }}>Join 20,234 Runners</Text>
+              <View style={{ width: '100%', height: 180, backgroundColor: '#FF6A00', borderRadius: 12, marginBottom: spacing.md }} />
+              <TouchableOpacity
+                onPress={() => setChallengeAcceptedVisible(true)}
+                style={{ borderWidth: 1, borderColor: colors.border, borderRadius: 12, paddingVertical: spacing.md, alignItems: 'center', marginBottom: spacing.xl }}
+              >
+                <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>Join Challenge</Text>
+              </TouchableOpacity>
+
+              {/* Ongoing list */}
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
+                <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>Ongoing Challenges</Text>
+                <TouchableOpacity>
+                  <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>See all</Text>
+                </TouchableOpacity>
+              </View>
+              {[1,2,3].map((i) => (
+                <TouchableOpacity key={i} onPress={() => router.push('/(community)/creator/challenge-details')} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+                  <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
+                    <Ionicons name="flash" size={20} color={colors.brand} />
+                  </View>
+                  <View style={{ flex: 1 }}>
+                    <Text style={{ fontFamily: fonts.semibold }}>July Weekly Challenge</Text>
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>0.00 / 15.00km</Text>
+                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>4 days Left</Text>
+                  </View>
+                  <Ionicons name="chevron-forward" size={18} color={colors.subtext} />
+                </TouchableOpacity>
+              ))}
+            </>
+          ) : (
             <>
               {/* Post 1 - Hey, Guyyyyyys */}
               <View style={{ marginBottom: spacing.xl }}>
@@ -232,251 +280,6 @@ export default function CreatorCommunity() {
                 >
                   <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: '#0F0F0F' }}>+</Text>
                 </TouchableOpacity>
-              </View>
-            </>
-          ) : selectedTab === 'Popular' ? (
-            <>
-              {/* Post 1 - Hey, Guyyyyyys */}
-              <View style={{ marginBottom: spacing.xl }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                  <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-                    <Text style={{ fontSize: 16 }}>👤</Text>
-                  </View>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Hey, Guyyyyyys</Text>
-                  </View>
-                  <TouchableOpacity style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.md, paddingVertical: spacing.xs, borderRadius: 16 }}>
-                    <Text style={{ fontSize: 12, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Follow</Text>
-                  </TouchableOpacity>
-                </View>
-                <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.sm, lineHeight: 20 }}>
-                  Happy to be rated No1. on the World Top 100 Lifters. Thank you for your support!!
-                </Text>
-                <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
-                  <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
-                </View>
-                <View style={{ flexDirection: 'row', gap: spacing.md }}>
-                  <TouchableOpacity
-                    onPress={() => handleLike('challenge-post-1')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name={likedPosts['challenge-post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['challenge-post-1'] ? colors.brand : colors.text} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['challenge-post-1'] || 12}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      try {
-                        await Share.share({
-                          message: 'Check out this amazing fitness post on FitApp!',
-                          title: 'Share Post',
-                        });
-                      } catch (error) {
-                        console.error('Error sharing:', error);
-                      }
-                    }}
-                  >
-                    <Ionicons name="share-outline" size={20} color={colors.text} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-
-              {/* Post 2 - Daily Exercise Post */}
-              <View style={{ marginBottom: spacing.xl, position: 'relative' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text }}>Daily Excerc...</Text>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext, marginTop: 2 }}>10M joined</Text>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Squat || Albs || Loins || Yoga</Text>
-                  </View>
-                  <TouchableOpacity>
-                    <Ionicons name="ellipsis-horizontal" size={20} color={colors.text} />
-                  </TouchableOpacity>
-                </View>
-                <TouchableOpacity
-                  onPress={() => router.push('/(creator)/content-detail')}
-                  style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
-                >
-                  <Text style={{ color: colors.subtext }}>Post Image</Text>
-                </TouchableOpacity>
-                <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
-                  <TouchableOpacity
-                    onPress={() => handleLike('popular-post-2')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name={likedPosts['popular-post-2'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['popular-post-2'] ? colors.brand : colors.text} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['popular-post-2'] || 12}</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => router.push('/(creator)/content-detail')}
-                    style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                  >
-                    <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      try {
-                        await Share.share({
-                          message: 'Check out this amazing fitness post on FitApp!',
-                          title: 'Share Post',
-                        });
-                      } catch (error) {
-                        console.error('Error sharing:', error);
-                      }
-                    }}
-                  >
-                    <Ionicons name="share-outline" size={20} color={colors.text} />
-                  </TouchableOpacity>
-                </View>
-                <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20, marginBottom: spacing.sm }}>
-                  Lorem ipsum dolor sit amet consectetur. Faucibus vitae nisl cras commodo nisl non. In dui adipiscing sit justo volutpat massa.
-                </Text>
-                {/* + Create Button */}
-                <TouchableOpacity
-                  onPress={() => setCreatePostModalVisible(true)}
-                  style={{
-                    position: 'absolute',
-                    bottom: spacing.sm,
-                    right: spacing.sm,
-                    backgroundColor: colors.brand,
-                    width: 48,
-                    height: 48,
-                    borderRadius: 24,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: '#0F0F0F' }}>+</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Post 3 - Sponsored Challenge Post */}
-              <View style={{ marginBottom: spacing.xl }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.semibold, fontSize: 14, color: colors.text }}>Debby Annie</Text>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>5th Lorem about...</Text>
-                    <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>1000 Lorem Coin - Running</Text>
-                  </View>
-                </View>
-                <View style={{ width: '100%', height: 200, borderRadius: 12, backgroundColor: '#FF6A00', marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}>
-                  <Text style={{ color: 'white', fontFamily: fonts.bold, fontSize: 18 }}>Jetter.</Text>
-                </View>
-                <TouchableOpacity
-                  onPress={() => setChallengeAcceptedVisible(true)}
-                  style={{ backgroundColor: colors.brand, paddingVertical: spacing.sm, borderRadius: 8, alignItems: 'center', marginBottom: spacing.sm }}
-                >
-                  <Text style={{ fontFamily: fonts.semibold, color: '#0F0F0F' }}>Join Challenge</Text>
-                </TouchableOpacity>
-              </View>
-
-              {/* Post 4 - Sponsored Post */}
-              <View style={{ marginBottom: spacing.xl, position: 'relative' }}>
-                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm }}>
-                  <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.semibold, fontSize: 14, color: colors.text }}>Debby Annie</Text>
-                    <View style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start', marginTop: spacing.xs }}>
-                      <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#0F0F0F' }}>Sponsored</Text>
-                    </View>
-                  </View>
-                </View>
-                <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20, marginBottom: spacing.sm }}>
-                  Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet conse...
-                </Text>
-                {/* + Create Button */}
-                <TouchableOpacity
-                  onPress={() => setCreatePostModalVisible(true)}
-                  style={{
-                    position: 'absolute',
-                    bottom: spacing.sm,
-                    right: spacing.sm,
-                    backgroundColor: colors.brand,
-                    width: 48,
-                    height: 48,
-                    borderRadius: 24,
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.25,
-                    shadowRadius: 3.84,
-                    elevation: 5,
-                  }}
-                >
-                  <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: '#0F0F0F' }}>+</Text>
-                </TouchableOpacity>
-              </View>
-            </>
-              ) : selectedTab === 'Following' ? (
-                <>
-                  {/* Following Posts */}
-                  <View style={{ marginBottom: spacing.xl }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
-                      <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
-                        <Text style={{ fontSize: 16 }}>👤</Text>
-                      </View>
-                      <View style={{ flex: 1 }}>
-                        <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
-                        <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 2, borderRadius: 4, alignSelf: 'flex-start', marginTop: spacing.xs }}>
-                          <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: colors.brand }}>Following</Text>
-                        </View>
-                      </View>
-                    </View>
-                    <TouchableOpacity
-                      onPress={() => router.push('/(creator)/content-detail')}
-                      style={{ width: '100%', height: 250, borderRadius: 12, backgroundColor: colors.border, marginBottom: spacing.sm, alignItems: 'center', justifyContent: 'center' }}
-                    >
-                      <Text style={{ color: colors.subtext }}>Post Image</Text>
-                    </TouchableOpacity>
-                    <View style={{ flexDirection: 'row', gap: spacing.md, marginBottom: spacing.sm }}>
-                      <TouchableOpacity
-                        onPress={() => handleLike('following-post-1')}
-                        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                      >
-                        <Ionicons name={likedPosts['following-post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['following-post-1'] ? colors.brand : colors.text} />
-                        <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['following-post-1'] || 12}</Text>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        onPress={() => router.push('/(creator)/content-detail')}
-                        style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
-                      >
-                        <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                        <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>4</Text>
-                      </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={async () => {
-                      try {
-                        await Share.share({
-                          message: 'Check out this amazing fitness post on FitApp!',
-                          title: 'Share Post',
-                        });
-                      } catch (error) {
-                        console.error('Error sharing:', error);
-                      }
-                    }}
-                  >
-                    <Ionicons name="share-outline" size={20} color={colors.text} />
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </>
-          ) : (
-            <>
-              {/* My Post Tab */}
-              <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: spacing.xl }}>
-                <Text style={{ fontSize: 16, fontFamily: fonts.regular, color: colors.subtext }}>No posts yet</Text>
               </View>
             </>
           )}
