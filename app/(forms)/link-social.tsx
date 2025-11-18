@@ -14,6 +14,7 @@ export default function LinkSocial() {
   const [tiktok, setTiktok] = React.useState('');
   const [instagram, setInstagram] = React.useState('');
   const [facebook, setFacebook] = React.useState('');
+  const [snapchat, setSnapchat] = React.useState('');
 
   return (
     <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64 }}>
@@ -58,6 +59,19 @@ export default function LinkSocial() {
       </View>
       <Input placeholder="Paste Link" value={facebook} onChangeText={setFacebook} showClearIcon />
 
+      {/* Snapchat - Only for Creator and Vendor */}
+      {(role === 'creator' || role === 'vendor') && (
+        <>
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.xs, marginTop: spacing.md }}>
+            <View style={{ width: 28, height: 28, borderRadius: 6, marginRight: spacing.sm, backgroundColor: '#FFFC00', alignItems: 'center', justifyContent: 'center' }}>
+              <Ionicons name="logo-snapchat" size={20} color="#000000" />
+            </View>
+            <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>SNAPCHAT</Text>
+          </View>
+          <Input placeholder="Paste Link" value={snapchat} onChangeText={setSnapchat} showClearIcon />
+        </>
+      )}
+
       <View style={{ flex: 1 }} />
       <View style={{ paddingBottom: spacing.lg }}>
         <Button 
@@ -68,6 +82,7 @@ export default function LinkSocial() {
               tiktok,
               instagram,
               facebook,
+              snapchat: role === 'creator' || role === 'vendor' ? snapchat : undefined,
             });
             router.push({ pathname: '/(verify)/account-verified', params: { role } });
           }} 
