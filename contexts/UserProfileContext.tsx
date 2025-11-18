@@ -26,6 +26,7 @@ export interface UserProfile {
   tiktok?: string;
   instagram?: string;
   facebook?: string;
+  snapchat?: string;
 }
 
 interface UserProfileContextType {
