@@ -141,7 +141,7 @@ export default function VendorCommunity() {
               {[1,2,3].map((i) => (
                 <TouchableOpacity key={i} onPress={() => router.push('/(community)/vendor/challenge-details')} style={{ flexDirection: 'row', alignItems: 'center', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
                   <View style={{ width: 36, height: 36, borderRadius: 18, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.md }}>
-                    <Text>🏅</Text>
+                    <Ionicons name="flash" size={20} color={colors.brand} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Text style={{ fontFamily: fonts.semibold }}>July Weekly Challenge</Text>
