@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'expo-router';
 import { View, Text, TouchableOpacity, Image, Animated } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { fonts, colors, spacing } from '../theme/tokens';
 // Replaced PandaIllustration with static image asset
 
@@ -39,45 +40,47 @@ export default function Landing() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
-      {/* Panda Illustration Card - Perfect Square with Curved Edges */}
-      <View style={{ width: '100%', aspectRatio: 1, backgroundColor: BRAND, borderRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20 }}>
-        <Image
-          source={require('../assets/panda.png')}
-          style={{ width: 220, height: 220, resizeMode: 'contain' }}
-        />
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
+      <View style={{ flex: 1 }}>
+        {/* Panda Illustration Card - Perfect Square with Curved Edges */}
+        <View style={{ width: '90%', aspectRatio: 1, backgroundColor: BRAND, borderRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20, marginTop: spacing.xl * 1.5, alignSelf: 'center' }}>
+          <Image
+            source={require('../assets/panda.png')}
+            style={{ width: 330, height: 330, resizeMode: 'contain' }}
+          />
+        </View>
+
+        {/* Content Section */}
+        <View style={{ flex: 1, padding: spacing.lg, paddingTop: spacing.md, justifyContent: 'flex-start', alignItems: 'center' }}>
+          <Text style={{ color: 'white', fontSize: 36, fontFamily: fonts.bold, marginBottom: 8, textAlign: 'center' }}>
+            Join the Movement
+          </Text>
+          <Text style={{ color: 'white', fontSize: 22, marginBottom: spacing.xl, fontFamily: fonts.regular, textAlign: 'center' }}>
+            Stay Fit. Earn Rewards
+          </Text>
+
+          <Link href="/(roles)/join-fit" asChild>
+            <TouchableOpacity
+              style={{ backgroundColor: BRAND, paddingVertical: 18, borderRadius: 16, alignItems: 'center', marginBottom: spacing.md, marginTop: spacing.xl, width: '100%' }}
+            >
+              <Text style={{ color: '#0F0F0F', fontSize: 16, fontFamily: fonts.bold }}>Create Account</Text>
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/(auth)/login" asChild>
+            <TouchableOpacity style={{ alignItems: 'center', marginBottom: spacing.md }}>
+              <Text style={{ color: 'white', fontSize: 16, fontFamily: fonts.bold }}>Log In</Text>
+            </TouchableOpacity>
+          </Link>
+
+          <Link href="/" asChild>
+            <TouchableOpacity style={{ alignItems: 'center', marginTop: spacing.sm }}>
+              <Text style={{ color: 'white', fontSize: 16, fontFamily: fonts.regular, opacity: 0.6 }}>Continue as Guest</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
       </View>
-
-      {/* Content Section */}
-      <View style={{ flex: 1, padding: spacing.lg, paddingTop: spacing.md, justifyContent: 'flex-start', alignItems: 'center' }}>
-        <Text style={{ color: 'white', fontSize: 36, fontFamily: fonts.bold, marginBottom: 8, textAlign: 'center' }}>
-          Join the Movement
-        </Text>
-        <Text style={{ color: 'white', fontSize: 18, marginBottom: spacing.xl, fontFamily: fonts.regular, textAlign: 'center' }}>
-          Stay Fit. Earn Rewards
-        </Text>
-
-        <Link href="/(roles)/join-fit" asChild>
-          <TouchableOpacity
-            style={{ backgroundColor: BRAND, paddingVertical: 18, borderRadius: 16, alignItems: 'center', marginBottom: spacing.md, marginTop: spacing.md, width: '100%' }}
-          >
-            <Text style={{ color: '#0F0F0F', fontSize: 16, fontFamily: fonts.bold }}>Create Account</Text>
-          </TouchableOpacity>
-        </Link>
-
-        <Link href="/(auth)/login" asChild>
-          <TouchableOpacity style={{ alignItems: 'center', marginBottom: spacing.md }}>
-            <Text style={{ color: 'white', fontSize: 16, fontFamily: fonts.bold }}>Log In</Text>
-          </TouchableOpacity>
-        </Link>
-
-        <Link href="/" asChild>
-          <TouchableOpacity style={{ alignItems: 'center', marginTop: spacing.sm }}>
-            <Text style={{ color: 'white', fontSize: 16, fontFamily: fonts.regular, opacity: 0.6 }}>Continue as Guest</Text>
-          </TouchableOpacity>
-        </Link>
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
