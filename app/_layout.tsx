@@ -19,6 +19,24 @@ export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({ Inter_400Regular, Inter_600SemiBold, Inter_700Bold });
 
   React.useEffect(() => {
+    // Handle unhandled promise rejections (like keep-awake errors)
+    // ErrorUtils is a global in React Native
+    const ErrorUtils = (global as any).ErrorUtils;
+    if (ErrorUtils) {
+      const originalErrorHandler = ErrorUtils.getGlobalHandler();
+      const handleError = (error: Error, isFatal?: boolean) => {
+        // Suppress keep-awake errors (non-critical development warnings)
+        if (error?.message?.includes?.('keep awake') || error?.message?.includes?.('Unable to activate keep awake')) {
+          return;
+        }
+        // Call original handler for other errors
+        if (originalErrorHandler) {
+          originalErrorHandler(error, isFatal);
+        }
+      };
+
+      ErrorUtils.setGlobalHandler(handleError);
+
     // Hide splash screen after fonts load or if there's an error
     const hideSplash = async () => {
       try {
@@ -31,6 +49,13 @@ export default function RootLayout() {
     if (fontsLoaded || fontError) {
       hideSplash();
     }
+
+    // Cleanup
+    return () => {
+      if (ErrorUtils && originalErrorHandler) {
+        ErrorUtils.setGlobalHandler(originalErrorHandler);
+      }
+    };
   }, [fontsLoaded, fontError]);
 
   // Show app immediately, don't wait for fonts
