@@ -34,7 +34,7 @@ export default function Activities() {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64 }}>
+    <View style={{ flex: 1, backgroundColor: 'white', padding: spacing.lg, paddingTop: 64, paddingBottom: spacing.xl * 2 }}>
       <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.lg }}>
         <Ionicons name="arrow-back" size={24} color={colors.text} />
       </TouchableOpacity>
