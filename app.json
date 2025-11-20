@@ -9,7 +9,7 @@
     "scheme": "fitapp",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/panda.png",
+      "image": "./assets/white.png",
       "resizeMode": "contain",
       "backgroundColor": "#12D585"
     },
