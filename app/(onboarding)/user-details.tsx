@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, Modal, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, Modal, ScrollView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Input from '../../components/ui/Input';
@@ -20,14 +20,49 @@ export default function UserDetails() {
   const [selectedMonth, setSelectedMonth] = React.useState('February');
   const [selectedDay, setSelectedDay] = React.useState(18);
   const [selectedYear, setSelectedYear] = React.useState(1995);
+  const monthRef = React.useRef<ScrollView>(null);
+  const dayRef = React.useRef<ScrollView>(null);
+  const yearRef = React.useRef<ScrollView>(null);
 
   const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
   const days = Array.from({ length: 31 }, (_, i) => i + 1);
   const years = Array.from({ length: 60 }, (_, i) => 1980 + i);
+  const ITEM_HEIGHT = 44;
+  const PICKER_PADDING = (180 - ITEM_HEIGHT) / 2;
 
   const handleDateConfirm = () => {
     setBirthdate(`${selectedMonth} ${selectedDay}, ${selectedYear}`);
     setShowDatePicker(false);
+  };
+
+  const scrollToInitialValues = React.useCallback(() => {
+    const monthIndex = months.indexOf(selectedMonth);
+    const dayIndex = days.indexOf(selectedDay);
+    const yearIndex = years.indexOf(selectedYear);
+
+    monthRef.current?.scrollTo({ y: monthIndex * ITEM_HEIGHT, animated: false });
+    dayRef.current?.scrollTo({ y: dayIndex * ITEM_HEIGHT, animated: false });
+    yearRef.current?.scrollTo({ y: yearIndex * ITEM_HEIGHT, animated: false });
+  }, [selectedMonth, selectedDay, selectedYear, months, days, years]);
+
+  React.useEffect(() => {
+    if (showDatePicker) {
+      setTimeout(scrollToInitialValues, 0);
+    }
+  }, [showDatePicker, scrollToInitialValues]);
+
+  const handleSnap = (type: 'month' | 'day' | 'year') => (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offset = event.nativeEvent.contentOffset.y;
+    const listLength = type === 'month' ? months.length : type === 'day' ? days.length : years.length;
+    const index = Math.min(Math.max(Math.round(offset / ITEM_HEIGHT), 0), listLength - 1);
+
+    if (type === 'month') {
+      setSelectedMonth(months[index]);
+    } else if (type === 'day') {
+      setSelectedDay(days[index]);
+    } else {
+      setSelectedYear(years[index]);
+    }
   };
 
   const canContinue = firstName.length >= 2 && lastName.length >= 2 && birthdate && gender;
@@ -169,32 +204,53 @@ export default function UserDetails() {
             <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.lg, paddingBottom: spacing.xl }}>
               <View style={{ height: 180, flexDirection: 'row', justifyContent: 'space-between' }}>
                 {/* selection highlight */}
-                <View pointerEvents="none" style={{ position: 'absolute', left: spacing.lg, right: spacing.lg, top: 68, height: 44, backgroundColor: '#F5FFF9', borderRadius: 12 }} />
+                <View pointerEvents="none" style={{ position: 'absolute', left: spacing.lg, right: spacing.lg, top: PICKER_PADDING, height: ITEM_HEIGHT, backgroundColor: '#F5FFF9', borderRadius: 12 }} />
 
                 {/* Month */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                <ScrollView
+                  ref={monthRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: PICKER_PADDING }}
+                  snapToInterval={ITEM_HEIGHT}
+                  decelerationRate="fast"
+                  onMomentumScrollEnd={handleSnap('month')}
+                >
                   {months.map((m) => (
-                    <TouchableOpacity key={m} onPress={() => setSelectedMonth(m)} style={{ height: 44, justifyContent: 'center' }}>
+                    <View key={m} style={{ height: ITEM_HEIGHT, justifyContent: 'center' }}>
                       <Text style={{ textAlign: 'left', fontFamily: fonts.regular, color: selectedMonth === m ? colors.text : '#B3B3B3', fontSize: 18 }}>{m}</Text>
-                    </TouchableOpacity>
+                    </View>
                   ))}
                 </ScrollView>
 
                 {/* Day */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                <ScrollView
+                  ref={dayRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: PICKER_PADDING }}
+                  snapToInterval={ITEM_HEIGHT}
+                  decelerationRate="fast"
+                  onMomentumScrollEnd={handleSnap('day')}
+                >
                   {days.map((d) => (
-                    <TouchableOpacity key={d} onPress={() => setSelectedDay(d)} style={{ height: 44, justifyContent: 'center', paddingHorizontal: spacing.md }}>
+                    <View key={d} style={{ height: ITEM_HEIGHT, justifyContent: 'center', paddingHorizontal: spacing.md }}>
                       <Text style={{ textAlign: 'center', fontFamily: fonts.regular, color: selectedDay === d ? colors.text : '#B3B3B3', fontSize: 18 }}>{d}</Text>
-                    </TouchableOpacity>
+                    </View>
                   ))}
                 </ScrollView>
 
                 {/* Year */}
-                <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={{ paddingVertical: 68 }}>
+                <ScrollView
+                  ref={yearRef}
+                  showsVerticalScrollIndicator={false}
+                  contentContainerStyle={{ paddingVertical: PICKER_PADDING }}
+                  snapToInterval={ITEM_HEIGHT}
+                  decelerationRate="fast"
+                  onMomentumScrollEnd={handleSnap('year')}
+                >
                   {years.map((y) => (
-                    <TouchableOpacity key={y} onPress={() => setSelectedYear(y)} style={{ height: 44, justifyContent: 'center', alignItems: 'flex-end' }}>
+                    <View key={y} style={{ height: ITEM_HEIGHT, justifyContent: 'center', alignItems: 'flex-end' }}>
                       <Text style={{ textAlign: 'right', fontFamily: fonts.regular, color: selectedYear === y ? colors.text : '#B3B3B3', fontSize: 18 }}>{y}</Text>
-                    </TouchableOpacity>
+                    </View>
                   ))}
                 </ScrollView>
               </View>
