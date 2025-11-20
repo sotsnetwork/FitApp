@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'expo-router';
 import { View, Text, TouchableOpacity, Image, Animated } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { StatusBar } from 'expo-status-bar';
 import { fonts, colors, spacing } from '../theme/tokens';
 // Replaced PandaIllustration with static image asset
 
@@ -40,7 +41,8 @@ export default function Landing() {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#0F0F0F' }} edges={['top', 'bottom']}>
+      <StatusBar style="light" backgroundColor="transparent" translucent />
       <View style={{ flex: 1 }}>
         {/* Panda Illustration Card - Perfect Square with Curved Edges */}
         <View style={{ width: '90%', aspectRatio: 1, backgroundColor: BRAND, borderRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20, marginTop: spacing.xl * 2.5, alignSelf: 'center' }}>
