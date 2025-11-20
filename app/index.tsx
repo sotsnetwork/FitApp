@@ -43,7 +43,7 @@ export default function Landing() {
     <SafeAreaView style={{ flex: 1, backgroundColor: '#0F0F0F' }}>
       <View style={{ flex: 1 }}>
         {/* Panda Illustration Card - Perfect Square with Curved Edges */}
-        <View style={{ width: '90%', aspectRatio: 1, backgroundColor: BRAND, borderRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20, marginTop: spacing.xl * 1.5, alignSelf: 'center' }}>
+        <View style={{ width: '90%', aspectRatio: 1, backgroundColor: BRAND, borderRadius: 40, alignItems: 'center', justifyContent: 'center', paddingVertical: 32, paddingHorizontal: 20, marginTop: spacing.xl * 2.5, alignSelf: 'center' }}>
           <Image
             source={require('../assets/panda.png')}
             style={{ width: 330, height: 330, resizeMode: 'contain' }}
