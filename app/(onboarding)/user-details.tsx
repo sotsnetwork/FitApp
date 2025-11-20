@@ -71,7 +71,7 @@ export default function UserDetails() {
     <View style={{ flex: 1, backgroundColor: 'white' }}>
       <ScrollView 
         style={{ flex: 1 }} 
-        contentContainerStyle={{ padding: spacing.lg, paddingTop: 64, paddingBottom: spacing.xl }}
+        contentContainerStyle={{ padding: spacing.lg, paddingTop: 64, paddingBottom: spacing.xl * 3 }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
