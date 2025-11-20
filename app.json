@@ -9,9 +9,9 @@
     "scheme": "fitapp",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/white.png",
+      "image": "./assets/panda.png",
       "resizeMode": "contain",
-      "backgroundColor": "#66FFCC"
+      "backgroundColor": "#12D585"
     },
     "ios": {
       "supportsTablet": true
@@ -19,7 +19,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/panda.png",
-        "backgroundColor": "#66FFCC"
+        "backgroundColor": "#12D585"
       },
       "icon": "./assets/panda.png",
       "edgeToEdgeEnabled": true,
