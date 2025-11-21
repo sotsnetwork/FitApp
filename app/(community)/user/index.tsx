@@ -11,7 +11,6 @@ const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
 export default function UserCommunity() {
   const [selectedTab, setSelectedTab] = React.useState('Popular');
-  const [challengeSubTab, setChallengeSubTab] = React.useState<'Leaderboard' | 'Challenges'>('Challenges');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
   const [menuVisible, setMenuVisible] = React.useState(false);
@@ -109,20 +108,6 @@ export default function UserCommunity() {
         <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
-              {/* Sub tabs */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginBottom: spacing.md }}>
-                {(['Leaderboard','Challenges'] as const).map((tab) => (
-                  <TouchableOpacity key={tab} onPress={() => setChallengeSubTab(tab)}>
-                    <View style={{ alignItems: 'center' }}>
-                      <Text style={{ fontFamily: fonts.semibold, color: challengeSubTab === tab ? colors.text : colors.subtext }}>{tab}</Text>
-                      {challengeSubTab === tab && (
-                        <View style={{ height: 2, backgroundColor: colors.text, width: 100, marginTop: 8 }} />
-                      )}
-                    </View>
-                  </TouchableOpacity>
-                ))}
-              </View>
-
               {/* Hero card */}
               <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm }}>Join 20,234 Runners</Text>
               <View style={{ width: '100%', height: 180, backgroundColor: '#FF6A00', borderRadius: 12, marginBottom: spacing.md }} />
