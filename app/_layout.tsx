@@ -22,8 +22,10 @@ export default function RootLayout() {
     // Handle unhandled promise rejections (like keep-awake errors)
     // ErrorUtils is a global in React Native
     const ErrorUtils = (global as any).ErrorUtils;
+    let originalErrorHandler: ((error: Error, isFatal?: boolean) => void) | undefined;
+    
     if (ErrorUtils) {
-      const originalErrorHandler = ErrorUtils.getGlobalHandler();
+      originalErrorHandler = ErrorUtils.getGlobalHandler();
       const handleError = (error: Error, isFatal?: boolean) => {
         // Suppress keep-awake errors (non-critical development warnings)
         if (error?.message?.includes?.('keep awake') || error?.message?.includes?.('Unable to activate keep awake')) {
@@ -36,6 +38,7 @@ export default function RootLayout() {
       };
 
       ErrorUtils.setGlobalHandler(handleError);
+    }
 
     // Hide splash screen after fonts load or if there's an error
     const hideSplash = async () => {
