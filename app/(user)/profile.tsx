@@ -1,104 +1,297 @@
-import React from 'react';
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, ScrollView, TouchableOpacity, Modal, Switch, Alert } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import * as ImagePicker from 'expo-image-picker';
 import { spacing, fonts, colors } from '../../theme/tokens';
 import { useUserProfile } from '../../contexts/UserProfileContext';
+import EditProfile from './edit-profile';
+import PrivacySecurity from './privacy-security';
+import WorkoutSettings from './workout-settings';
+import SupportHelp from './support-help';
 
 export default function UserProfile() {
-  const { profile } = useUserProfile();
-  const [selectedMenu, setSelectedMenu] = React.useState('Home');
+  const { profile, updateProfile } = useUserProfile();
+  const [editProfileVisible, setEditProfileVisible] = useState(false);
+  const [privacySecurityVisible, setPrivacySecurityVisible] = useState(false);
+  const [workoutSettingsVisible, setWorkoutSettingsVisible] = useState(false);
+  const [supportHelpVisible, setSupportHelpVisible] = useState(false);
+  const [imageSourceModalVisible, setImageSourceModalVisible] = useState(false);
+  const [darkMode, setDarkMode] = useState(profile?.darkMode ?? false);
+  const [notifications, setNotifications] = useState(profile?.notifications ?? true);
 
-  // Get display name from profile or use defaults
   const displayName = profile 
     ? `${profile.firstName || ''} ${profile.lastName || ''}`.trim() || profile.username || 'User'
     : 'User';
   
-  const displayBio = profile?.bio || 'Enthusiast about exercise, health fitness and recreation';
+  const displayBio = profile?.bio || 'Certified Trainer | Strength & Conditioning | Nutrition guidance | Lifestyle coaching.';
+
+  const handleImageSource = async (source: 'gallery' | 'camera') => {
+    setImageSourceModalVisible(false);
+    try {
+      const options: ImagePicker.ImagePickerOptions = {
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 0.8,
+      };
+
+      let result;
+      if (source === 'camera') {
+        result = await ImagePicker.launchCameraAsync(options);
+      } else {
+        result = await ImagePicker.launchImageLibraryAsync(options);
+      }
+
+      if (!result.canceled && result.assets[0]) {
+        // In a real app, you would upload the image and save the URL
+        Alert.alert('Success', 'Profile picture updated');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Failed to update profile picture');
+    }
+  };
+
+  const handleDarkModeToggle = (value: boolean) => {
+    setDarkMode(value);
+    updateProfile({ darkMode: value });
+  };
+
+  const handleNotificationsToggle = (value: boolean) => {
+    setNotifications(value);
+    updateProfile({ notifications: value });
+  };
+
+  const handleLogout = () => {
+    Alert.alert(
+      'Log Out',
+      'Are you sure you want to log out?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        { 
+          text: 'Log Out', 
+          style: 'destructive',
+          onPress: () => {
+            // Clear profile and navigate to login
+            router.replace('/(auth)/login');
+          }
+        },
+      ]
+    );
+  };
+
+  const settingsItems = [
+    {
+      id: 'my-profile',
+      label: 'My Profile',
+      description: 'Edit your account information',
+      onPress: () => setEditProfileVisible(true),
+    },
+    {
+      id: 'connect-devices',
+      label: 'Connect Devices',
+      description: 'Connect Apple watch, Fitbit, Garmin',
+      onPress: () => Alert.alert('Coming Soon', 'Device connection feature coming soon'),
+    },
+    {
+      id: 'subscription',
+      label: 'Subscription & Billing',
+      description: 'Edit your account information',
+      onPress: () => Alert.alert('Coming Soon', 'Subscription management coming soon'),
+    },
+    {
+      id: 'app-preference',
+      label: 'App Preference',
+      description: 'Theme, Notifications',
+      onPress: () => Alert.alert('Coming Soon', 'App preferences coming soon'),
+    },
+    {
+      id: 'privacy',
+      label: 'Privacy & Security',
+      description: 'Theme, Notifications',
+      onPress: () => setPrivacySecurityVisible(true),
+    },
+    {
+      id: 'workout',
+      label: 'Workout & Coaching Settings',
+      description: 'Preferences, Set Workout goals',
+      onPress: () => setWorkoutSettingsVisible(true),
+    },
+    {
+      id: 'support',
+      label: 'Support & Help',
+      description: 'Help Center, FAQs',
+      onPress: () => setSupportHelpVisible(true),
+    },
+  ];
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+      {/* Header */}
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color={colors.text} />
+        </TouchableOpacity>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>My Profile</Text>
+        <View style={{ width: 24 }} />
+      </View>
+
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        {/* Profile Header */}
-        <View style={{ padding: spacing.lg, paddingTop: spacing.xl }}>
-          <TouchableOpacity onPress={() => router.back()} style={{ marginBottom: spacing.lg }}>
-            <Ionicons name="arrow-back" size={24} color={colors.text} />
-          </TouchableOpacity>
-          
-          {/* Profile Image */}
-          <View style={{ alignItems: 'flex-start', marginBottom: spacing.md }}>
-            <View style={{ width: 80, height: 80, borderRadius: 40, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', overflow: 'hidden', marginBottom: spacing.sm }}>
-              <Text style={{ fontSize: 40 }}>👤</Text>
-            </View>
-            
-            {/* Name */}
-            <Text style={{ fontSize: 24, fontFamily: fonts.bold, color: colors.text, marginBottom: spacing.xs }}>
-              {displayName}
-            </Text>
-            
-            {/* Bio */}
-            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, lineHeight: 20 }}>
+        <View style={{ padding: spacing.lg }}>
+          {/* Profile Picture and Info */}
+          <View style={{ alignItems: 'center', marginBottom: spacing.xl }}>
+            <TouchableOpacity onPress={() => setImageSourceModalVisible(true)}>
+              <View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md }}>
+                <Text style={{ fontSize: 48 }}>👤</Text>
+              </View>
+            </TouchableOpacity>
+            <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.xs }}>{displayName}</Text>
+            <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.lg, lineHeight: 20 }}>
               {displayBio}
             </Text>
+            <TouchableOpacity
+              onPress={() => setEditProfileVisible(true)}
+              style={{ backgroundColor: colors.brand, paddingHorizontal: spacing.xl, paddingVertical: spacing.md, borderRadius: 12 }}
+            >
+              <Text style={{ color: 'white', fontFamily: fonts.semibold, fontSize: 16 }}>Edit Profile</Text>
+            </TouchableOpacity>
           </View>
-        </View>
 
-        {/* Navigation Menu */}
-        <View style={{ paddingHorizontal: spacing.lg, paddingBottom: spacing.xl }}>
-          {/* Home */}
+          {/* Social Links */}
+          <View style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.md, marginBottom: spacing.xl }}>
+            {profile?.linkedin && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#0077B5', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-linkedin" size={20} color="white" />
+              </TouchableOpacity>
+            )}
+            {profile?.instagram && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#E4405F', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-instagram" size={20} color="white" />
+              </TouchableOpacity>
+            )}
+            {profile?.youtube && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#FF0000', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-youtube" size={20} color="white" />
+              </TouchableOpacity>
+            )}
+            {profile?.tiktok && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-tiktok" size={20} color="white" />
+              </TouchableOpacity>
+            )}
+          </View>
+
+          {/* Account Settings */}
+          <View style={{ marginBottom: spacing.lg }}>
+            {settingsItems.map((item) => (
+              <TouchableOpacity
+                key={item.id}
+                onPress={item.onPress}
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  paddingVertical: spacing.md,
+                  borderBottomWidth: 1,
+                  borderBottomColor: colors.border,
+                }}
+              >
+                <View style={{ flex: 1 }}>
+                  <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>{item.label}</Text>
+                  <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>{item.description}</Text>
+                </View>
+                <Ionicons name="chevron-forward" size={20} color={colors.subtext} />
+              </TouchableOpacity>
+            ))}
+          </View>
+
+          {/* Toggles */}
+          <View style={{ marginBottom: spacing.lg }}>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Dark Mode</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Enable Dark Mode</Text>
+              </View>
+              <Switch
+                value={darkMode}
+                onValueChange={handleDarkModeToggle}
+                trackColor={{ false: colors.border, true: colors.brand }}
+                thumbColor={darkMode ? 'white' : '#f4f3f4'}
+              />
+            </View>
+            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Notifications</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Receive Notifications</Text>
+              </View>
+              <Switch
+                value={notifications}
+                onValueChange={handleNotificationsToggle}
+                trackColor={{ false: colors.border, true: colors.brand }}
+                thumbColor={notifications ? 'white' : '#f4f3f4'}
+              />
+            </View>
+          </View>
+
+          {/* Log Out Button */}
           <TouchableOpacity
-            onPress={() => {
-              setSelectedMenu('Home');
-              router.push('/(user)/home');
-            }}
+            onPress={handleLogout}
             style={{
-              backgroundColor: selectedMenu === 'Home' ? '#F5F5F5' : 'transparent',
+              backgroundColor: '#FF3B30',
+              paddingVertical: spacing.md,
               borderRadius: 12,
-              padding: spacing.md,
-              marginBottom: spacing.sm,
               alignItems: 'center',
+              marginTop: spacing.lg,
+              marginBottom: spacing.xl,
             }}
           >
-            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Home</Text>
-          </TouchableOpacity>
-
-          {/* Bookmarked */}
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedMenu('Bookmarked');
-              router.push('/(user)/saved-videos');
-            }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: spacing.md,
-              marginBottom: spacing.sm,
-            }}
-          >
-            <Ionicons name="bookmark-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
-            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Bookmarked</Text>
-          </TouchableOpacity>
-
-          {/* Shopping Cart */}
-          <TouchableOpacity
-            onPress={() => {
-              setSelectedMenu('Shopping Cart');
-              router.push('/(user)/shop');
-            }}
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              padding: spacing.md,
-              marginBottom: spacing.sm,
-            }}
-          >
-            <Ionicons name="bag-outline" size={24} color={colors.text} style={{ marginRight: spacing.md }} />
-            <Text style={{ fontFamily: fonts.regular, fontSize: 16, color: colors.text }}>Shopping Cart</Text>
+            <Text style={{ color: 'white', fontFamily: fonts.semibold, fontSize: 16 }}>Log Out</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
+
+      {/* Image Source Modal */}
+      <Modal visible={imageSourceModalVisible} transparent animationType="slide" onRequestClose={() => setImageSourceModalVisible(false)}>
+        <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
+          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.lg }}>
+              <Text style={{ fontSize: 20, fontFamily: fonts.bold }}>Gallery</Text>
+              <TouchableOpacity onPress={() => setImageSourceModalVisible(false)}>
+                <Ionicons name="close" size={24} color={colors.text} />
+              </TouchableOpacity>
+            </View>
+            <View style={{ flexDirection: 'row', gap: spacing.md }}>
+              <TouchableOpacity
+                onPress={() => handleImageSource('gallery')}
+                style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.lg, borderRadius: 12, alignItems: 'center' }}
+              >
+                <Ionicons name="images-outline" size={32} color={colors.brand} />
+                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm }}>Gallery</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => handleImageSource('camera')}
+                style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.lg, borderRadius: 12, alignItems: 'center' }}
+              >
+                <Ionicons name="camera-outline" size={32} color={colors.brand} />
+                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm }}>Camera</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+
+      {/* Edit Profile Modal */}
+      <EditProfile visible={editProfileVisible} onClose={() => setEditProfileVisible(false)} />
+
+      {/* Privacy & Security Modal */}
+      <PrivacySecurity visible={privacySecurityVisible} onClose={() => setPrivacySecurityVisible(false)} />
+
+      {/* Workout Settings Modal */}
+      <WorkoutSettings visible={workoutSettingsVisible} onClose={() => setWorkoutSettingsVisible(false)} />
+
+      {/* Support & Help Modal */}
+      <SupportHelp visible={supportHelpVisible} onClose={() => setSupportHelpVisible(false)} />
     </SafeAreaView>
   );
 }
-
