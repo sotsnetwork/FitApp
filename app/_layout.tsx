@@ -11,6 +11,7 @@ import { CartProvider } from '../contexts/CartContext';
 import { SearchHistoryProvider } from '../contexts/SearchHistoryContext';
 import { UserProfileProvider } from '../contexts/UserProfileContext';
 import { VendorProductsProvider } from '../contexts/VendorProductsContext';
+import { DarkModeProvider } from '../contexts/DarkModeContext';
 
 // Prevent splash screen from auto-hiding, we'll hide it manually
 SplashScreen.preventAutoHideAsync();
@@ -67,21 +68,23 @@ export default function RootLayout() {
   return (
     <UserRoleProvider>
       <UserProfileProvider>
-        <SavedPostsProvider>
-          <SavedProductsProvider>
-            <VendorProductsProvider>
-              <CartProvider>
-                <SearchHistoryProvider>
-                  <SafeAreaProvider>
-                    <View style={{ flex: 1 }}>
-                      <Stack screenOptions={{ headerShown: false }} />
-                    </View>
-                  </SafeAreaProvider>
-                </SearchHistoryProvider>
-              </CartProvider>
-            </VendorProductsProvider>
-          </SavedProductsProvider>
-        </SavedPostsProvider>
+        <DarkModeProvider>
+          <SavedPostsProvider>
+            <SavedProductsProvider>
+              <VendorProductsProvider>
+                <CartProvider>
+                  <SearchHistoryProvider>
+                    <SafeAreaProvider>
+                      <View style={{ flex: 1 }}>
+                        <Stack screenOptions={{ headerShown: false }} />
+                      </View>
+                    </SafeAreaProvider>
+                  </SearchHistoryProvider>
+                </CartProvider>
+              </VendorProductsProvider>
+            </SavedProductsProvider>
+          </SavedPostsProvider>
+        </DarkModeProvider>
       </UserProfileProvider>
     </UserRoleProvider>
   );
