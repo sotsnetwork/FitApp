@@ -4,8 +4,10 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { spacing, fonts, colors } from '../../theme/tokens';
+import { spacing, fonts } from '../../theme/tokens';
 import { useUserProfile } from '../../contexts/UserProfileContext';
+import { useTheme } from '../../hooks/useTheme';
+import { useDarkMode } from '../../contexts/DarkModeContext';
 import EditProfile from './edit-profile';
 import PrivacySecurity from './privacy-security';
 import WorkoutSettings from './workout-settings';
@@ -13,12 +15,13 @@ import SupportHelp from './support-help';
 
 export default function UserProfile() {
   const { profile, updateProfile } = useUserProfile();
+  const { colors, isDarkMode } = useTheme();
+  const { toggleDarkMode } = useDarkMode();
   const [editProfileVisible, setEditProfileVisible] = useState(false);
   const [privacySecurityVisible, setPrivacySecurityVisible] = useState(false);
   const [workoutSettingsVisible, setWorkoutSettingsVisible] = useState(false);
   const [supportHelpVisible, setSupportHelpVisible] = useState(false);
   const [imageSourceModalVisible, setImageSourceModalVisible] = useState(false);
-  const [darkMode, setDarkMode] = useState(profile?.darkMode ?? false);
   const [notifications, setNotifications] = useState(profile?.notifications ?? true);
 
   const displayName = profile 
@@ -53,9 +56,10 @@ export default function UserProfile() {
     }
   };
 
-  const handleDarkModeToggle = (value: boolean) => {
-    setDarkMode(value);
-    updateProfile({ darkMode: value });
+  const handleDarkModeToggle = async (value: boolean) => {
+    if (value !== isDarkMode) {
+      await toggleDarkMode();
+    }
   };
 
   const handleNotificationsToggle = (value: boolean) => {
@@ -127,13 +131,13 @@ export default function UserProfile() {
   ];
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>My Profile</Text>
+            <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>My Profile</Text>
         <View style={{ width: 24 }} />
       </View>
 
@@ -146,7 +150,7 @@ export default function UserProfile() {
                 <Text style={{ fontSize: 48 }}>👤</Text>
               </View>
             </TouchableOpacity>
-            <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.xs }}>{displayName}</Text>
+            <Text style={{ fontSize: 24, fontFamily: fonts.bold, marginBottom: spacing.xs, color: colors.text }}>{displayName}</Text>
             <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, textAlign: 'center', marginBottom: spacing.lg, lineHeight: 20 }}>
               {displayBio}
             </Text>
@@ -160,9 +164,9 @@ export default function UserProfile() {
 
           {/* Social Links */}
           <View style={{ flexDirection: 'row', justifyContent: 'center', gap: spacing.md, marginBottom: spacing.xl }}>
-            {profile?.linkedin && (
-              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#0077B5', alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name="logo-linkedin" size={20} color="white" />
+            {profile?.tiktok && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-tiktok" size={20} color="white" />
               </TouchableOpacity>
             )}
             {profile?.instagram && (
@@ -170,14 +174,14 @@ export default function UserProfile() {
                 <Ionicons name="logo-instagram" size={20} color="white" />
               </TouchableOpacity>
             )}
-            {profile?.youtube && (
-              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#FF0000', alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name="logo-youtube" size={20} color="white" />
+            {profile?.facebook && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#1877F2', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-facebook" size={20} color="white" />
               </TouchableOpacity>
             )}
-            {profile?.tiktok && (
-              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#000000', alignItems: 'center', justifyContent: 'center' }}>
-                <Ionicons name="logo-tiktok" size={20} color="white" />
+            {profile?.snapchat && (
+              <TouchableOpacity style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: '#FFFC00', alignItems: 'center', justifyContent: 'center' }}>
+                <Ionicons name="logo-snapchat" size={20} color="#000000" />
               </TouchableOpacity>
             )}
           </View>
@@ -198,7 +202,7 @@ export default function UserProfile() {
                 }}
               >
                 <View style={{ flex: 1 }}>
-                  <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>{item.label}</Text>
+                  <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs, color: colors.text }}>{item.label}</Text>
                   <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>{item.description}</Text>
                 </View>
                 <Ionicons name="chevron-forward" size={20} color={colors.subtext} />
@@ -210,19 +214,19 @@ export default function UserProfile() {
           <View style={{ marginBottom: spacing.lg }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Dark Mode</Text>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs, color: colors.text }}>Dark Mode</Text>
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Enable Dark Mode</Text>
               </View>
               <Switch
-                value={darkMode}
+                value={isDarkMode}
                 onValueChange={handleDarkModeToggle}
                 trackColor={{ false: colors.border, true: colors.brand }}
-                thumbColor={darkMode ? 'white' : '#f4f3f4'}
+                thumbColor={isDarkMode ? 'white' : '#f4f3f4'}
               />
             </View>
             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs }}>Notifications</Text>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.xs, color: colors.text }}>Notifications</Text>
                 <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>Receive Notifications</Text>
               </View>
               <Switch
@@ -254,9 +258,9 @@ export default function UserProfile() {
       {/* Image Source Modal */}
       <Modal visible={imageSourceModalVisible} transparent animationType="slide" onRequestClose={() => setImageSourceModalVisible(false)}>
         <View style={{ flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' }}>
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
+          <View style={{ backgroundColor: colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.lg }}>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.lg }}>
-              <Text style={{ fontSize: 20, fontFamily: fonts.bold }}>Gallery</Text>
+              <Text style={{ fontSize: 20, fontFamily: fonts.bold, color: colors.text }}>Gallery</Text>
               <TouchableOpacity onPress={() => setImageSourceModalVisible(false)}>
                 <Ionicons name="close" size={24} color={colors.text} />
               </TouchableOpacity>
@@ -267,14 +271,14 @@ export default function UserProfile() {
                 style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.lg, borderRadius: 12, alignItems: 'center' }}
               >
                 <Ionicons name="images-outline" size={32} color={colors.brand} />
-                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm }}>Gallery</Text>
+                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm, color: colors.text }}>Gallery</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => handleImageSource('camera')}
                 style={{ flex: 1, backgroundColor: colors.brandTint, padding: spacing.lg, borderRadius: 12, alignItems: 'center' }}
               >
                 <Ionicons name="camera-outline" size={32} color={colors.brand} />
-                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm }}>Camera</Text>
+                <Text style={{ fontFamily: fonts.semibold, marginTop: spacing.sm, color: colors.text }}>Camera</Text>
               </TouchableOpacity>
             </View>
           </View>
