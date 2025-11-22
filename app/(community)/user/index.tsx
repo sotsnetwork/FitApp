@@ -119,7 +119,7 @@ export default function UserCommunity() {
               </TouchableOpacity>
 
               {/* Ongoing list */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm, }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
                 <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>Ongoing Challenges</Text>
                 <TouchableOpacity>
                   <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>See all</Text>
