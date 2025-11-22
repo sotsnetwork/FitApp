@@ -40,9 +40,12 @@ export default function UserHome() {
           </View>
         </TouchableOpacity>
         <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>HOME</Text>
-        <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
-          <Ionicons name="notifications-outline" size={24} color={colors.text} />
-        </TouchableOpacity>
+        <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
+          <Ionicons name="sparkles" size={24} color={colors.text} />
+          <TouchableOpacity onPress={() => router.push('/(user)/notifications')}>
+            <Ionicons name="notifications-outline" size={24} color={colors.text} />
+          </TouchableOpacity>
+        </View>
       </View>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
