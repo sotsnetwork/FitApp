@@ -4,12 +4,14 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import * as ImagePicker from 'expo-image-picker';
-import { spacing, fonts, colors } from '../../../theme/tokens';
+import { spacing, fonts } from '../../../theme/tokens';
+import { useTheme } from '../../../hooks/useTheme';
 import UserMenuOverlay from '../../(user)/menu-overlay';
 
 const tabs = ['Popular', 'My Post', 'Following', 'Challenges'];
 
 export default function UserCommunity() {
+  const { colors, isDarkMode } = useTheme();
   const [selectedTab, setSelectedTab] = React.useState('Popular');
   const [challengeAcceptedVisible, setChallengeAcceptedVisible] = React.useState(false);
   const [createPostModalVisible, setCreatePostModalVisible] = React.useState(false);
@@ -61,7 +63,7 @@ export default function UserCommunity() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
         <TouchableOpacity onPress={() => setMenuVisible(true)}>
@@ -69,7 +71,7 @@ export default function UserCommunity() {
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>COMMUNITY</Text>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>COMMUNITY</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
           <TouchableOpacity onPress={() => router.push('/(user)/search')}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
@@ -109,7 +111,7 @@ export default function UserCommunity() {
           {selectedTab === 'Challenges' ? (
             <>
               {/* Hero card */}
-              <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm }}>Join 20,234 Runners</Text>
+              <Text style={{ fontFamily: fonts.regular, marginBottom: spacing.sm, color: colors.text }}>Join 20,234 Runners</Text>
               <View style={{ width: '100%', height: 180, backgroundColor: '#FF6A00', borderRadius: 12, marginBottom: spacing.md }} />
               <TouchableOpacity
                 onPress={() => setChallengeAcceptedVisible(true)}
@@ -120,7 +122,7 @@ export default function UserCommunity() {
 
               {/* Ongoing list */}
               <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
-                <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>Ongoing Challenges</Text>
+                <Text style={{ fontFamily: fonts.bold, fontSize: 16, color: colors.text }}>Ongoing Challenges</Text>
                 <TouchableOpacity>
                   <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>See all</Text>
                 </TouchableOpacity>
@@ -131,7 +133,7 @@ export default function UserCommunity() {
                     <Ionicons name="flash" size={20} color={colors.brand} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={{ fontFamily: fonts.semibold }}>July Weekly Challenge</Text>
+                    <Text style={{ fontFamily: fonts.semibold, color: colors.text }}>July Weekly Challenge</Text>
                     <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>0.00 / 15.00km</Text>
                     <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.subtext }}>4 days Left</Text>
                   </View>
@@ -149,7 +151,7 @@ export default function UserCommunity() {
                 <Text style={{ fontSize: 16 }}>👤</Text>
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Hey, Guyyyyyys</Text>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 14, color: colors.text }}>Hey, Guyyyyyys</Text>
               </View>
               <TouchableOpacity 
                 onPress={() => setFollowing({ ...following, 'hey-guys': !following['hey-guys'] })}
@@ -167,7 +169,7 @@ export default function UserCommunity() {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.xs, lineHeight: 20 }}>
+            <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.xs, lineHeight: 20, color: colors.text }}>
               Happy to be rated No1. on the World Top 100 Lifters. Thank you for your support!!
             </Text>
             <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.xs }}>
@@ -179,14 +181,14 @@ export default function UserCommunity() {
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
                 <Ionicons name={likedPosts['post-1'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-1'] ? colors.brand : colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-1'] || 12}</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>{postLikeCounts['post-1'] || 12}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/(user)/post-detail')}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>3</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
@@ -229,14 +231,14 @@ export default function UserCommunity() {
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
                 <Ionicons name={likedPosts['post-2'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-2'] ? colors.brand : colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-2'] || 12}</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>{postLikeCounts['post-2'] || 12}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/(user)/post-detail')}
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
                 <Ionicons name="chatbubble-outline" size={20} color={colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>3</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>3</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={async () => {
@@ -265,7 +267,7 @@ export default function UserCommunity() {
                 <Text style={{ fontSize: 16 }}>👤</Text>
               </View>
               <View style={{ flex: 1 }}>
-                <Text style={{ fontFamily: fonts.semibold, fontSize: 14 }}>Runnnnnnnnnnn!!!</Text>
+                <Text style={{ fontFamily: fonts.semibold, fontSize: 14, color: colors.text }}>Runnnnnnnnnnn!!!</Text>
               </View>
               <TouchableOpacity 
                 onPress={() => setFollowingPosts({ ...followingPosts, 'running': !followingPosts['running'] })}
@@ -298,7 +300,7 @@ export default function UserCommunity() {
                 style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
               >
                 <Ionicons name={likedPosts['post-3'] ? 'heart' : 'heart-outline'} size={20} color={likedPosts['post-3'] ? colors.brand : colors.text} />
-                <Text style={{ fontFamily: fonts.regular, fontSize: 12 }}>{postLikeCounts['post-3'] || 12}</Text>
+                <Text style={{ fontFamily: fonts.regular, fontSize: 12, color: colors.text }}>{postLikeCounts['post-3'] || 12}</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => router.push('/(user)/post-detail')}
@@ -365,7 +367,7 @@ export default function UserCommunity() {
             activeOpacity={1}
             onPress={() => setChallengeAcceptedVisible(false)}
           />
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl, alignItems: 'center' }}>
+          <View style={{ backgroundColor: colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl, alignItems: 'center' }}>
             {/* Handle/Grabber */}
             <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
               <View
@@ -468,7 +470,7 @@ export default function UserCommunity() {
             activeOpacity={1}
             onPress={() => setCreatePostModalVisible(false)}
           />
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl }}>
+          <View style={{ backgroundColor: colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: spacing.xl }}>
             {/* Handle/Grabber */}
             <View style={{ alignItems: 'center', marginBottom: spacing.lg }}>
               <View
