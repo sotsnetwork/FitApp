@@ -27,6 +27,17 @@ export interface UserProfile {
   instagram?: string;
   facebook?: string;
   snapchat?: string;
+  linkedin?: string;
+  youtube?: string;
+  // Profile settings
+  headlines?: string;
+  fitnessGoal?: string;
+  darkMode?: boolean;
+  notifications?: boolean;
+  coachPreference?: string;
+  difficultyLevel?: string;
+  workoutScheduleReminder?: string;
+  hideProfile?: string;
 }
 
 interface UserProfileContextType {
