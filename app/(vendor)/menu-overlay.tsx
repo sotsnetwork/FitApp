@@ -57,7 +57,13 @@ export default function MenuOverlay({ visible, onClose, currentScreen }: MenuOve
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <Animated.View style={{ width: 340, backgroundColor: 'white', transform: [{ translateX: slideAnim }] }}>
           {/* Profile Section */}
-          <View style={{ padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <TouchableOpacity
+            onPress={() => {
+              onClose();
+              router.push('/(vendor)/profile');
+            }}
+            style={{ padding: spacing.lg, borderBottomWidth: 1, borderBottomColor: colors.border }}
+          >
             <View style={{ width: 48, height: 48, borderRadius: 24, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginBottom: spacing.md }}>
               <Text style={{ fontSize: 24 }}>👤</Text>
             </View>
@@ -65,7 +71,7 @@ export default function MenuOverlay({ visible, onClose, currentScreen }: MenuOve
             <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.subtext, lineHeight: 20 }}>
               {displayBio}
             </Text>
-          </View>
+          </TouchableOpacity>
 
           {/* Menu Items */}
           <View style={{ paddingVertical: spacing.md }}>
