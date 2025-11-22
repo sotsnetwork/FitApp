@@ -103,7 +103,7 @@ export default function VendorCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg, marginTop: -1 }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Hero card */}
