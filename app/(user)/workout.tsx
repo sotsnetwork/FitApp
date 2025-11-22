@@ -3,7 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput, Modal } from 'reac
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, fonts, colors } from '../../theme/tokens';
+import { spacing, fonts } from '../../theme/tokens';
+import { useTheme } from '../../hooks/useTheme';
 import { useSavedPosts } from '../../contexts/SavedPostsContext';
 import UserMenuOverlay from './menu-overlay';
 import BookmarkOverlay from '../../components/BookmarkOverlay';
@@ -25,6 +26,7 @@ const allPosts = [
 ];
 
 export default function UserWorkout() {
+  const { colors, isDarkMode } = useTheme();
   const [selectedCategory, setSelectedCategory] = React.useState('All');
   const [sponsoredDropdownVisible, setSponsoredDropdownVisible] = React.useState(false);
   const [selectedFilter, setSelectedFilter] = React.useState('Sponsored');
@@ -64,7 +66,7 @@ export default function UserWorkout() {
   }, [selectedCategory, selectedFilter, searchQuery]);
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
         <TouchableOpacity onPress={() => setMenuVisible(true)}>
@@ -72,7 +74,7 @@ export default function UserWorkout() {
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>WORKOUT</Text>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>WORKOUT</Text>
         <View style={{ flexDirection: 'row', gap: spacing.md }}>
           <TouchableOpacity onPress={() => setSearchVisible(true)}>
             <Ionicons name="search-outline" size={24} color={colors.text} />
@@ -94,7 +96,7 @@ export default function UserWorkout() {
                 style={{
                   paddingHorizontal: spacing.md,
                   borderRadius: 16,
-                  backgroundColor: selectedCategory === category ? colors.brand : 'white',
+                  backgroundColor: selectedCategory === category ? colors.brand : colors.background,
                   borderWidth: 1,
                   borderColor: selectedCategory === category ? colors.brand : colors.border,
                   height: 36,
@@ -116,7 +118,7 @@ export default function UserWorkout() {
         {/* Recommended Section */}
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md, marginTop: 0 }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
-            <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>RECOMMENDED</Text>
+            <Text style={{ fontSize: 16, fontFamily: fonts.bold, color: colors.text }}>RECOMMENDED</Text>
             <TouchableOpacity
               onPress={() => setSponsoredDropdownVisible(true)}
               style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.xs }}
@@ -137,7 +139,7 @@ export default function UserWorkout() {
                     onPress={() => router.push('/(user)/post-detail')}
                   />
                   <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs }}>
-                    <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, flex: 1 }}>
+                    <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.text, flex: 1 }}>
                       {post.title}
                     </Text>
                     <TouchableOpacity
@@ -201,7 +203,7 @@ export default function UserWorkout() {
             activeOpacity={1}
             onPress={() => setSearchVisible(false)}
           />
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
+          <View style={{ backgroundColor: colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
             {/* Handle/Grabber */}
             <View style={{ alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.md }}>
               <View
@@ -374,7 +376,7 @@ export default function UserWorkout() {
             activeOpacity={1}
             onPress={() => setSponsoredDropdownVisible(false)}
           />
-          <View style={{ backgroundColor: 'white', borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
+          <View style={{ backgroundColor: colors.background, borderTopLeftRadius: 20, borderTopRightRadius: 20, paddingBottom: spacing.xl }}>
             {/* Handle/Grabber */}
             <View style={{ alignItems: 'center', paddingTop: spacing.sm, paddingBottom: spacing.md }}>
               <View
