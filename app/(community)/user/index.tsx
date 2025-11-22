@@ -105,7 +105,7 @@ export default function UserCommunity() {
       </ScrollView>
 
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
-        <View style={{ paddingHorizontal: spacing.lg, paddingTop: spacing.sm, paddingBottom: spacing.lg }}>
+        <View style={{ paddingHorizontal: spacing.lg, paddingTop: 0, paddingBottom: spacing.lg }}>
           {selectedTab === 'Challenges' ? (
             <>
               {/* Hero card */}
@@ -119,7 +119,7 @@ export default function UserCommunity() {
               </TouchableOpacity>
 
               {/* Ongoing list */}
-              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm, }}>
                 <Text style={{ fontFamily: fonts.bold, fontSize: 16 }}>Ongoing Challenges</Text>
                 <TouchableOpacity>
                   <Text style={{ fontFamily: fonts.regular, color: colors.subtext }}>See all</Text>
@@ -143,7 +143,7 @@ export default function UserCommunity() {
             <>
         {/* Feed Posts */}
           {/* Post 1 */}
-          <View style={{ marginBottom: spacing.xl }}>
+          <View style={{ marginBottom: spacing.xl, marginTop: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
                 <Text style={{ fontSize: 16 }}>👤</Text>
