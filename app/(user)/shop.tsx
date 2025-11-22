@@ -3,12 +3,14 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, fonts, colors } from '../../theme/tokens';
+import { spacing, fonts } from '../../theme/tokens';
+import { useTheme } from '../../hooks/useTheme';
 import { useSavedProducts } from '../../contexts/SavedProductsContext';
 
 const tabs = ['GEARS', 'SUPPLEMENTS', 'PLANS'];
 
 export default function UserShop() {
+  const { colors, isDarkMode } = useTheme();
   const [selectedTab, setSelectedTab] = React.useState('GEARS');
   const { saveProduct, unsaveProduct, isSaved } = useSavedProducts();
 
@@ -51,13 +53,13 @@ export default function UserShop() {
   const products = getProducts();
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>SHOP</Text>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>SHOP</Text>
         <TouchableOpacity onPress={() => router.push('/(user)/shopping-cart')}>
           <Ionicons name="bag-outline" size={24} color={colors.text} />
         </TouchableOpacity>
@@ -72,7 +74,7 @@ export default function UserShop() {
             style={{
               paddingHorizontal: spacing.md,
               borderRadius: 16,
-              backgroundColor: selectedTab === tab ? colors.brand : 'white',
+              backgroundColor: selectedTab === tab ? colors.brand : colors.background,
               marginRight: spacing.xs,
               height: 40,
               justifyContent: 'center',
@@ -89,20 +91,20 @@ export default function UserShop() {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
         <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F5F5F5', borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomWidth: 1, borderBottomColor: colors.border }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: isDarkMode ? colors.border : '#F5F5F5', borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm, borderBottomWidth: 1, borderBottomColor: colors.border }}>
             <Ionicons name="search-outline" size={20} color={colors.subtext} />
-            <TextInput placeholder="What are you looking for?" style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular }} />
+            <TextInput placeholder="What are you looking for?" placeholderTextColor={colors.subtext} style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular, color: colors.text }} />
           </View>
         </View>
 
         {/* You Might Be Interested In */}
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.xl }}>
-          <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.md }}>YOU MIGHT BE INTERESTED IN</Text>
+          <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.md, color: colors.text }}>YOU MIGHT BE INTERESTED IN</Text>
           <View style={{ flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between' }}>
             {products.map((product) => {
               const saved = isSaved(product.id);
               return (
-                <View key={product.id} style={{ width: '48%', marginBottom: spacing.md, backgroundColor: '#F9F9F9', borderRadius: 12, overflow: 'hidden' }}>
+                <View key={product.id} style={{ width: '48%', marginBottom: spacing.md, backgroundColor: isDarkMode ? colors.border : '#F9F9F9', borderRadius: 12, overflow: 'hidden' }}>
                   <TouchableOpacity
                     style={{ width: '100%' }}
                     onPress={() => router.push({ pathname: '/(user)/product-detail', params: { productId: product.id } })}
@@ -113,7 +115,7 @@ export default function UserShop() {
                     <View style={{ padding: spacing.md }}>
                       <Text style={{ fontSize: 12, fontFamily: fonts.regular, marginBottom: spacing.xs, color: colors.subtext }}>{product.name}</Text>
                       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs }}>
-                        <Text style={{ fontSize: 14, fontFamily: fonts.regular }}>{product.price}</Text>
+                        <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.text }}>{product.price}</Text>
                       </View>
                       <Text style={{ fontSize: 10, fontFamily: fonts.semibold, color: '#FFA500', alignSelf: 'flex-start' }}>
                         {product.discount} Discount
