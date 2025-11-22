@@ -143,7 +143,7 @@ export default function UserCommunity() {
             <>
         {/* Feed Posts */}
           {/* Post 1 */}
-          <View style={{ marginBottom: spacing.xl, marginTop: 0 }}>
+          <View style={{ marginBottom: spacing.md, marginTop: 0 }}>
             <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
               <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.brandTint, alignItems: 'center', justifyContent: 'center', marginRight: spacing.sm }}>
                 <Text style={{ fontSize: 16 }}>👤</Text>
@@ -167,10 +167,10 @@ export default function UserCommunity() {
                 </Text>
               </TouchableOpacity>
             </View>
-            <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.sm, lineHeight: 20 }}>
+            <Text style={{ fontFamily: fonts.regular, fontSize: 14, marginBottom: spacing.xs, lineHeight: 20 }}>
               Happy to be rated No1. on the World Top 100 Lifters. Thank you for your support!!
             </Text>
-            <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.sm }}>
+            <View style={{ backgroundColor: colors.brandTint, paddingHorizontal: spacing.sm, paddingVertical: 1, borderRadius: 8, alignSelf: 'flex-start', marginBottom: spacing.xs }}>
               <Text style={{ fontSize: 11, fontFamily: fonts.regular, color: colors.brand }}>Challenges</Text>
             </View>
             <View style={{ flexDirection: 'row', gap: spacing.md }}>
