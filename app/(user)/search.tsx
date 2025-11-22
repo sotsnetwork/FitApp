@@ -3,7 +3,8 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, fonts, colors } from '../../theme/tokens';
+import { spacing, fonts } from '../../theme/tokens';
+import { useTheme } from '../../hooks/useTheme';
 import { useSearchHistory } from '../../contexts/SearchHistoryContext';
 
 // Mock data for search results
@@ -31,6 +32,7 @@ const mockKeywords = [
 type SearchTab = 'all' | 'accounts' | 'posts' | 'keywords';
 
 export default function Search() {
+  const { colors, isDarkMode } = useTheme();
   const [searchQuery, setSearchQuery] = React.useState('');
   const [selectedTab, setSelectedTab] = React.useState<SearchTab>('all');
   const { searchHistory, addToHistory, removeFromHistory, clearHistory } = useSearchHistory();
@@ -120,7 +122,7 @@ export default function Search() {
     return (
       <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
-          <Text style={{ fontSize: 16, fontFamily: fonts.bold }}>Recent Searches</Text>
+          <Text style={{ fontSize: 16, fontFamily: fonts.bold, color: colors.text }}>Recent Searches</Text>
           <TouchableOpacity onPress={clearHistory}>
             <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.brand }}>Clear</Text>
           </TouchableOpacity>
@@ -162,7 +164,7 @@ export default function Search() {
 
     return (
       <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}>
-        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>
+        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>
           {isUsernameSearch() ? 'Usernames' : 'Accounts'}
         </Text>
         {filteredAccounts.map((account) => (
@@ -209,7 +211,7 @@ export default function Search() {
 
     return (
       <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}>
-        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Posts</Text>
+        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>Posts</Text>
         {filteredPosts.map((post) => (
           <TouchableOpacity
             key={post.id}
@@ -247,7 +249,7 @@ export default function Search() {
 
     return (
       <View style={{ paddingHorizontal: spacing.lg, marginTop: spacing.md }}>
-        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm }}>Keywords</Text>
+        <Text style={{ fontSize: 16, fontFamily: fonts.bold, marginBottom: spacing.sm, color: colors.text }}>Keywords</Text>
         {filteredKeywords.map((keyword) => (
           <TouchableOpacity
             key={keyword.id}
@@ -301,19 +303,19 @@ export default function Search() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color={colors.text} />
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>SEARCH</Text>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>SEARCH</Text>
         <View style={{ width: 24 }} />
       </View>
 
       {/* Search Bar */}
       <View style={{ paddingHorizontal: spacing.lg, paddingVertical: spacing.md, borderBottomWidth: 1, borderBottomColor: colors.border }}>
-        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: colors.border, borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: isDarkMode ? colors.border : '#F5F5F5', borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
           <Ionicons name="search-outline" size={20} color={colors.subtext} />
           <TextInput
             placeholder="Search accounts, posts, keywords, @username..."
