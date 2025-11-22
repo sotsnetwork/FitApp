@@ -3,12 +3,14 @@ import { View, Text, ScrollView, TouchableOpacity, TextInput } from 'react-nativ
 import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { spacing, fonts, colors } from '../../theme/tokens';
+import { spacing, fonts } from '../../theme/tokens';
+import { useTheme } from '../../hooks/useTheme';
 import { useUserRole } from '../../contexts/UserRoleContext';
 import UserMenuOverlay from './menu-overlay';
 
 export default function UserHome() {
   const { role } = useUserRole();
+  const { colors, isDarkMode } = useTheme();
   const [menuVisible, setMenuVisible] = React.useState(false);
 
   // Redirect creators and vendors to their own home screens
@@ -31,7 +33,7 @@ export default function UserHome() {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: 'white' }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: colors.background }}>
       {/* Header */}
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', paddingHorizontal: spacing.lg, paddingVertical: spacing.md }}>
         <TouchableOpacity onPress={handleProfileClick}>
@@ -39,7 +41,7 @@ export default function UserHome() {
             <Text style={{ fontSize: 20 }}>👤</Text>
           </View>
         </TouchableOpacity>
-        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5 }}>HOME</Text>
+        <Text style={{ fontSize: 20, fontFamily: fonts.bold, letterSpacing: 0.5, color: colors.text }}>HOME</Text>
         <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing.md }}>
           <TouchableOpacity onPress={() => router.push('/(user)/leaderboard')}>
             <Ionicons name="sparkles" size={24} color={colors.text} />
@@ -53,16 +55,16 @@ export default function UserHome() {
       <ScrollView style={{ flex: 1 }} showsVerticalScrollIndicator={false}>
         {/* Search Bar */}
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: '#F5F5F5', borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: isDarkMode ? colors.border : '#F5F5F5', borderRadius: 12, paddingHorizontal: spacing.md, paddingVertical: spacing.sm }}>
             <Ionicons name="search-outline" size={20} color={colors.subtext} />
-            <TextInput placeholder="Search" style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular }} />
+            <TextInput placeholder="Search" placeholderTextColor={colors.subtext} style={{ flex: 1, marginLeft: spacing.sm, fontFamily: fonts.regular, color: colors.text }} />
           </View>
         </View>
 
         {/* Tip for the Day */}
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
-          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.sm }}>Tip for the Day</Text>
-          <View style={{ borderWidth: 1, borderColor: '#FFA500', borderRadius: 12, padding: spacing.md, backgroundColor: 'white' }}>
+          <Text style={{ fontFamily: fonts.semibold, fontSize: 16, marginBottom: spacing.sm, color: colors.text }}>Tip for the Day</Text>
+          <View style={{ borderWidth: 1, borderColor: '#FFA500', borderRadius: 12, padding: spacing.md, backgroundColor: colors.background }}>
             <Text style={{ fontFamily: fonts.regular, fontSize: 14, color: colors.text, lineHeight: 20 }}>
               Lorem ipsum dolor sit amet consectetur. Et neque id mauris diam facilisis turpis nibh malesuada. At amet.
             </Text>
@@ -72,19 +74,19 @@ export default function UserHome() {
         {/* Daily Goal */}
         <View style={{ paddingHorizontal: spacing.lg, marginBottom: spacing.md }}>
           <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: spacing.sm }}>
-            <Text style={{ fontSize: 18, fontFamily: fonts.bold }}>Daily Goal</Text>
+            <Text style={{ fontSize: 18, fontFamily: fonts.bold, color: colors.text }}>Daily Goal</Text>
             <TouchableOpacity onPress={() => router.push('/(user)/daily-goals')}>
               <Text style={{ fontSize: 14, fontFamily: fonts.regular, color: colors.text, opacity: 0.5 }}>See all</Text>
             </TouchableOpacity>
           </View>
-          <TouchableOpacity style={{ backgroundColor: '#F9F9F9', borderRadius: 16, overflow: 'hidden' }}>
+          <TouchableOpacity style={{ backgroundColor: isDarkMode ? colors.border : '#F9F9F9', borderRadius: 16, overflow: 'hidden' }}>
             <View style={{ width: '100%', height: 200, backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: 'rgba(0,0,0,0.5)', alignItems: 'center', justifyContent: 'center' }}>
                 <Ionicons name="play" size={32} color="white" />
               </View>
             </View>
             <View style={{ padding: spacing.md }}>
-              <Text style={{ fontSize: 16, fontFamily: fonts.semibold, marginBottom: spacing.xs }}>
+              <Text style={{ fontSize: 16, fontFamily: fonts.semibold, marginBottom: spacing.xs, color: colors.text }}>
                 Simple Dumbbell Handless for Thighs, Buttock & Ankle
               </Text>
               <View style={{ flexDirection: 'row', alignItems: 'center', marginBottom: spacing.sm }}>
@@ -110,12 +112,12 @@ export default function UserHome() {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {[1, 2].map((challenge) => (
-              <TouchableOpacity key={challenge} style={{ width: 200, marginRight: spacing.md, backgroundColor: '#F9F9F9', borderRadius: 12, overflow: 'hidden' }}>
+              <TouchableOpacity key={challenge} style={{ width: 200, marginRight: spacing.md, backgroundColor: isDarkMode ? colors.border : '#F9F9F9', borderRadius: 12, overflow: 'hidden' }}>
                 <View style={{ width: '100%', height: 120, backgroundColor: colors.border, alignItems: 'center', justifyContent: 'center' }}>
                   <Ionicons name="barbell" size={40} color={colors.subtext} />
                 </View>
                 <View style={{ padding: spacing.md }}>
-                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.xs }}>
+                  <Text style={{ fontSize: 14, fontFamily: fonts.regular, marginBottom: spacing.xs, color: colors.text }}>
                     Lorem ipsum dolor sit amet
                   </Text>
                   <Text style={{ fontSize: 12, fontFamily: fonts.regular, color: colors.subtext, marginBottom: spacing.xs }}>
